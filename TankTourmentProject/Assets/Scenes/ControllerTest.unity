@@ -323,6 +323,26 @@ PrefabInstance:
       propertyPath: tank
       value: 
       objectReference: {fileID: 821186798690844246}
+    - target: {fileID: 2757046076287949333, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
+        type: 3}
+      propertyPath: action.m_Name
+      value: Action
+      objectReference: {fileID: 0}
+    - target: {fileID: 2757046076287949333, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
+        type: 3}
+      propertyPath: action.m_SingletonActionBindings.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2757046076287949333, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
+        type: 3}
+      propertyPath: action.m_SingletonActionBindings.Array.data[0].m_Id
+      value: 242ef9f4-3645-49b0-ad1b-6b49d3b1fe86
+      objectReference: {fileID: 0}
+    - target: {fileID: 2757046076287949333, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
+        type: 3}
+      propertyPath: action.m_SingletonActionBindings.Array.data[0].m_Action
+      value: Action
+      objectReference: {fileID: 0}
     - target: {fileID: 7326542362435752075, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
         type: 3}
       propertyPath: m_Name
@@ -332,6 +352,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_DefaultActionMap
       value: Main
+      objectReference: {fileID: 0}
+    - target: {fileID: 8065253951509896450, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
+        type: 3}
+      propertyPath: m_NeverAutoSwitchControlSchemes
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8065253951509896450, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
         type: 3}
@@ -945,21 +970,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173,
-        type: 3}
-      propertyPath: maxSpeed
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173,
-        type: 3}
-      propertyPath: acceleration
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173,
-        type: 3}
-      propertyPath: maxTurnSpeed
-      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

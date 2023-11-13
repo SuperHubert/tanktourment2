@@ -403,7 +403,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 4
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!65 &2112816837149304249
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -438,11 +438,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 6034856823885727613}
+  headTransform: {fileID: 5652426724392423080}
   moveTowardsDirection: 1
   maxSpeed: 25
   acceleration: 10
-  maxTurnSpeed: 500
-  targetDirection: {x: 0, y: 0}
+  maxTurnSpeed: 450
+  movementDirection: {x: 0, y: 0}
+  headDirection: {x: 0, y: 0}
 --- !u!1 &5925696095241948726
 GameObject:
   m_ObjectHideFlags: 0
