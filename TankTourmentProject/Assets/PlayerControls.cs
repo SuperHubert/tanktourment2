@@ -24,13 +24,40 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     ""name"": ""PlayerControls"",
     ""maps"": [
         {
-            ""name"": ""Shoot"",
+            ""name"": ""Main"",
             ""id"": ""b25b5389-a50f-4066-8744-3c9ecd25d0a2"",
             ""actions"": [
                 {
-                    ""name"": ""New action"",
+                    ""name"": ""Shoot"",
                     ""type"": ""Button"",
                     ""id"": ""cd079d9d-7b3c-4623-8420-c46f12971e2b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Move"",
+                    ""type"": ""Value"",
+                    ""id"": ""03a74a65-18b8-4c37-aa69-a9a7e6bb43cb"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Aim"",
+                    ""type"": ""Value"",
+                    ""id"": ""5637d8ef-7514-47e7-b0eb-8ac4ab998289"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Cancel"",
+                    ""type"": ""Button"",
+                    ""id"": ""d0c3a9ab-1a74-4f2c-894e-da29dab983e4"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -45,7 +72,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""New action"",
+                    ""action"": ""Shoot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -56,91 +83,40 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""New action"",
+                    ""action"": ""Shoot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
-            ""name"": ""Move"",
-            ""id"": ""963ec77d-b37b-45d0-a8d1-e05a4f5173f2"",
-            ""actions"": [
-                {
-                    ""name"": ""New action"",
-                    ""type"": ""Value"",
-                    ""id"": ""35b8ad74-62a6-48ce-bf27-f7e8b4a37972"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                }
-            ],
-            ""bindings"": [
+                },
                 {
                     ""name"": """",
-                    ""id"": ""774d05a9-43d4-4556-b2c2-f373979227a7"",
+                    ""id"": ""1b3cba0d-4a4e-4ab7-ac4e-f364f4e538c8"",
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""New action"",
+                    ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
-            ""name"": ""Aim"",
-            ""id"": ""3a935922-2344-4632-9d39-36e7b8e313d9"",
-            ""actions"": [
-                {
-                    ""name"": ""New action"",
-                    ""type"": ""Value"",
-                    ""id"": ""0d944fe2-1170-4b10-9936-267e9b12c283"",
-                    ""expectedControlType"": ""Vector2"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                }
-            ],
-            ""bindings"": [
+                },
                 {
                     ""name"": """",
-                    ""id"": ""e6008834-6efa-4647-8ecd-6f26599ac67d"",
+                    ""id"": ""2aeebcbd-9ca8-4f4f-b595-477e5483cc7e"",
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""New action"",
+                    ""action"": ""Aim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
-            ""name"": ""Cancel"",
-            ""id"": ""3878c282-e9cb-497e-8063-70bf8be394e8"",
-            ""actions"": [
-                {
-                    ""name"": ""New action"",
-                    ""type"": ""Button"",
-                    ""id"": ""b8d5bb40-a000-4718-baed-66b75dcf5501"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
+                },
                 {
                     ""name"": """",
-                    ""id"": ""31b51cbb-8704-4e95-8308-b3279cfc85cb"",
+                    ""id"": ""81216c39-c967-4033-bb7a-26ed0b0cfe2b"",
                     ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""New action"",
+                    ""action"": ""Cancel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -172,18 +148,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         }
     ]
 }");
-        // Shoot
-        m_Shoot = asset.FindActionMap("Shoot", throwIfNotFound: true);
-        m_Shoot_Newaction = m_Shoot.FindAction("New action", throwIfNotFound: true);
-        // Move
-        m_Move = asset.FindActionMap("Move", throwIfNotFound: true);
-        m_Move_Newaction = m_Move.FindAction("New action", throwIfNotFound: true);
-        // Aim
-        m_Aim = asset.FindActionMap("Aim", throwIfNotFound: true);
-        m_Aim_Newaction = m_Aim.FindAction("New action", throwIfNotFound: true);
-        // Cancel
-        m_Cancel = asset.FindActionMap("Cancel", throwIfNotFound: true);
-        m_Cancel_Newaction = m_Cancel.FindAction("New action", throwIfNotFound: true);
+        // Main
+        m_Main = asset.FindActionMap("Main", throwIfNotFound: true);
+        m_Main_Shoot = m_Main.FindAction("Shoot", throwIfNotFound: true);
+        m_Main_Move = m_Main.FindAction("Move", throwIfNotFound: true);
+        m_Main_Aim = m_Main.FindAction("Aim", throwIfNotFound: true);
+        m_Main_Cancel = m_Main.FindAction("Cancel", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -242,189 +212,75 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         return asset.FindBinding(bindingMask, out action);
     }
 
-    // Shoot
-    private readonly InputActionMap m_Shoot;
-    private List<IShootActions> m_ShootActionsCallbackInterfaces = new List<IShootActions>();
-    private readonly InputAction m_Shoot_Newaction;
-    public struct ShootActions
+    // Main
+    private readonly InputActionMap m_Main;
+    private List<IMainActions> m_MainActionsCallbackInterfaces = new List<IMainActions>();
+    private readonly InputAction m_Main_Shoot;
+    private readonly InputAction m_Main_Move;
+    private readonly InputAction m_Main_Aim;
+    private readonly InputAction m_Main_Cancel;
+    public struct MainActions
     {
         private @PlayerControls m_Wrapper;
-        public ShootActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Newaction => m_Wrapper.m_Shoot_Newaction;
-        public InputActionMap Get() { return m_Wrapper.m_Shoot; }
+        public MainActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Shoot => m_Wrapper.m_Main_Shoot;
+        public InputAction @Move => m_Wrapper.m_Main_Move;
+        public InputAction @Aim => m_Wrapper.m_Main_Aim;
+        public InputAction @Cancel => m_Wrapper.m_Main_Cancel;
+        public InputActionMap Get() { return m_Wrapper.m_Main; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(ShootActions set) { return set.Get(); }
-        public void AddCallbacks(IShootActions instance)
+        public static implicit operator InputActionMap(MainActions set) { return set.Get(); }
+        public void AddCallbacks(IMainActions instance)
         {
-            if (instance == null || m_Wrapper.m_ShootActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_ShootActionsCallbackInterfaces.Add(instance);
-            @Newaction.started += instance.OnNewaction;
-            @Newaction.performed += instance.OnNewaction;
-            @Newaction.canceled += instance.OnNewaction;
+            if (instance == null || m_Wrapper.m_MainActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_MainActionsCallbackInterfaces.Add(instance);
+            @Shoot.started += instance.OnShoot;
+            @Shoot.performed += instance.OnShoot;
+            @Shoot.canceled += instance.OnShoot;
+            @Move.started += instance.OnMove;
+            @Move.performed += instance.OnMove;
+            @Move.canceled += instance.OnMove;
+            @Aim.started += instance.OnAim;
+            @Aim.performed += instance.OnAim;
+            @Aim.canceled += instance.OnAim;
+            @Cancel.started += instance.OnCancel;
+            @Cancel.performed += instance.OnCancel;
+            @Cancel.canceled += instance.OnCancel;
         }
 
-        private void UnregisterCallbacks(IShootActions instance)
+        private void UnregisterCallbacks(IMainActions instance)
         {
-            @Newaction.started -= instance.OnNewaction;
-            @Newaction.performed -= instance.OnNewaction;
-            @Newaction.canceled -= instance.OnNewaction;
+            @Shoot.started -= instance.OnShoot;
+            @Shoot.performed -= instance.OnShoot;
+            @Shoot.canceled -= instance.OnShoot;
+            @Move.started -= instance.OnMove;
+            @Move.performed -= instance.OnMove;
+            @Move.canceled -= instance.OnMove;
+            @Aim.started -= instance.OnAim;
+            @Aim.performed -= instance.OnAim;
+            @Aim.canceled -= instance.OnAim;
+            @Cancel.started -= instance.OnCancel;
+            @Cancel.performed -= instance.OnCancel;
+            @Cancel.canceled -= instance.OnCancel;
         }
 
-        public void RemoveCallbacks(IShootActions instance)
+        public void RemoveCallbacks(IMainActions instance)
         {
-            if (m_Wrapper.m_ShootActionsCallbackInterfaces.Remove(instance))
+            if (m_Wrapper.m_MainActionsCallbackInterfaces.Remove(instance))
                 UnregisterCallbacks(instance);
         }
 
-        public void SetCallbacks(IShootActions instance)
+        public void SetCallbacks(IMainActions instance)
         {
-            foreach (var item in m_Wrapper.m_ShootActionsCallbackInterfaces)
+            foreach (var item in m_Wrapper.m_MainActionsCallbackInterfaces)
                 UnregisterCallbacks(item);
-            m_Wrapper.m_ShootActionsCallbackInterfaces.Clear();
+            m_Wrapper.m_MainActionsCallbackInterfaces.Clear();
             AddCallbacks(instance);
         }
     }
-    public ShootActions @Shoot => new ShootActions(this);
-
-    // Move
-    private readonly InputActionMap m_Move;
-    private List<IMoveActions> m_MoveActionsCallbackInterfaces = new List<IMoveActions>();
-    private readonly InputAction m_Move_Newaction;
-    public struct MoveActions
-    {
-        private @PlayerControls m_Wrapper;
-        public MoveActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Newaction => m_Wrapper.m_Move_Newaction;
-        public InputActionMap Get() { return m_Wrapper.m_Move; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(MoveActions set) { return set.Get(); }
-        public void AddCallbacks(IMoveActions instance)
-        {
-            if (instance == null || m_Wrapper.m_MoveActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_MoveActionsCallbackInterfaces.Add(instance);
-            @Newaction.started += instance.OnNewaction;
-            @Newaction.performed += instance.OnNewaction;
-            @Newaction.canceled += instance.OnNewaction;
-        }
-
-        private void UnregisterCallbacks(IMoveActions instance)
-        {
-            @Newaction.started -= instance.OnNewaction;
-            @Newaction.performed -= instance.OnNewaction;
-            @Newaction.canceled -= instance.OnNewaction;
-        }
-
-        public void RemoveCallbacks(IMoveActions instance)
-        {
-            if (m_Wrapper.m_MoveActionsCallbackInterfaces.Remove(instance))
-                UnregisterCallbacks(instance);
-        }
-
-        public void SetCallbacks(IMoveActions instance)
-        {
-            foreach (var item in m_Wrapper.m_MoveActionsCallbackInterfaces)
-                UnregisterCallbacks(item);
-            m_Wrapper.m_MoveActionsCallbackInterfaces.Clear();
-            AddCallbacks(instance);
-        }
-    }
-    public MoveActions @Move => new MoveActions(this);
-
-    // Aim
-    private readonly InputActionMap m_Aim;
-    private List<IAimActions> m_AimActionsCallbackInterfaces = new List<IAimActions>();
-    private readonly InputAction m_Aim_Newaction;
-    public struct AimActions
-    {
-        private @PlayerControls m_Wrapper;
-        public AimActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Newaction => m_Wrapper.m_Aim_Newaction;
-        public InputActionMap Get() { return m_Wrapper.m_Aim; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(AimActions set) { return set.Get(); }
-        public void AddCallbacks(IAimActions instance)
-        {
-            if (instance == null || m_Wrapper.m_AimActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_AimActionsCallbackInterfaces.Add(instance);
-            @Newaction.started += instance.OnNewaction;
-            @Newaction.performed += instance.OnNewaction;
-            @Newaction.canceled += instance.OnNewaction;
-        }
-
-        private void UnregisterCallbacks(IAimActions instance)
-        {
-            @Newaction.started -= instance.OnNewaction;
-            @Newaction.performed -= instance.OnNewaction;
-            @Newaction.canceled -= instance.OnNewaction;
-        }
-
-        public void RemoveCallbacks(IAimActions instance)
-        {
-            if (m_Wrapper.m_AimActionsCallbackInterfaces.Remove(instance))
-                UnregisterCallbacks(instance);
-        }
-
-        public void SetCallbacks(IAimActions instance)
-        {
-            foreach (var item in m_Wrapper.m_AimActionsCallbackInterfaces)
-                UnregisterCallbacks(item);
-            m_Wrapper.m_AimActionsCallbackInterfaces.Clear();
-            AddCallbacks(instance);
-        }
-    }
-    public AimActions @Aim => new AimActions(this);
-
-    // Cancel
-    private readonly InputActionMap m_Cancel;
-    private List<ICancelActions> m_CancelActionsCallbackInterfaces = new List<ICancelActions>();
-    private readonly InputAction m_Cancel_Newaction;
-    public struct CancelActions
-    {
-        private @PlayerControls m_Wrapper;
-        public CancelActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Newaction => m_Wrapper.m_Cancel_Newaction;
-        public InputActionMap Get() { return m_Wrapper.m_Cancel; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(CancelActions set) { return set.Get(); }
-        public void AddCallbacks(ICancelActions instance)
-        {
-            if (instance == null || m_Wrapper.m_CancelActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_CancelActionsCallbackInterfaces.Add(instance);
-            @Newaction.started += instance.OnNewaction;
-            @Newaction.performed += instance.OnNewaction;
-            @Newaction.canceled += instance.OnNewaction;
-        }
-
-        private void UnregisterCallbacks(ICancelActions instance)
-        {
-            @Newaction.started -= instance.OnNewaction;
-            @Newaction.performed -= instance.OnNewaction;
-            @Newaction.canceled -= instance.OnNewaction;
-        }
-
-        public void RemoveCallbacks(ICancelActions instance)
-        {
-            if (m_Wrapper.m_CancelActionsCallbackInterfaces.Remove(instance))
-                UnregisterCallbacks(instance);
-        }
-
-        public void SetCallbacks(ICancelActions instance)
-        {
-            foreach (var item in m_Wrapper.m_CancelActionsCallbackInterfaces)
-                UnregisterCallbacks(item);
-            m_Wrapper.m_CancelActionsCallbackInterfaces.Clear();
-            AddCallbacks(instance);
-        }
-    }
-    public CancelActions @Cancel => new CancelActions(this);
+    public MainActions @Main => new MainActions(this);
     private int m_ControllerSchemeIndex = -1;
     public InputControlScheme ControllerScheme
     {
@@ -443,20 +299,11 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             return asset.controlSchemes[m_KeyboardSchemeIndex];
         }
     }
-    public interface IShootActions
+    public interface IMainActions
     {
-        void OnNewaction(InputAction.CallbackContext context);
-    }
-    public interface IMoveActions
-    {
-        void OnNewaction(InputAction.CallbackContext context);
-    }
-    public interface IAimActions
-    {
-        void OnNewaction(InputAction.CallbackContext context);
-    }
-    public interface ICancelActions
-    {
-        void OnNewaction(InputAction.CallbackContext context);
+        void OnShoot(InputAction.CallbackContext context);
+        void OnMove(InputAction.CallbackContext context);
+        void OnAim(InputAction.CallbackContext context);
+        void OnCancel(InputAction.CallbackContext context);
     }
 }
