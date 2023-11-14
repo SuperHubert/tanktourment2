@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class Tank : MonoBehaviour
+public class Tank : MonoBehaviour, IDamageable
 {
     [Header("Components")]
     [SerializeField] private Rigidbody rb;
@@ -16,13 +16,14 @@ public class Tank : MonoBehaviour
     [SerializeField] private float maxTurnSpeed = 10f;
     [Space]
     [SerializeField] private Projectile projectilePrefab;
-    [SerializeField] private float projectileForce;
-    [SerializeField] private int projectileDamage;
+    [SerializeField] private Projectile.ProjectileData projectileData;
+    [Space]
+    [SerializeField] private int maxHp;
 
     [Header("Debug")]
-    [SerializeField] private Gradient projectileGradient;
     [SerializeField] private Vector2 movementDirection;
     [SerializeField] private Vector3 headDirection;
+    [SerializeField] private int currentHp;
     
     public Vector3 Position => transform.position;
     
@@ -34,6 +35,14 @@ public class Tank : MonoBehaviour
     public void HandleHeadInputs(Vector2 inputs)
     {
         headDirection = new Vector3(inputs.x,0,inputs.y);
+    }
+
+    public void RespawnValues()
+    {
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+
+        currentHp = maxHp;
     }
     
     private void Update()
@@ -93,14 +102,19 @@ public class Tank : MonoBehaviour
     public void Shoot()
     {
         var projectile =  ObjectPooler.Pool(projectilePrefab,canonTip.position,canonTip.rotation);
-
-        projectile.Shoot(canonTip.forward * projectileForce,projectileGradient);
+        
+        projectile.Shoot(projectileData);
         
         //TODO - don't forget animation
     }
 
-    private void OnCollisionEnter(Collision other)
+    public void TakeDamage(int damage)
     {
-        Debug.Log(other);
+        currentHp -= damage;
     }
+}
+
+public interface IDamageable
+{
+    void TakeDamage(int damage);
 }

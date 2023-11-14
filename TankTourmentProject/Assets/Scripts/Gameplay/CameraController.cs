@@ -23,15 +23,12 @@ public class CameraController : MonoBehaviour
         
         Cam.enabled = hasTarget;
 
-        
-        
-        //LookAtTarget();
+        CamTransform.position = target.position + offset; 
     }
     
     private void Update()
     {
         MoveWithTarget();
-        //LookAtTarget();
     }
 
     [ContextMenu("Look At Target")]

@@ -34,6 +34,8 @@ public class TankManager : MonoBehaviour
     {
         var tank = Instantiate(tankPrefab,NextAvailableSpawnPoint(), Quaternion.identity);
         
+        tank.RespawnValues();
+        
         tanks.Add(tank);
         
         controller.TankController.ConnectTank(tank);
