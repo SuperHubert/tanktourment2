@@ -43,6 +43,8 @@ namespace MapGeneration
         public void AutoSelectTileType()
         {
             TileTypeSelected = TileTypesPossibles[Random.Range(0, TileTypesPossibles.Count)];
+            TileTypesPossibles.Clear();
+            TileTypesPossibles.Add(TileTypeSelected);
             Collapse();
         }
         
