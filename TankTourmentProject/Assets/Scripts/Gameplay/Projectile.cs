@@ -14,8 +14,23 @@ public class Projectile : MonoBehaviour
         [field: SerializeField] public Gradient Color { get; private set; }
         [field: SerializeField] public int Damage { get; private set; }
         [field: SerializeField] public float ExplosionRadius { get; private set; }
-        [HideInInspector] public Vector3 direction;
     }
+
+    public struct DamageData
+    {
+        [field: SerializeField] public Vector3 ExplosionOrigin { get; private set; }
+        [field: SerializeField] public Tank Shooter  { get; private set; }
+        [field: SerializeField] public int Damage { get; private set; }
+        
+        public DamageData(Vector3 explosionOrigin, Tank shooter, int damage)
+        {
+            ExplosionOrigin = explosionOrigin;
+            Shooter = shooter;
+            Damage = damage;
+        }
+    }
+
+    private Tank owner;
     
     private int damage;
     private float explosionRadius;
@@ -27,13 +42,17 @@ public class Projectile : MonoBehaviour
 
     private void Cleanup()
     {
+        owner = null;
         rb.velocity = Vector3.zero;
         trailRenderer.Clear();
     }
 
-    public void Shoot(ProjectileData data)
+    public void Shoot(ProjectileData data,Tank shooter)
     {
         Cleanup();
+        
+        owner = shooter;
+        
         trailRenderer.colorGradient = data.Color;
         
         var velocity = data.Velocity * transform.forward;
@@ -44,26 +63,46 @@ public class Projectile : MonoBehaviour
         rb.AddForce(velocity);
     }
 
-    private void OnCollisionEnter(Collision other)
-    {
-        //Debug.Log($"Collision : {other.gameObject.name}");
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"Trigger : {other.gameObject.name}");
+        //Debug.Log($"Trigger : {other.gameObject.name}");
+        
+        if (other.TryGetComponent(out Tank tank))
+        {
+            if(tank == owner) return;
+        }
         
         gameObject.SetActive(false);
-        
-        
-        var colliders = Physics.OverlapSphere(transform.position, explosionRadius);
 
+        var position = transform.position;
+        
+        var data = new DamageData(position, owner, damage);
+        
+        // TODO - explosion feedback
+        //fx
+        //maybe push stuff around
+        
+        var colliders = Physics.OverlapSphere(position, explosionRadius);
+        
         foreach (var col in colliders)
         {
+            Debug.DrawLine(position,col.transform.position,Color.red,1f);
+            
             if (col.TryGetComponent(out IDamageable damageable))
             {
-                damageable.TakeDamage(damage);
+                //raycast to see if there is no wall between the explosion and the damageable
+                
+                damageable.TakeDamage(data);
             }
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        var color = Color.red;
+        color.a = 0.5f;
+        Gizmos.color = color;
+        
+        Gizmos.DrawWireSphere(transform.position,explosionRadius);
     }
 }

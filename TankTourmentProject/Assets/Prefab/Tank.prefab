@@ -479,8 +479,7 @@ MonoBehaviour:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     <Damage>k__BackingField: 1
-    <ExplosionRadius>k__BackingField: 10
-    direction: {x: 0, y: 0, z: 0}
+    <ExplosionRadius>k__BackingField: 1
   maxHp: 3
   movementDirection: {x: 0, y: 0}
   headDirection: {x: 0, y: 0, z: 0}

@@ -24,6 +24,8 @@ public class Tank : MonoBehaviour, IDamageable
     [SerializeField] private Vector2 movementDirection;
     [SerializeField] private Vector3 headDirection;
     [SerializeField] private int currentHp;
+
+    public event Action<Tank> OnTankKilled;
     
     public Vector3 Position => transform.position;
     
@@ -39,6 +41,8 @@ public class Tank : MonoBehaviour, IDamageable
 
     public void RespawnValues()
     {
+        gameObject.SetActive(true);
+        
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
@@ -103,18 +107,25 @@ public class Tank : MonoBehaviour, IDamageable
     {
         var projectile =  ObjectPooler.Pool(projectilePrefab,canonTip.position,canonTip.rotation);
         
-        projectile.Shoot(projectileData);
+        projectile.Shoot(projectileData,this);
         
         //TODO - don't forget animation
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(Projectile.DamageData data)
     {
-        currentHp -= damage;
+        currentHp -= data.Damage;
+        
+        if(currentHp <= 0)
+        {
+            gameObject.SetActive(false);
+            
+            OnTankKilled?.Invoke(data.Shooter);
+        }
     }
 }
 
 public interface IDamageable
 {
-    void TakeDamage(int damage);
+    void TakeDamage(Projectile.DamageData data);
 }
