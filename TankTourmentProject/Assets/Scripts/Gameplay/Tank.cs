@@ -7,14 +7,20 @@ public class Tank : MonoBehaviour
     [Header("Components")]
     [SerializeField] private Rigidbody rb;
     [SerializeField] private Transform headTransform;
+    [SerializeField] private Transform canonTip;
     
     [Header("Settings")]
     [SerializeField] private bool moveTowardsDirection = false;
     [SerializeField] private float maxSpeed = 10f;
     [SerializeField] private float acceleration = 10f;
     [SerializeField] private float maxTurnSpeed = 10f;
-    
+    [Space]
+    [SerializeField] private Projectile projectilePrefab;
+    [SerializeField] private float projectileForce;
+    [SerializeField] private int projectileDamage;
+
     [Header("Debug")]
+    [SerializeField] private Gradient projectileGradient;
     [SerializeField] private Vector2 movementDirection;
     [SerializeField] private Vector3 headDirection;
     
@@ -44,7 +50,8 @@ public class Tank : MonoBehaviour
     private void HandleHeadRotation()
     {
         if(headDirection == Vector3.zero) return;
-        headTransform.forward = headDirection;
+        
+        headTransform.forward = headDirection; // TODO : make it smooth (lerp)
     }
 
     private void HandleMovement()
@@ -85,26 +92,15 @@ public class Tank : MonoBehaviour
     
     public void Shoot()
     {
-        Debug.Log("Pew Pew", gameObject);
+        var projectile =  ObjectPooler.Pool(projectilePrefab,canonTip.position,canonTip.rotation);
+
+        projectile.Shoot(canonTip.forward * projectileForce,projectileGradient);
         
         //TODO - don't forget animation
     }
 
-    /*
-    private void OnDrawGizmos()
+    private void OnCollisionEnter(Collision other)
     {
-        var targetRot = moveTowardsDirection ? new Vector3(movementDirection.x,0,movementDirection.y) : (transform.right * movementDirection.x);
-        
-        var pos = transform.position;
-        Gizmos.color = Color.red;
-        Gizmos.DrawRay(pos, targetRot * maxSpeed);
-        
-        var targetVelocity = moveTowardsDirection
-            ? new Vector3(movementDirection.x, 0, movementDirection.y) * maxSpeed
-            : transform.forward; 
-        
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawRay(pos, targetVelocity * maxSpeed);
+        Debug.Log(other);
     }
-    */
 }

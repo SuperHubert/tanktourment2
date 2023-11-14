@@ -87,6 +87,28 @@
                 },
                 {
                     "name": "",
+                    "id": "d5fcfe4a-01d9-49df-9424-1b7d315e919c",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Controller",
+                    "action": "Shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1e1b26bb-cdf4-4e6d-ad2f-d7f76eebfd65",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Controller",
+                    "action": "Shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "81216c39-c967-4033-bb7a-26ed0b0cfe2b",
                     "path": "<Gamepad>/buttonEast",
                     "interactions": "",

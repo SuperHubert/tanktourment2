@@ -259,5 +259,5 @@ MonoBehaviour:
   <Cam>k__BackingField: {fileID: 7303184125657476110}
   <CamTransform>k__BackingField: {fileID: 8684715165285673610}
   offset: {x: 0, y: 10, z: 0}
-  speed: 2
+  speed: 5
   target: {fileID: 0}

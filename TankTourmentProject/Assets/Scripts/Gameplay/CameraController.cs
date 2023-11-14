@@ -23,12 +23,15 @@ public class CameraController : MonoBehaviour
         
         Cam.enabled = hasTarget;
 
-        LookAtTarget();
+        
+        
+        //LookAtTarget();
     }
     
     private void Update()
     {
         MoveWithTarget();
+        //LookAtTarget();
     }
 
     [ContextMenu("Look At Target")]
@@ -44,6 +47,9 @@ public class CameraController : MonoBehaviour
         if(!hasTarget) return;
         
         var pos = CamTransform.position;
-        CamTransform.position = Vector3.MoveTowards(pos, target.position + offset, speed * Time.deltaTime);
+
+        var targetPos = target.position + offset; //TODO: offset this by the input direction if aiming
+        
+        CamTransform.position = Vector3.MoveTowards(pos, targetPos, speed * Time.deltaTime);
     }
 }
