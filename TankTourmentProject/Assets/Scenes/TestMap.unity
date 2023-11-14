@@ -407,31 +407,77 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc76fbe6564342846a7f9e5342c036e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilePrefabs:
-  - go: {fileID: 1015573513967199939, guid: cd9c5523ddd92324c8d0ec89848d923b, type: 3}
-    tileType: 1
-  - go: {fileID: 1015573513967199939, guid: 564081797e12af54dac8903633c5ce79, type: 3}
-    tileType: 2
-  - go: {fileID: 1015573513967199939, guid: beaf497dfbc5e454f9d1f8deb966e492, type: 3}
-    tileType: 3
-  - go: {fileID: 1015573513967199939, guid: 0d1e06c4535b7d0478b499ee12d500ce, type: 3}
-    tileType: 4
-  - go: {fileID: 1015573513967199939, guid: 6677a5317ab735848ac43714910409c1, type: 3}
-    tileType: 5
-  - go: {fileID: 1015573513967199939, guid: 14f4f32e8369ef04c8807ed0a3261841, type: 3}
-    tileType: 6
-  - go: {fileID: 1015573513967199939, guid: 377c03f76eb55c644896b52f27d10f2c, type: 3}
-    tileType: 7
-  - go: {fileID: 1015573513967199939, guid: 854b81b819d3cee4fb39c3d78d29b8e8, type: 3}
-    tileType: 8
-  - go: {fileID: 1015573513967199939, guid: 8f853da55d670a0438e6b3812dc8eb66, type: 3}
-    tileType: 9
-  - go: {fileID: 1015573513967199939, guid: 65266961aada2304496d2446c9400240, type: 3}
-    tileType: 10
-  - go: {fileID: 1015573513967199939, guid: 44401c4c593b73047ac8bc5ccb4fa0d5, type: 3}
-    tileType: 11
+  creationSpeed: 0
   width: 10
   height: 10
+  offset: 0
+  tilePrefabs:
+  - name: Cross
+    go: {fileID: 1015573513967199939, guid: cd9c5523ddd92324c8d0ec89848d923b, type: 3}
+    top: w-o-w
+    bot: w-o-w
+    left: w-o-w
+    right: w-o-w
+  - name: Line Horizontal
+    go: {fileID: 1015573513967199939, guid: 564081797e12af54dac8903633c5ce79, type: 3}
+    top: c
+    bot: c
+    left: w-o-w
+    right: w-o-w
+  - name: Line Vertical
+    go: {fileID: 1015573513967199939, guid: beaf497dfbc5e454f9d1f8deb966e492, type: 3}
+    top: w-o-w
+    bot: w-o-w
+    left: c
+    right: c
+  - name: L Shape TL
+    go: {fileID: 1015573513967199939, guid: 0d1e06c4535b7d0478b499ee12d500ce, type: 3}
+    top: w-o-w
+    bot: c
+    left: w-o-w
+    right: c
+  - name: L Shape TR
+    go: {fileID: 1015573513967199939, guid: 6677a5317ab735848ac43714910409c1, type: 3}
+    top: w-o-w
+    bot: c
+    left: c
+    right: w-o-w
+  - name: L Shape BL
+    go: {fileID: 1015573513967199939, guid: 14f4f32e8369ef04c8807ed0a3261841, type: 3}
+    top: c
+    bot: w-o-w
+    left: w-o-w
+    right: c
+  - name: L Shape BR
+    go: {fileID: 1015573513967199939, guid: 377c03f76eb55c644896b52f27d10f2c, type: 3}
+    top: c
+    bot: w-o-w
+    left: c
+    right: w-o-w
+  - name: T Shape T
+    go: {fileID: 1015573513967199939, guid: 854b81b819d3cee4fb39c3d78d29b8e8, type: 3}
+    top: c
+    bot: w-o-w
+    left: w-o-w
+    right: w-o-w
+  - name: T Shape B
+    go: {fileID: 1015573513967199939, guid: 8f853da55d670a0438e6b3812dc8eb66, type: 3}
+    top: w-o-w
+    bot: c
+    left: w-o-w
+    right: w-o-w
+  - name: T Shape L
+    go: {fileID: 1015573513967199939, guid: 65266961aada2304496d2446c9400240, type: 3}
+    top: w-o-w
+    bot: w-o-w
+    left: c
+    right: w-o-w
+  - name: T Shape R
+    go: {fileID: 1015573513967199939, guid: 44401c4c593b73047ac8bc5ccb4fa0d5, type: 3}
+    top: w-o-w
+    bot: w-o-w
+    left: w-o-w
+    right: c
 --- !u!4 &1651105791
 Transform:
   m_ObjectHideFlags: 0
