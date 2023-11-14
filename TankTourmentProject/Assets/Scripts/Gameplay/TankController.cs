@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -5,28 +6,41 @@ public class TankController : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] private PlayerInput playerInput;
+
+    private Camera inputCam;
     
     private InputAction moveAction;
     private InputAction lookAction;
     private InputAction shootAction;
-    private InputAction mouseLookAction;
+    private InputAction pointerLookAction;
     
     [SerializeField] private Tank tank; //TODO Instantiate this with game manager
+    [SerializeField] private Vector2 mousePos;
+
+    
+    private bool connected = false;
     
     private void Start()
     {
+        inputCam = playerInput.camera;
+        
         moveAction = playerInput.actions["Move"];
-        lookAction = playerInput.actions["Test"];
+        lookAction = playerInput.actions["Look"];
         shootAction = playerInput.actions["Shoot"];
-        
-        Debug.Log("lookAction: " + lookAction);
-        
+        pointerLookAction = playerInput.actions["LookMouse"];
         
         ConnectTankInputs();
     }
 
+    private void Update()
+    {
+        HandleMouseHeadInputs();
+    }
+
     private void ConnectTankInputs()
     {
+        if(tank == null) return;
+        
         moveAction.performed += HandleMovement;
         moveAction.canceled += HandleMovement;
         
@@ -34,6 +48,8 @@ public class TankController : MonoBehaviour
         lookAction.canceled += HandleHeadInputs;
         
         shootAction.started += HandleShooting;
+        
+        connected = true;
     }
     
     private void HandleMovement(InputAction.CallbackContext context)
@@ -46,6 +62,13 @@ public class TankController : MonoBehaviour
     {
         var direction = context.ReadValue<Vector2>();
         tank.HandleHeadInputs(direction);
+    }
+
+    private void HandleMouseHeadInputs()
+    {
+        mousePos = pointerLookAction.ReadValue<Vector2>();
+        var dir = mousePos - (Vector2)inputCam.WorldToScreenPoint(tank.transform.position);
+        tank.HandleHeadInputs(dir.normalized);
     }
     
     private void HandleShooting(InputAction.CallbackContext context)
