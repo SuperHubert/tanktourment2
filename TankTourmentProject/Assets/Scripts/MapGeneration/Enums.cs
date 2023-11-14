@@ -4,15 +4,38 @@ namespace MapGeneration
 {
     public class Enums
     {
+        public static Direction ReverseDirection(Direction direction)
+        {
+            switch (direction)
+            {
+                case Direction.Top:
+                    return Direction.Bottom;
+                case Direction.Bottom:
+                    return Direction.Top;
+                case Direction.Left:
+                    return Direction.Right;
+                case Direction.Right:
+                    return Direction.Left;
+                default:
+                    return Direction.Top; // Will never happen, required for compilation
+            }
+        }
+        
         public static List<TileType> AllTileTypes = new List<TileType>()
         {
             TileType.Cross,
             TileType.LineHorizontal,
             TileType.LineVertical,
+            
             TileType.LShapeTL,
             TileType.LShapeTR,
             TileType.LShapeBL,
             TileType.LShapeBR,
+            
+            TileType.TShapeT,
+            TileType.TShapeB,
+            TileType.TShapeL,
+            TileType.TShapeR
         };
         
         
@@ -34,6 +57,14 @@ namespace MapGeneration
                     return GetNeighborLShapeBL(direction);
                 case TileType.LShapeBR:
                     return GetNeighborLShapeBR(direction);
+                case TileType.TShapeT:
+                    return direction == Direction.Top ? NeighborType.Closed : NeighborType.Open;
+                case TileType.TShapeB:
+                    return direction == Direction.Bottom ? NeighborType.Closed : NeighborType.Open;
+                case TileType.TShapeL:
+                    return direction == Direction.Left ? NeighborType.Closed : NeighborType.Open;
+                case TileType.TShapeR:
+                    return direction == Direction.Right ? NeighborType.Closed : NeighborType.Open;
             }
             
             return NeighborType.Closed; // Will never happen, required for compilation
@@ -140,10 +171,16 @@ namespace MapGeneration
             Cross,
             LineHorizontal,
             LineVertical,
-            LShapeTL,
+
+            LShapeTL, // L Shape (Open are Letters)
             LShapeTR,
             LShapeBL,
             LShapeBR,
+            
+            TShapeT, // T Shape (all except Letter)
+            TShapeB,
+            TShapeL,
+            TShapeR,
         }
 
         public enum NeighborType
