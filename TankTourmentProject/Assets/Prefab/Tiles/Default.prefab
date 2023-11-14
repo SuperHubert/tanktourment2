@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8722445309024678892}
-  - component: {fileID: -7072455253838075982}
+  - component: {fileID: 198370908226086563}
   m_Layer: 0
-  m_Name: StraightPath 2
+  m_Name: Default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,7 +33,7 @@ Transform:
   - {fileID: 6022650189333847984}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-7072455253838075982
+--- !u!114 &198370908226086563
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -108,7 +108,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: afcca6721f2a3d94ba467ded22d02ca5, type: 2}
+  - {fileID: 2100000, guid: 82a477cff45d3f44bbfa6671dc9ebd4b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

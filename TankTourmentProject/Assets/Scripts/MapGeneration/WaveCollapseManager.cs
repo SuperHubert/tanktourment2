@@ -17,7 +17,22 @@ namespace MapGeneration
         [SerializeField] private int width;
         [SerializeField] private int height;
         [SerializeField] private float offset;
+        [SerializeField] private Vector3 scale;
         
+        [field:Header("Map customization")]
+        [SerializeField] private Vector2Int spawnPosition;
+        [SerializeField] private Vector2Int spawnSize;
+        
+        [SerializeField] private Vector2Int connectorsPosition;
+        [SerializeField] private Vector2Int connectorsSize;
+        
+        [SerializeField] private Vector2Int controlPosition;
+        [SerializeField] private Vector2Int controlPSize;
+        
+        private int Width => width + 2;
+        private int Height => height + 2;
+
+
         
         [field:Header("Prefabs")]
         [field:SerializeField] private List<PrefabData> tilePrefabs;
@@ -32,9 +47,9 @@ namespace MapGeneration
             if (Instance == null) Instance = this;
             else Destroy(gameObject);
             
-            nodes = new Node[width, height];
+            nodes = new Node[Width, Height];
             
-            CollapseWave();
+            GenerateMap();
         }
 
         // Update is called once per frame
@@ -45,9 +60,9 @@ namespace MapGeneration
         
         void GenerateVisualMap()
         {
-            for (int i = 0; i < width; i++)
+            for (int i = 0; i < Width; i++)
             {
-                for (int j = 0; j < height; j++)
+                for (int j = 0; j < Height; j++)
                 {
                     GenerateVisualFor(i, j);
                 }
@@ -56,22 +71,91 @@ namespace MapGeneration
 
         void GenerateVisualFor(int i, int j)
         {
-            GameObject prefabToInstantiate = tilePrefabs.First(t => t.name == nodes[i,j].TileTypeSelected).go;
-            Instantiate(prefabToInstantiate, new Vector3(i * (1+offset) + 0.5f, 0, j * (1+offset) +0.5f), Quaternion.identity);
+            if(i < 0 || i >= Width || j < 0 || j >= Height) return;
+
+            var prefabToInstantiate = tilePrefabs[4].go;
+
+            var useDefault = nodes[i, j].TileTypeSelected == null;
+            
+            if (!useDefault) prefabToInstantiate = nodes[i,j].TileTypeSelected.go;
+            
+            var tile = Instantiate(prefabToInstantiate,
+                new Vector3(i * (offset + scale.x) + 0.5f, 0, j * (scale.z + offset) + 0.5f), Quaternion.identity,
+                useDefault ? transform : null);
+            tile.transform.localScale = scale;
+            
+            var mat = tile.Renderer.material;
+            mat.color = nodes[i,j].debugColor;
+            
+            tile.Renderer.material = mat;
+            
         }
     
-        private void CollapseWave()
+        private void GenerateMap()
         {
             
             // Init all Nodes
             InitNodes();
         
             // Set Fix nodes
+            Debug.Log("Control Points");
+            SpawnPoints(controlPosition, controlPSize, tilePrefabs[0]);
             
+            Debug.Log("Spawn Points");
+            SpawnPoints(spawnPosition, spawnSize, tilePrefabs[1]);
             
-            StartCoroutine( IterateSlowly() );
-        }
+            Debug.Log("Connectors Points");
+            SpawnPoints(connectorsPosition, connectorsSize, tilePrefabs[2]);
 
+            var rotatedPos = new Vector2Int(connectorsPosition.y, connectorsPosition.x);
+            var rotatedSize = new Vector2Int(connectorsSize.y, connectorsSize.x);
+
+            SpawnPoints(rotatedPos, rotatedSize, tilePrefabs[2]);
+            
+            // Connect : Player - connector - control
+            // Connect : control - control (2 to 2, then one of each pair to the other one)
+            // Wall around the connectors
+            // Collapse the rest :happy:
+            // Wall around the map (ignore collapse)
+
+
+            GenerateVisualMap();
+            
+            //StartCoroutine( IterateSlowly() );
+        }
+        
+        private void SpawnPoints(Vector2Int position, Vector2Int size, PrefabData prefabData)
+        {
+            position += Vector2Int.one;
+            SpawnControlPoint(position, size);
+            SpawnControlPoint(new Vector2Int((Width)-position.x, (Height)-position.y), -size);
+
+            SpawnControlPoint(new Vector2Int((Width)-position.y, position.x), new Vector2Int(-size.y, size.x));
+            SpawnControlPoint(new Vector2Int(position.y, (Height)-position.x), new Vector2Int(size.y, -size.x));
+            
+            return;
+            
+            void SpawnControlPoint(Vector2Int p, Vector2Int s)
+            {
+                var a = p;
+                var b = p + s;
+
+                if(a.x > b.x) (a.x, b.x) = (b.x, a.x);
+                if(a.y > b.y) (a.y, b.y) = (b.y, a.y);
+                
+                for (int y = a.y; y < b.y; y++)
+                {
+                    for (int x = a.x; x < b.x; x++)
+                    {
+                        nodes[x, y].debugColor = prefabData.DebugColor;
+                    }
+                }
+                
+                var randX = Random.Range(a.x, b.x);
+                var randY = Random.Range(a.y, b.y);
+                nodes[randX, randY].SelectTile(prefabData);
+            }
+        }
         IEnumerator IterateSlowly()
         {
             while (!IsFullyCollapsed())
@@ -83,23 +167,22 @@ namespace MapGeneration
     
         private void InitNodes()
         {
-            nodes = new Node[width, height];
-            var allShapes = tilePrefabs.Select(t => t.name).ToList();
+            nodes = new Node[Width, Height];
             
-            for (int i = 0; i < width; i++)
+            for (int i = 0; i < Width; i++)
             {
-                for (int j = 0; j < height; j++)
+                for (int j = 0; j < Height; j++)
                 {
-                    nodes[i, j] = new Node(new Vector2Int(i, j), allShapes);
+                    nodes[i, j] = new Node(new Vector2Int(i, j), tilePrefabs);
                 }
             }
         }
     
         private bool IsFullyCollapsed()
         {
-            for (int i = 0; i < width; i++)
+            for (int i = 1; i < width; i++)
             {
-                for (int j = 0; j < height; j++)
+                for (int j = 1; j < height; j++)
                 {
                     if (!nodes[i, j].IsCollapsed)
                         return false;
@@ -112,7 +195,7 @@ namespace MapGeneration
         {
             Node nodeToCollapse = GetMinEntropyNode();
             CollapseNode(nodeToCollapse);
-            if (nodeToCollapse.TileTypeSelected != "") GenerateVisualFor(nodeToCollapse.Position.x, nodeToCollapse.Position.y);
+            if (nodeToCollapse.TileTypeSelected != null) GenerateVisualFor(nodeToCollapse.Position.x, nodeToCollapse.Position.y);
             
             PropagateWave(nodeToCollapse);
         }
@@ -122,9 +205,9 @@ namespace MapGeneration
             List<Node> possiblesNodes = new List<Node>();
             int minEntropy = Int32.MaxValue;
             
-            for (int i = 0; i < width; i++)
+            for (int i = 1; i < width; i++)
             {
-                for (int j = 0; j < height; j++)
+                for (int j = 1; j < height; j++)
                 {
                     if (!nodes[i, j].IsCollapsed)
                     {
@@ -200,7 +283,7 @@ namespace MapGeneration
                     break;
             }
             
-            if (x < 0 || x >= width || y < 0 || y >= height) return;
+            if (x < 1 || x >= width || y < 1 || y >= height) return;
             
             Node nodeToUpdate = nodes[x, y];
             
@@ -214,9 +297,7 @@ namespace MapGeneration
             // Remove possibilities if it does not correspond to nodeUpToDate's selected or available
             foreach (var tileTypesPossible in nodeToUpdate.TileTypesPossibles.ToList())
             {
-                var neighborType = GetPrefabConnexionByName(tileTypesPossible, Enums.ReverseDirection(direction));
-                
-                //Enums.GetNeighborTypeByDirection(tileTypesPossible, Enums.ReverseDirection(direction) );
+                var neighborType = tileTypesPossible.GetPrefabConnexion(Enums.ReverseDirection(direction));
                 
                 if (!neighborType.Any( t => possibleNeighbors.Contains(t) ))
                 {
@@ -227,45 +308,32 @@ namespace MapGeneration
                 }
             }
         }
-
-
-        public string[] GetPrefabConnexionByName(string name, Enums.Direction direction)
-        {
-            return GetPrefabConnexion(GetPrefabIndex(name), direction);
-        }
-        
-        private int GetPrefabIndex(string name)
-        {
-            return tilePrefabs.FindIndex(t => t.name == name);
-        }
-
-        private string[] GetPrefabConnexion(int i, Enums.Direction direction)
-        {
-            switch (direction)
-            {
-                case Enums.Direction.Top:
-                    return tilePrefabs[i].top.Split(";");
-                case Enums.Direction.Bottom:
-                    return tilePrefabs[i].bot.Split(";");
-                case Enums.Direction.Left:
-                    return tilePrefabs[i].left.Split(";");
-                case Enums.Direction.Right:
-                    return tilePrefabs[i].right.Split(";");
-                default:
-                    return Array.Empty<string>();
-            }
-        }
     }
 
     [Serializable] public class PrefabData
     {
         [SerializeField] public string name; //ID but called name so it renames Element i in Inspector
-        [SerializeField] public GameObject go;
-        
+        [SerializeField] public WorldTile go;
+
         [SerializeField] public string top;
         [SerializeField] public string bot;
         [SerializeField] public string left;
         [SerializeField] public string right;
 
+        [field: SerializeField] public bool CanSpawn { get; private set; } = true;
+        [field: SerializeField] public Color DebugColor { get; private set; } = Color.white;
+
+
+        public string[] GetPrefabConnexion(Enums.Direction direction)
+        {
+            return direction switch
+            {
+                Enums.Direction.Top => top.Split(";"),
+                Enums.Direction.Bottom => bot.Split(";"),
+                Enums.Direction.Left => left.Split(";"),
+                Enums.Direction.Right => right.Split(";"),
+                _ => Array.Empty<string>()
+            };
+        }
     }
 }
