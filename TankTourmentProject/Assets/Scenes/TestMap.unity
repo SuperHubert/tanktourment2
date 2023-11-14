@@ -865,7 +865,7 @@ MonoBehaviour:
     <CanSpawn>k__BackingField: 1
     <DebugColor>k__BackingField: {r: 1, g: 1, b: 1, a: 1}
   - name: T Shape T
-    go: {fileID: -1842336671822792011, guid: 8f853da55d670a0438e6b3812dc8eb66, type: 3}
+    go: {fileID: 3633499327750700709, guid: 854b81b819d3cee4fb39c3d78d29b8e8, type: 3}
     top: c
     bot: w-o-w
     left: w-o-w

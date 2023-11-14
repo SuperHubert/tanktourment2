@@ -78,17 +78,19 @@ namespace MapGeneration
             var useDefault = nodes[i, j].TileTypeSelected == null;
             
             if (!useDefault) prefabToInstantiate = nodes[i,j].TileTypeSelected.go;
+
+            var pos = new Vector3(i * (offset + scale.x) + 0.5f, 0, j * (scale.z + offset) + 0.5f);
             
-            var tile = Instantiate(prefabToInstantiate,
-                new Vector3(i * (offset + scale.x) + 0.5f, 0, j * (scale.z + offset) + 0.5f), Quaternion.identity,
-                useDefault ? transform : null);
+            var tile = Instantiate(prefabToInstantiate, pos, Quaternion.identity, useDefault ? transform : null);
             tile.transform.localScale = scale;
             
             var mat = tile.Renderer.material;
             mat.color = nodes[i,j].debugColor;
             
             tile.Renderer.material = mat;
-            
+
+            tile.Node = nodes[i, j];
+
         }
     
         private void GenerateMap()
@@ -99,39 +101,83 @@ namespace MapGeneration
         
             // Set Fix nodes
             Debug.Log("Control Points");
-            SpawnPoints(controlPosition, controlPSize, tilePrefabs[0]);
+            
+            var controlPointsNodes = new List<Node>();
+            var spawnPositionNodes = new List<Node>();
+            var connectorNodes = new List<Node>();
+            
+            SpawnPoints(controlPosition, controlPSize, tilePrefabs[0],controlPointsNodes);
             
             Debug.Log("Spawn Points");
-            SpawnPoints(spawnPosition, spawnSize, tilePrefabs[1]);
+            SpawnPoints(spawnPosition, spawnSize, tilePrefabs[1],spawnPositionNodes);
             
             Debug.Log("Connectors Points");
-            SpawnPoints(connectorsPosition, connectorsSize, tilePrefabs[2]);
+            SpawnPoints(connectorsPosition, connectorsSize, tilePrefabs[2],connectorNodes);
 
             var rotatedPos = new Vector2Int(connectorsPosition.y, connectorsPosition.x);
             var rotatedSize = new Vector2Int(connectorsSize.y, connectorsSize.x);
 
-            SpawnPoints(rotatedPos, rotatedSize, tilePrefabs[2]);
+            SpawnPoints(rotatedPos, rotatedSize, tilePrefabs[2],connectorNodes);
+
+            var count = 0;
+            for (int i = 0; i < Height; i++)
+            {
+                for (int j = 0; j < Width; j++)
+                {
+                    count += nodes[j, i].IsCollapsed ? 1 : 0;
+                }
+            }
+            
+            Debug.Log($"Collapsed : {count}");
             
             // Connect : Player - connector - control
+
+            var path = new List<Node>();
+            var buffer = new List<Node>();
+
+            for (int i = 0; i < 4; i++)
+            {
+                spawnPositionNodes[i].GetPath(connectorNodes[i], out buffer);
+                path.AddRange(buffer);
+                spawnPositionNodes[i].GetPath(connectorNodes[i+4], out buffer);
+                path.AddRange(buffer);
+            }
+            
+            for (int i = 0; i < 4; i++)
+            {
+                controlPointsNodes[i].GetPath(connectorNodes[i], out buffer);
+                path.AddRange(buffer);
+                controlPointsNodes[i].GetPath(connectorNodes[(i+3)%8], out buffer);
+                path.AddRange(buffer);
+            }
+            
+            foreach (var node in path)
+            {
+                node.SelectTile(tilePrefabs[3]);
+            }
+
+            
             // Connect : control - control (2 to 2, then one of each pair to the other one)
             // Wall around the connectors
             // Collapse the rest :happy:
             // Wall around the map (ignore collapse)
 
 
-            GenerateVisualMap();
+            //GenerateVisualMap();
             
-            //StartCoroutine( IterateSlowly() );
+            StartCoroutine( IterateSlowly() );
         }
         
-        private void SpawnPoints(Vector2Int position, Vector2Int size, PrefabData prefabData)
+        private void SpawnPoints(Vector2Int position, Vector2Int size, PrefabData prefabData,List<Node> addedNodes)
         {
             position += Vector2Int.one;
-            SpawnControlPoint(position, size);
-            SpawnControlPoint(new Vector2Int((Width)-position.x, (Height)-position.y), -size);
+            SpawnControlPoint(position, size); // bot left
+            
+            SpawnControlPoint(new Vector2Int((Width)-position.y, position.x), new Vector2Int(-size.y, size.x)); // bot right
+            
+            SpawnControlPoint(new Vector2Int((Width)-position.x, (Height)-position.y), -size); // top right
 
-            SpawnControlPoint(new Vector2Int((Width)-position.y, position.x), new Vector2Int(-size.y, size.x));
-            SpawnControlPoint(new Vector2Int(position.y, (Height)-position.x), new Vector2Int(size.y, -size.x));
+            SpawnControlPoint(new Vector2Int(position.y, (Height)-position.x), new Vector2Int(size.y, -size.x)); // top left
             
             return;
             
@@ -153,7 +199,10 @@ namespace MapGeneration
                 
                 var randX = Random.Range(a.x, b.x);
                 var randY = Random.Range(a.y, b.y);
+                
                 nodes[randX, randY].SelectTile(prefabData);
+                
+                addedNodes.Add(nodes[randX, randY]);
             }
         }
         IEnumerator IterateSlowly()
@@ -163,6 +212,8 @@ namespace MapGeneration
                 yield return new WaitForSeconds(creationSpeed);
                 IterateWaveCollapse();
             }
+            
+            GenerateVisualMap();
         }
     
         private void InitNodes()
@@ -174,6 +225,31 @@ namespace MapGeneration
                 for (int j = 0; j < Height; j++)
                 {
                     nodes[i, j] = new Node(new Vector2Int(i, j), tilePrefabs);
+                }
+            }
+            
+            for (int i = 0; i < Width; i++)
+            {
+                for (int j = 0; j < Height; j++)
+                {
+                    var neighbors = new List<Node>();
+                    
+                    var top = j + 1;
+                    var bot = j - 1;
+                    var left = i - 1;
+                    var right = i + 1;
+
+
+                    if(left >= 1) neighbors.Add(nodes[left, j]);
+                    if(top < Height-1 && left >= 1) neighbors.Add(nodes[left, top]);
+                    if(top < Height-1) neighbors.Add(nodes[i, top]);
+                    if(top < Height-1 && right < Width-1) neighbors.Add(nodes[right, top]);
+                    if(right < Width-1) neighbors.Add(nodes[right, j]);
+                    if(bot >= 1 && right < Width-1) neighbors.Add(nodes[right, bot]);
+                    if(bot >= 1) neighbors.Add(nodes[i, bot]);
+                    if(bot >= 1 && left >= 1) neighbors.Add(nodes[left, bot]);
+                    
+                    nodes[i, j].SetNeighbors(neighbors);
                 }
             }
         }
@@ -205,9 +281,9 @@ namespace MapGeneration
             List<Node> possiblesNodes = new List<Node>();
             int minEntropy = Int32.MaxValue;
             
-            for (int i = 1; i < width; i++)
+            for (int i = 1; i < Width-1; i++)
             {
-                for (int j = 1; j < height; j++)
+                for (int j = 1; j < Height-1; j++)
                 {
                     if (!nodes[i, j].IsCollapsed)
                     {
@@ -283,7 +359,7 @@ namespace MapGeneration
                     break;
             }
             
-            if (x < 1 || x >= width || y < 1 || y >= height) return;
+            if (x < 1 || x >= Width-1 || y < 1 || y >= Height-1) return;
             
             Node nodeToUpdate = nodes[x, y];
             
