@@ -160,6 +160,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8684715165285673610}
+  - {fileID: 6505776879281065359}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8065253951509896450
@@ -190,23 +191,27 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 35b8ad74-62a6-48ce-bf27-f7e8b4a37972
-    m_ActionName: Move/New action[/DualShock4GamepadHID/leftStick]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 0d944fe2-1170-4b10-9936-267e9b12c283
-    m_ActionName: Aim/New action[/DualShock4GamepadHID/rightStick]
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: cd079d9d-7b3c-4623-8420-c46f12971e2b
     m_ActionName: Shoot/New action[/DualShock4GamepadHID/buttonSouth]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: b8d5bb40-a000-4718-baed-66b75dcf5501
-    m_ActionName: Cancel/New action[/DualShock4GamepadHID/buttonEast]
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Move
+    m_ActionId: d0c3a9ab-1a74-4f2c-894e-da29dab983e4
+    m_ActionName: Main/Cancel
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8892b2a1-93aa-4002-acaf-4a35b06fd3a5
+    m_ActionName: Main/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 181d481b-94eb-4ce2-b11a-b06d81decaa8
+    m_ActionName: Main/Look[/Mouse/delta]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: bebdf7cb-4433-4a05-ba81-fbe708982cfb
+    m_ActionName: Main/LookMouse[/Mouse/position]
+  m_NeverAutoSwitchControlSchemes: 1
+  m_DefaultControlScheme: Controller
+  m_DefaultActionMap: Main
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 7303184125657476110}
 --- !u!114 &2757046076287949333
@@ -222,4 +227,91 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInput: {fileID: 8065253951509896450}
-  tank: {fileID: 0}
+  tank: {fileID: 1454255096490383909}
+  mousePos: {x: 0, y: 0}
+--- !u!1001 &8973502614968100891
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1399560903020922915}
+    m_Modifications:
+    - target: {fileID: 2792619415156893076, guid: 09bdb263e8caf3749ab19372c730a173,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2792619415156893076, guid: 09bdb263e8caf3749ab19372c730a173,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 2792619415156893076, guid: 09bdb263e8caf3749ab19372c730a173,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2792619415156893076, guid: 09bdb263e8caf3749ab19372c730a173,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2792619415156893076, guid: 09bdb263e8caf3749ab19372c730a173,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2792619415156893076, guid: 09bdb263e8caf3749ab19372c730a173,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2792619415156893076, guid: 09bdb263e8caf3749ab19372c730a173,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2792619415156893076, guid: 09bdb263e8caf3749ab19372c730a173,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2792619415156893076, guid: 09bdb263e8caf3749ab19372c730a173,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2792619415156893076, guid: 09bdb263e8caf3749ab19372c730a173,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5510632380216159349, guid: 09bdb263e8caf3749ab19372c730a173,
+        type: 3}
+      propertyPath: m_Name
+      value: Tank
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 09bdb263e8caf3749ab19372c730a173, type: 3}
+--- !u!114 &1454255096490383909 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173,
+    type: 3}
+  m_PrefabInstance: {fileID: 8973502614968100891}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2518af801ab88334b9bbd31b5cbfbaf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &6505776879281065359 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2792619415156893076, guid: 09bdb263e8caf3749ab19372c730a173,
+    type: 3}
+  m_PrefabInstance: {fileID: 8973502614968100891}
+  m_PrefabAsset: {fileID: 0}

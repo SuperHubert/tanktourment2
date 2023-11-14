@@ -323,106 +323,89 @@ PrefabInstance:
       propertyPath: tank
       value: 
       objectReference: {fileID: 821186798690844246}
-    - target: {fileID: 2757046076287949333, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
-        type: 3}
-      propertyPath: action.m_Name
-      value: Action
-      objectReference: {fileID: 0}
-    - target: {fileID: 2757046076287949333, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
-        type: 3}
-      propertyPath: action.m_SingletonActionBindings.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2757046076287949333, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
-        type: 3}
-      propertyPath: action.m_SingletonActionBindings.Array.data[0].m_Id
-      value: 242ef9f4-3645-49b0-ad1b-6b49d3b1fe86
-      objectReference: {fileID: 0}
-    - target: {fileID: 2757046076287949333, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
-        type: 3}
-      propertyPath: action.m_SingletonActionBindings.Array.data[0].m_Action
-      value: Action
-      objectReference: {fileID: 0}
     - target: {fileID: 7326542362435752075, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
         type: 3}
       propertyPath: m_Name
       value: PlayerController
       objectReference: {fileID: 0}
-    - target: {fileID: 8065253951509896450, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
+    - target: {fileID: 7326542362435752075, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
         type: 3}
-      propertyPath: m_DefaultActionMap
-      value: Main
-      objectReference: {fileID: 0}
-    - target: {fileID: 8065253951509896450, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
-        type: 3}
-      propertyPath: m_DefaultControlScheme
-      value: Controller
-      objectReference: {fileID: 0}
-    - target: {fileID: 8065253951509896450, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
-        type: 3}
-      propertyPath: m_ActionEvents.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8065253951509896450, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
-        type: 3}
-      propertyPath: m_NeverAutoSwitchControlSchemes
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8065253951509896450, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
-        type: 3}
-      propertyPath: m_ActionEvents.Array.data[0].m_ActionId
-      value: cd079d9d-7b3c-4623-8420-c46f12971e2b
-      objectReference: {fileID: 0}
-    - target: {fileID: 8065253951509896450, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
-        type: 3}
-      propertyPath: m_ActionEvents.Array.data[1].m_ActionId
-      value: d0c3a9ab-1a74-4f2c-894e-da29dab983e4
-      objectReference: {fileID: 0}
-    - target: {fileID: 8065253951509896450, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
-        type: 3}
-      propertyPath: m_ActionEvents.Array.data[2].m_ActionId
-      value: 8892b2a1-93aa-4002-acaf-4a35b06fd3a5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8065253951509896450, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
-        type: 3}
-      propertyPath: m_ActionEvents.Array.data[3].m_ActionId
-      value: 181d481b-94eb-4ce2-b11a-b06d81decaa8
-      objectReference: {fileID: 0}
-    - target: {fileID: 8065253951509896450, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
-        type: 3}
-      propertyPath: m_ActionEvents.Array.data[4].m_ActionId
-      value: bebdf7cb-4433-4a05-ba81-fbe708982cfb
-      objectReference: {fileID: 0}
-    - target: {fileID: 8065253951509896450, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
-        type: 3}
-      propertyPath: m_ActionEvents.Array.data[0].m_ActionName
-      value: Shoot/New action[/DualShock4GamepadHID/buttonSouth]
-      objectReference: {fileID: 0}
-    - target: {fileID: 8065253951509896450, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
-        type: 3}
-      propertyPath: m_ActionEvents.Array.data[1].m_ActionName
-      value: Main/Cancel
-      objectReference: {fileID: 0}
-    - target: {fileID: 8065253951509896450, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
-        type: 3}
-      propertyPath: m_ActionEvents.Array.data[2].m_ActionName
-      value: Main/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
-      objectReference: {fileID: 0}
-    - target: {fileID: 8065253951509896450, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
-        type: 3}
-      propertyPath: m_ActionEvents.Array.data[3].m_ActionName
-      value: Main/Look[/Mouse/delta]
-      objectReference: {fileID: 0}
-    - target: {fileID: 8065253951509896450, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
-        type: 3}
-      propertyPath: m_ActionEvents.Array.data[4].m_ActionName
-      value: Main/LookMouse[/Mouse/position]
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16, type: 3}
+--- !u!1001 &1286448575
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3770755211667358811, guid: 509b571c29abc374c9cffd3860f8bd1e,
+        type: 3}
+      propertyPath: m_Name
+      value: MuliplayerManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 8807036370339533938, guid: 509b571c29abc374c9cffd3860f8bd1e,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8807036370339533938, guid: 509b571c29abc374c9cffd3860f8bd1e,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8807036370339533938, guid: 509b571c29abc374c9cffd3860f8bd1e,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8807036370339533938, guid: 509b571c29abc374c9cffd3860f8bd1e,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8807036370339533938, guid: 509b571c29abc374c9cffd3860f8bd1e,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8807036370339533938, guid: 509b571c29abc374c9cffd3860f8bd1e,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8807036370339533938, guid: 509b571c29abc374c9cffd3860f8bd1e,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8807036370339533938, guid: 509b571c29abc374c9cffd3860f8bd1e,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8807036370339533938, guid: 509b571c29abc374c9cffd3860f8bd1e,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8807036370339533938, guid: 509b571c29abc374c9cffd3860f8bd1e,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 509b571c29abc374c9cffd3860f8bd1e, type: 3}
 --- !u!1 &1794322293
 GameObject:
   m_ObjectHideFlags: 0
@@ -662,7 +645,7 @@ PrefabInstance:
     - target: {fileID: 2792619415156893076, guid: 09bdb263e8caf3749ab19372c730a173,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.336
+      value: 0.28
       objectReference: {fileID: 0}
     - target: {fileID: 2792619415156893076, guid: 09bdb263e8caf3749ab19372c730a173,
         type: 3}
@@ -709,11 +692,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tank
       objectReference: {fileID: 0}
-    - target: {fileID: 5510632380216159349, guid: 09bdb263e8caf3749ab19372c730a173,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -740,3 +718,4 @@ SceneRoots:
   - {fileID: 535643686}
   - {fileID: 821186798690844245}
   - {fileID: 1794322297}
+  - {fileID: 1286448575}

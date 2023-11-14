@@ -14,6 +14,9 @@ public class TankController : MonoBehaviour
     private InputAction shootAction;
     private InputAction pointerLookAction;
     
+    private const string KeyboardControlScheme = "Keyboard & Mouse";
+    private bool useMouse = false;
+    
     [SerializeField] private Tank tank; //TODO Instantiate this with game manager
     [SerializeField] private Vector2 mousePos;
 
@@ -22,7 +25,7 @@ public class TankController : MonoBehaviour
     
     private void Start()
     {
-        playerInput.neverAutoSwitchControlSchemes = true;
+        //playerInput.neverAutoSwitchControlSchemes = true;
         
         inputCam = playerInput.camera;
         
@@ -31,7 +34,19 @@ public class TankController : MonoBehaviour
         shootAction = playerInput.actions["Shoot"];
         pointerLookAction = playerInput.actions["LookMouse"];
         
+        playerInput.controlsChangedEvent.AddListener(SwitchControlSchemes);
+        
+        SwitchControlSchemes(playerInput);
+        
+        tank.transform.SetParent(null);
+        
         ConnectTankInputs();
+    }
+
+    private void SwitchControlSchemes(PlayerInput context)
+    {
+        Debug.Log(context.currentControlScheme);
+        useMouse = context.currentControlScheme == KeyboardControlScheme;
     }
 
     private void Update()
@@ -69,6 +84,7 @@ public class TankController : MonoBehaviour
     private void HandleMouseHeadInputs()
     {
         // todo - don't do this if controller inputscheme
+        if(!useMouse) return;
         
         mousePos = pointerLookAction.ReadValue<Vector2>();
         var dir = mousePos - (Vector2)inputCam.WorldToScreenPoint(tank.transform.position);

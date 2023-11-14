@@ -444,7 +444,7 @@ MonoBehaviour:
   acceleration: 10
   maxTurnSpeed: 450
   movementDirection: {x: 0, y: 0}
-  headDirection: {x: 0, y: 0}
+  headDirection: {x: 0, y: 0, z: 0}
 --- !u!1 &5925696095241948726
 GameObject:
   m_ObjectHideFlags: 0
