@@ -86,6 +86,8 @@ public class Tank : MonoBehaviour
     public void Shoot()
     {
         Debug.Log("Pew Pew");
+        
+        //TODO - don't forget animation
     }
 
     /*

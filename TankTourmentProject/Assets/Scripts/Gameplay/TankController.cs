@@ -22,6 +22,8 @@ public class TankController : MonoBehaviour
     
     private void Start()
     {
+        playerInput.neverAutoSwitchControlSchemes = true;
+        
         inputCam = playerInput.camera;
         
         moveAction = playerInput.actions["Move"];
@@ -66,6 +68,8 @@ public class TankController : MonoBehaviour
 
     private void HandleMouseHeadInputs()
     {
+        // todo - don't do this if controller inputscheme
+        
         mousePos = pointerLookAction.ReadValue<Vector2>();
         var dir = mousePos - (Vector2)inputCam.WorldToScreenPoint(tank.transform.position);
         tank.HandleHeadInputs(dir.normalized);
