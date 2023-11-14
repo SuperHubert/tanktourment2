@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8807036370339533938}
   - component: {fileID: 6702745651168192591}
+  - component: {fileID: 6191463346219485045}
   m_Layer: 0
   m_Name: MuliplayerManager
   m_TagString: Untagged
@@ -78,3 +79,17 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &6191463346219485045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3770755211667358811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 634d30013e0c14949bd90abc3c6bb789, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tankPrefab: {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173,
+    type: 3}

@@ -8,8 +8,6 @@ public class Tank : MonoBehaviour
     [SerializeField] private Rigidbody rb;
     [SerializeField] private Transform headTransform;
     
-    
-
     [Header("Settings")]
     [SerializeField] private bool moveTowardsDirection = false;
     [SerializeField] private float maxSpeed = 10f;
@@ -19,6 +17,8 @@ public class Tank : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private Vector2 movementDirection;
     [SerializeField] private Vector3 headDirection;
+    
+    public Vector3 Position => transform.position;
     
     public void HandleMovementInputs(Vector2 inputs)
     {

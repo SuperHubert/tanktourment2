@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,6 +15,7 @@ public class TankController : MonoBehaviour
     
     private const string KeyboardControlScheme = "Keyboard & Mouse";
     private bool useMouse = false;
+    private bool hasTank = false;
     
     [SerializeField] private Tank tank; //TODO Instantiate this with game manager
     [SerializeField] private Vector2 mousePos;
@@ -37,8 +37,15 @@ public class TankController : MonoBehaviour
         playerInput.controlsChangedEvent.AddListener(SwitchControlSchemes);
         
         SwitchControlSchemes(playerInput);
+    }
+    
+    public void ConnectTank(Tank t)
+    {
+        tank = t;
         
-        tank.transform.SetParent(null);
+        hasTank = tank != null;
+        
+        if(!hasTank) return;
         
         ConnectTankInputs();
     }
@@ -56,8 +63,6 @@ public class TankController : MonoBehaviour
 
     private void ConnectTankInputs()
     {
-        if(tank == null) return;
-        
         moveAction.performed += HandleMovement;
         moveAction.canceled += HandleMovement;
         
@@ -83,11 +88,14 @@ public class TankController : MonoBehaviour
 
     private void HandleMouseHeadInputs()
     {
-        // todo - don't do this if controller inputscheme
         if(!useMouse) return;
         
+        if(!hasTank) return;
+        
         mousePos = pointerLookAction.ReadValue<Vector2>();
-        var dir = mousePos - (Vector2)inputCam.WorldToScreenPoint(tank.transform.position);
+        
+        var dir = mousePos - (Vector2)inputCam.WorldToScreenPoint(tank.Position);
+        
         tank.HandleHeadInputs(dir.normalized);
     }
     
