@@ -9,9 +9,6 @@ namespace MapGeneration
 {
     public class WaveCollapseManager : MonoBehaviour
     {
-        public static WaveCollapseManager Instance { get; private set; }
-     
-        
         [field:Header("Wave Collapse Manager")]
         [SerializeField] private int creationSpeed;
         [SerializeField] private int width;
@@ -31,12 +28,9 @@ namespace MapGeneration
         
         private int Width => width + 2;
         private int Height => height + 2;
-
-
         
         [field:Header("Prefabs")]
         [field:SerializeField] private List<PrefabData> tilePrefabs;
-
         
         private Node[,] nodes;
 
@@ -44,9 +38,6 @@ namespace MapGeneration
         // Start is called before the first frame update
         void Start()
         {
-            if (Instance == null) Instance = this;
-            else Destroy(gameObject);
-            
             nodes = new Node[Width, Height];
             
             GenerateMap();
@@ -64,7 +55,7 @@ namespace MapGeneration
             {
                 for (int j = 0; j < Height; j++)
                 {
-                    GenerateVisualFor(i, j);
+                    if (nodes[i,j].IsCollapsed) GenerateVisualFor(i, j);
                 }
             }
         }
@@ -73,22 +64,19 @@ namespace MapGeneration
         {
             if(i < 0 || i >= Width || j < 0 || j >= Height) return;
 
-            var prefabToInstantiate = tilePrefabs[4].go;
-
+            var prefabToInstantiate = tilePrefabs[4];
             var useDefault = nodes[i, j].TileTypeSelected == null;
             
-            if (!useDefault) prefabToInstantiate = nodes[i,j].TileTypeSelected.go;
+            if (!useDefault) prefabToInstantiate = nodes[i,j].TileTypeSelected;
 
             var pos = new Vector3(i * (offset + scale.x) + 0.5f, 0, j * (scale.z + offset) + 0.5f);
-            
-            var tile = Instantiate(prefabToInstantiate, pos, Quaternion.identity, useDefault ? transform : null);
+            var tile = Instantiate(prefabToInstantiate.go, pos, prefabToInstantiate.rotation, useDefault ? transform : null);
             tile.transform.localScale = scale;
             
             var mat = tile.Renderer.material;
             mat.color = nodes[i,j].debugColor;
             
             tile.Renderer.material = mat;
-
             tile.Node = nodes[i, j];
 
         }
@@ -128,8 +116,6 @@ namespace MapGeneration
                 }
             }
             
-            Debug.Log($"Collapsed : {count}");
-            
             // Connect : Player - connector - control
 
             var path = new List<Node>();
@@ -143,6 +129,7 @@ namespace MapGeneration
                 path.AddRange(buffer);
             }
             
+            // Connect : control - control (2 to 2, then one of each pair to the other one)
             for (int i = 0; i < 4; i++)
             {
                 controlPointsNodes[i].GetPath(connectorNodes[i], out buffer);
@@ -154,10 +141,12 @@ namespace MapGeneration
             foreach (var node in path)
             {
                 node.SelectTile(tilePrefabs[3]);
+                GenerateVisualFor(node.Position.x, node.Position.y);
+                PropagateWave(node);
             }
 
             
-            // Connect : control - control (2 to 2, then one of each pair to the other one)
+            
             // Wall around the connectors
             // Collapse the rest :happy:
             // Wall around the map (ignore collapse)
@@ -201,6 +190,8 @@ namespace MapGeneration
                 var randY = Random.Range(a.y, b.y);
                 
                 nodes[randX, randY].SelectTile(prefabData);
+                GenerateVisualFor(randX, randY);
+                PropagateWave(nodes[randX, randY]);
                 
                 addedNodes.Add(nodes[randX, randY]);
             }
@@ -212,8 +203,7 @@ namespace MapGeneration
                 yield return new WaitForSeconds(creationSpeed);
                 IterateWaveCollapse();
             }
-            
-            GenerateVisualMap();
+            //GenerateVisualMap();
         }
     
         private void InitNodes()
@@ -256,9 +246,9 @@ namespace MapGeneration
     
         private bool IsFullyCollapsed()
         {
-            for (int i = 1; i < width; i++)
+            for (int i = 1; i < Width-1; i++)
             {
-                for (int j = 1; j < height; j++)
+                for (int j = 1; j < Height-1; j++)
                 {
                     if (!nodes[i, j].IsCollapsed)
                         return false;
@@ -271,7 +261,7 @@ namespace MapGeneration
         {
             Node nodeToCollapse = GetMinEntropyNode();
             CollapseNode(nodeToCollapse);
-            if (nodeToCollapse.TileTypeSelected != null) GenerateVisualFor(nodeToCollapse.Position.x, nodeToCollapse.Position.y);
+            GenerateVisualFor(nodeToCollapse.Position.x, nodeToCollapse.Position.y);
             
             PropagateWave(nodeToCollapse);
         }
@@ -390,6 +380,7 @@ namespace MapGeneration
     {
         [SerializeField] public string name; //ID but called name so it renames Element i in Inspector
         [SerializeField] public WorldTile go;
+        [SerializeField] public Quaternion rotation;
 
         [SerializeField] public string top;
         [SerializeField] public string bot;
@@ -402,13 +393,18 @@ namespace MapGeneration
 
         public string[] GetPrefabConnexion(Enums.Direction direction)
         {
+            return GetPrefabConnexionNoSplit(direction).Split(";");
+        }
+        
+        public string GetPrefabConnexionNoSplit(Enums.Direction direction)
+        {
             return direction switch
             {
-                Enums.Direction.Top => top.Split(";"),
-                Enums.Direction.Bottom => bot.Split(";"),
-                Enums.Direction.Left => left.Split(";"),
-                Enums.Direction.Right => right.Split(";"),
-                _ => Array.Empty<string>()
+                Enums.Direction.Top => top,
+                Enums.Direction.Bottom => bot,
+                Enums.Direction.Left => left,
+                Enums.Direction.Right => right,
+                _ => ""
             };
         }
     }

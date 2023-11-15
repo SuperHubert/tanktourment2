@@ -58,12 +58,31 @@ namespace MapGeneration
         public void AutoSelectTileType()
         {
             var spawnables = TileTypesPossibles.Where(t => t.CanSpawn).ToList();
+            
+            if (spawnables.Count == 0)
+            {
+                Debug.Log($"No spawnables: {Position}");
+                
+                DebugNeighbors(neighbors[0], Enums.Direction.Left);
+                DebugNeighbors(neighbors[2], Enums.Direction.Top);
+                DebugNeighbors(neighbors[4], Enums.Direction.Right);
+                DebugNeighbors(neighbors[6], Enums.Direction.Bottom);
+            }
+            
             TileTypeSelected = spawnables[Random.Range(0, spawnables.Count)];
             
             
             TileTypesPossibles.Clear();
             TileTypesPossibles.Add(TileTypeSelected);
             Collapse();
+        }
+
+        private void DebugNeighbors(Node neighbor, Enums.Direction direction)
+        {
+            if (!neighbor.IsCollapsed)
+                return;
+            
+            Debug.Log($"Neigbor {direction} is: {neighbor.TileTypeSelected.GetPrefabConnexionNoSplit(Enums.ReverseDirection(direction))}");
         }
 
         public void SelectTile(PrefabData selected)
