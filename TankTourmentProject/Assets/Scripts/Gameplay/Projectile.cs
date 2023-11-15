@@ -65,8 +65,6 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"Trigger : {other.gameObject.name} by {owner.name}");
-        
         if (other.gameObject.layer == owner.gameObject.layer) return;
         
         gameObject.SetActive(false);

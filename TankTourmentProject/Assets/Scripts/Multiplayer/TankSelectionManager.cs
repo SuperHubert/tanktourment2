@@ -40,6 +40,16 @@ public class TankSelectionManager : MonoBehaviour
     {
         colorSelectionLayout.gameObject.SetActive(value);
     }
+
+    public void HideSelections()
+    {
+        ShowColors(false);
+        
+        foreach (var selection in tankSelections.Values)
+        {
+            selection.gameObject.SetActive(false);
+        }
+    }
     
     public TankSelection GetTankSelection(PlayerController playerController)
     {
@@ -59,6 +69,8 @@ public class TankSelectionManager : MonoBehaviour
     private void TryStartGame(bool _)
     {
         var readyPlayers = tankSelections.Where(kvp => kvp.Value.IsReady).Select(kvp => kvp.Key).ToList();
+        
+        Debug.Log($"Invoking {readyPlayers.Count} ready");
         
         OnPlayerReadyChanged?.Invoke(readyPlayers);
     }
