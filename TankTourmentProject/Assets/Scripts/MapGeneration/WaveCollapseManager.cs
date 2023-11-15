@@ -15,6 +15,7 @@ namespace MapGeneration
         [SerializeField] private int height;
         [SerializeField] private float offset;
         [SerializeField] private Vector3 scale;
+        [SerializeField] private bool noFun = false;
         
         [field:Header("Map customization")]
         [SerializeField] private Vector2Int spawnPosition;
@@ -38,6 +39,8 @@ namespace MapGeneration
         List<Node> connectorNodes = new List<Node>();
         
         private Node[,] nodes;
+        
+        public event Action OnMapGenerated;
 
         void GenerateVisualMap()
         {
@@ -72,7 +75,7 @@ namespace MapGeneration
             tile.Renderer.material = mat;
         }
         
-        public void GenerateMap(out List<Vector3> spawnTiles)
+        public void GenerateMap(out GenerationData data)
         {
             // Init all Nodes
             InitNodes();
@@ -131,7 +134,10 @@ namespace MapGeneration
                 PropagateWave(node);
             }
 
-            spawnTiles = spawnPositionNodes.Select(node => node.Tile.SpawnPosition).ToList();
+            var spawnTiles = spawnPositionNodes.Select(node => node.Tile.SpawnPosition).ToList();
+            var worldCenter = new Vector3(Width * (offset + scale.x) * 0.5f,10, Height * (offset + scale.z) * 0.5f);
+            
+            data = new GenerationData(spawnTiles,worldCenter);
             
             // Wall around the connectors
             // Collapse the rest :happy:
@@ -139,8 +145,12 @@ namespace MapGeneration
 
 
             //GenerateVisualMap();
-            
-            
+
+            if (noFun)
+            {
+                IterateNoFun();
+                return;
+            }
             
             StartCoroutine( IterateSlowly() );
         }
@@ -182,6 +192,18 @@ namespace MapGeneration
                 addedNodes.Add(nodes[randX, randY]);
             }
         }
+
+        private void IterateNoFun()
+        {
+            while (!IsFullyCollapsed())
+            {
+                IterateWaveCollapse();
+            }
+            SetBorders();
+            
+            OnMapGenerated?.Invoke();
+        }
+        
         IEnumerator IterateSlowly()
         {
             while (!IsFullyCollapsed())
@@ -190,6 +212,8 @@ namespace MapGeneration
                 IterateWaveCollapse();
             }
             SetBorders();
+            
+            OnMapGenerated?.Invoke();
         }
 
         private void SetBorders()
@@ -419,6 +443,18 @@ namespace MapGeneration
                 Enums.Direction.Right => right,
                 _ => ""
             };
+        }
+    }
+
+    public class GenerationData
+    {
+        public List<Vector3> SpawnTilePositions { get; }
+        public Vector3 WorldCenter { get; }
+        
+        public GenerationData(List<Vector3> spawnTilePositions,Vector3 worldCenter)
+        {
+            SpawnTilePositions = spawnTilePositions;
+            WorldCenter = worldCenter;
         }
     }
 }

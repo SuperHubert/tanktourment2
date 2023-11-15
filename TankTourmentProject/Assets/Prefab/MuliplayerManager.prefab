@@ -114,8 +114,10 @@ MonoBehaviour:
   tankManager: {fileID: 6191463346219485045}
   waveCollapseManager: {fileID: 2839526565459127063}
   tankSelectionManager: {fileID: 8838535159309284989}
+  mainCamera: {fileID: 0}
   layerPlayer0: 10
   minPlayer: 2
+  borderMultiplier: 0.995
   playerControllers: []
   inactivePlayerControllers: []
 --- !u!114 &8838535159309284989
