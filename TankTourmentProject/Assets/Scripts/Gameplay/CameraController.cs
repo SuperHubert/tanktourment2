@@ -21,7 +21,6 @@ public class CameraController : MonoBehaviour
 
         hasTarget = target != null;
 
-
         Cam.enabled = hasTarget;
 
         if(!hasTarget) return;
@@ -53,5 +52,16 @@ public class CameraController : MonoBehaviour
         var targetPos = target.position + offset; //TODO: offset this by the input direction if aiming
         
         CamTransform.position = Vector3.MoveTowards(pos, targetPos, speed * Time.deltaTime);
+    }
+
+    public void SetLayerVisible(int layer, bool visible)
+    {
+        if(layer == 0) return;
+        if (visible)
+        {
+            Cam.cullingMask |= (1 << layer);
+            return;    
+        }
+        Cam.cullingMask &= ~(1 << layer);
     }
 }

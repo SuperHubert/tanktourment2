@@ -10,8 +10,10 @@ public class Tank : MonoBehaviour, IDamageable
     [SerializeField] private Transform canonTip;
     [field:SerializeField] public Renderer[] ColoredRenderers { get; private set; }
     [SerializeField] public GameObject[] layerGameobjects;
+    [SerializeField] private Transform[] raycastOrigins;
 
     [Header("Settings")]
+    [SerializeField] private LayerMask baseLayersToCheck;
     [SerializeField] private bool moveTowardsDirection = false;
     [SerializeField] private float maxSpeed = 10f;
     [SerializeField] private float acceleration = 10f;
@@ -27,8 +29,10 @@ public class Tank : MonoBehaviour, IDamageable
     [SerializeField] private Vector2 movementDirection;
     [SerializeField] private Vector3 headDirection;
     [SerializeField] private int currentHp;
-
+    [SerializeField] private LayerMask layersToCheck;
+    public int Layer { get; private set; }
     public event Action<Tank> OnTankKilled;
+    public event Action<int,bool> OnLayerVisibleUpdated;
     
     public Vector3 Position => transform.position;
 
@@ -39,10 +43,14 @@ public class Tank : MonoBehaviour, IDamageable
 
     public void SetLayer(int layer)
     {
+        Layer = layer;
         foreach (var go in layerGameobjects)
         {
-            go.layer = layer;
+            go.layer = Layer;
         }
+
+        layersToCheck = baseLayersToCheck;
+        layersToCheck &=  ~(1 << Layer);
     }
     
     public void HandleMovementInputs(Vector2 inputs)
@@ -138,6 +146,29 @@ public class Tank : MonoBehaviour, IDamageable
             
             OnTankKilled?.Invoke(data.Shooter);
         }
+    }
+
+    public void CheckVisible(Tank other)
+    {
+        if(other == this) return;
+        
+        var visible = false;
+        foreach (var tr in other.raycastOrigins)
+        {
+            var dif = tr.position - headTransform.position;
+            var dir = Vector3.Normalize(dif);
+            
+            var dist = dif.magnitude * 1.1f;
+
+            if (!Physics.Raycast(headTransform.position, dir, out var hit, dist, layersToCheck)) continue;
+            
+            if (hit.collider.gameObject.layer != other.gameObject.layer) continue;
+            
+            visible = true;
+            break;
+        }
+
+        OnLayerVisibleUpdated?.Invoke(other.Layer,visible);
     }
 }
 

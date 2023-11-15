@@ -20,7 +20,9 @@ public class PlayerController : MonoBehaviour
 
     public void SetLayer(int layer)
     {
+        CameraController.SetLayerVisible(Layer,false);
         Layer = layer;
+        CameraController.SetLayerVisible(Layer,true);
     }
     
     private void Start()

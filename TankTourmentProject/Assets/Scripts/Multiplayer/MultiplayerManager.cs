@@ -154,6 +154,8 @@ public class MultiplayerManager : MonoBehaviour
         mainCamera.cullingMask = 0;
         
         tankManager.SpawnTanks(playerControllers);
+        
+        tankManager.SetRunning(true);
 
         foreach (var controller in ActivePlayers)
         {

@@ -13,8 +13,28 @@ public class TankManager : MonoBehaviour
     [SerializeField] private float respawnDuration;
     
     private List<Vector3> availableSpawnPoints = new List<Vector3>();
-    private List<Tank> tanks = new List<Tank>();
+    [SerializeField] private List<Tank> tanks = new List<Tank>();
     
+    [SerializeField] private bool isRunning = false;
+
+    public void SetRunning(bool value)
+    {
+        isRunning = value;
+    }
+    
+    public void Update()
+    {
+        if(!isRunning) return;
+
+        foreach (var tank0 in tanks)
+        {
+            foreach (var tank1 in tanks)
+            {
+                tank0.CheckVisible(tank1);
+            }
+        }
+    }
+
     public void SpawnTanks(List<PlayerController> controllers)
     {
         foreach (var controller in controllers)
@@ -57,6 +77,8 @@ public class TankManager : MonoBehaviour
         tank.RespawnValues();
         
         tank.OnTankKilled += Killed;
+        
+        tank.OnLayerVisibleUpdated += controller.CameraController.SetLayerVisible;
         
         tanks.Add(tank);
         
