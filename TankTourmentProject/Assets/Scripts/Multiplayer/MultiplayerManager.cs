@@ -67,6 +67,8 @@ public class MultiplayerManager : MonoBehaviour
             
             var layer = layerPlayer0 + i;
             
+            controller.SetLayer(layer);
+            
             var selection = tankSelectionManager.GetTankSelection(controller);
 
             selection.ConnectToPlayerController(controller, layer);
@@ -77,6 +79,8 @@ public class MultiplayerManager : MonoBehaviour
     {
         var activeAndReady = readyPlayers.Count(player => !inactivePlayerControllers.Contains(player));
         
+        Debug.Log($"Active and ready : {activeAndReady}, min : {minPlayer}, total active : {playerControllers.Count-inactivePlayerControllers.Count}");
+        
         if(activeAndReady < minPlayer || activeAndReady < (playerControllers.Count-inactivePlayerControllers.Count)) return;
         
         LaunchGame();
@@ -84,12 +88,18 @@ public class MultiplayerManager : MonoBehaviour
 
     private void LaunchGame()
     {
+        tankSelectionManager.OnPlayerReadyChanged -= TryStartGame;
+        
+        tankSelectionManager.ShowColors(false);
+        
         // create map
         
+        waveCollapseManager.GenerateMap(out var spawnTiles);
+        
         // set spawn points
+        tankManager.SetSpawnPoints(spawnTiles);
         
         // spawn tanks
-        
         tankManager.SpawnTanks(playerControllers);
     }
 

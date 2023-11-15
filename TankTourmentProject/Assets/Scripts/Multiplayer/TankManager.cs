@@ -9,10 +9,10 @@ public class TankManager : MonoBehaviour
     [SerializeField] private Tank tankPrefab;
     
     [Header("Settings")]
-    [SerializeField] private Transform[] spawnPoints;
+    [SerializeField] private Vector3[] spawnPoints;
     [SerializeField] private float respawnDuration;
     
-    private List<Transform> availableSpawnPoints = new List<Transform>();
+    private List<Vector3> availableSpawnPoints = new List<Vector3>();
     private List<Tank> tanks = new List<Tank>();
     
     public void SpawnTanks(List<PlayerController> controllers)
@@ -21,6 +21,11 @@ public class TankManager : MonoBehaviour
         {
             SpawnTank(controller);
         }
+    }
+
+    public void SetSpawnPoints(List<Vector3> transforms)
+    {
+        spawnPoints = transforms.ToArray();
     }
     
     private Vector3 NextAvailableSpawnPoint()
@@ -32,13 +37,22 @@ public class TankManager : MonoBehaviour
         
         var spawnPoint = availableSpawnPoints[0];
         availableSpawnPoints.RemoveAt(0);
-
-        return spawnPoint.position;
+        
+        return spawnPoint;
     }
 
     public void SpawnTank(PlayerController controller)
     {
-        var tank = Instantiate(tankPrefab,NextAvailableSpawnPoint(), Quaternion.identity);
+        var pos = NextAvailableSpawnPoint();
+        pos.y += tankPrefab.SpawnHeight;
+
+        var prefab = tankPrefab; //TODO, put it in arguments
+        
+        var tank = Instantiate(prefab,pos, Quaternion.identity);
+
+        tank.SetLayer(controller.Layer);
+        
+        tank.gameObject.name = $"GameTank ({LayerMask.LayerToName(controller.Layer)})";
         
         tank.RespawnValues();
         
@@ -68,7 +82,10 @@ public class TankManager : MonoBehaviour
     {
         yield return new WaitForSeconds(respawnDuration);
         
-        tank.transform.position = NextAvailableSpawnPoint();
+        var pos = NextAvailableSpawnPoint();
+        pos.y += tankPrefab.SpawnHeight;
+        
+        tank.transform.position = pos;
         
         tank.RespawnValues();
     }

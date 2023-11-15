@@ -33,23 +33,12 @@ namespace MapGeneration
         [field:SerializeField] private List<PrefabData> tilePrefabs;
         [field:SerializeField] private List<PrefabData> borderPrefabs;
         
+        List<Node> controlPointsNodes = new List<Node>();
+        List<Node> spawnPositionNodes = new List<Node>();
+        List<Node> connectorNodes = new List<Node>();
+        
         private Node[,] nodes;
 
-        
-        // Start is called before the first frame update
-        void Start()
-        {
-            nodes = new Node[Width, Height];
-            
-            GenerateMap();
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
-        
         void GenerateVisualMap()
         {
             for (int i = 0; i < Width; i++)
@@ -64,35 +53,32 @@ namespace MapGeneration
         void GenerateVisualFor(int i, int j)
         {
             if(i < 0 || i >= Width || j < 0 || j >= Height) return;
+            
+            var node = nodes[i, j];
 
             var prefabToInstantiate = tilePrefabs[4];
-            var useDefault = nodes[i, j].TileTypeSelected == null;
+            var useDefault = node.TileTypeSelected == null;
             
-            if (!useDefault) prefabToInstantiate = nodes[i,j].TileTypeSelected;
+            if (!useDefault) prefabToInstantiate = node.TileTypeSelected;
 
             var pos = new Vector3(i * (offset + scale.x) + 0.5f, 0, j * (scale.z + offset) + 0.5f);
             var tile = Instantiate(prefabToInstantiate.go, pos, prefabToInstantiate.rotation, useDefault ? transform : null);
             tile.transform.localScale = scale;
             
             var mat = tile.Renderer.material;
-            mat.color = nodes[i,j].debugColor;
+            mat.color = node.debugColor;
             
+            node.SetTile(tile);
             tile.Renderer.material = mat;
-            tile.Node = nodes[i, j];
         }
-    
-        private void GenerateMap()
+        
+        public void GenerateMap(out List<Vector3> spawnTiles)
         {
-            
             // Init all Nodes
             InitNodes();
         
             // Set Fix nodes
             Debug.Log("Control Points");
-            
-            var controlPointsNodes = new List<Node>();
-            var spawnPositionNodes = new List<Node>();
-            var connectorNodes = new List<Node>();
             
             SpawnPoints(controlPosition, controlPSize, tilePrefabs[0],controlPointsNodes);
             
@@ -145,7 +131,7 @@ namespace MapGeneration
                 PropagateWave(node);
             }
 
-            
+            spawnTiles = spawnPositionNodes.Select(node => node.Tile.SpawnPosition).ToList();
             
             // Wall around the connectors
             // Collapse the rest :happy:
@@ -153,6 +139,8 @@ namespace MapGeneration
 
 
             //GenerateVisualMap();
+            
+            
             
             StartCoroutine( IterateSlowly() );
         }

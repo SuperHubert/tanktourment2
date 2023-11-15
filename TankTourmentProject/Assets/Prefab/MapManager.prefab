@@ -1,0 +1,320 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5643361891096779731
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1825120194535517251}
+  - component: {fileID: 7261213669953396308}
+  m_Layer: 0
+  m_Name: MapManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1825120194535517251
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5643361891096779731}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7261213669953396308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5643361891096779731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc76fbe6564342846a7f9e5342c036e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  creationSpeed: 0
+  width: 19
+  height: 19
+  offset: 2
+  scale: {x: 1, y: 1, z: 1}
+  spawnPosition: {x: 0, y: 0}
+  spawnSize: {x: 3, y: 3}
+  connectorsPosition: {x: 1, y: 5}
+  connectorsSize: {x: 4, y: 1}
+  controlPosition: {x: 4, y: 7}
+  controlPSize: {x: 3, y: 5}
+  tilePrefabs:
+  - name: Control point
+    go: {fileID: -2538792677096696554, guid: 4679937d1bbb2814e9374ee3f28570a2, type: 3}
+    rotation: {x: 0, y: 0, z: 0, w: 0}
+    top: o-o-o
+    bot: o-o-o
+    left: o-o-o
+    right: o-o-o
+    <CanSpawn>k__BackingField: 0
+    <DebugColor>k__BackingField: {r: 1, g: 0, b: 0, a: 1}
+  - name: Spawn Point
+    go: {fileID: 7409150216249584525, guid: d9b9f27b7541606418f302f8871485e3, type: 3}
+    rotation: {x: 0, y: 0, z: 0, w: 0}
+    top: o-o-o
+    bot: o-o-o
+    left: o-o-o
+    right: o-o-o
+    <CanSpawn>k__BackingField: 0
+    <DebugColor>k__BackingField: {r: 0.29462504, g: 1, b: 0, a: 1}
+  - name: Connector
+    go: {fileID: 5849393861115226587, guid: e57d770c44522914e85e22e81b40b3bc, type: 3}
+    rotation: {x: 0, y: 0, z: 0, w: 0}
+    top: o-o-o
+    bot: o-o-o
+    left: o-o-o
+    right: o-o-o
+    <CanSpawn>k__BackingField: 0
+    <DebugColor>k__BackingField: {r: 0, g: 0.8328297, b: 1, a: 1}
+  - name: Open Field
+    go: {fileID: 5849393861115226587, guid: e57d770c44522914e85e22e81b40b3bc, type: 3}
+    rotation: {x: 0, y: 0, z: 0, w: 0}
+    top: o-o-o
+    bot: o-o-o
+    left: o-o-o
+    right: o-o-o
+    <CanSpawn>k__BackingField: 0
+    <DebugColor>k__BackingField: {r: 1, g: 0.0047169924, b: 0.5900552, a: 1}
+  - name: Default
+    go: {fileID: 198370908226086563, guid: 9e2741614e0a30140b702f05acd9958e, type: 3}
+    rotation: {x: 0, y: 0, z: 0, w: 0}
+    top: o-o-o
+    bot: o-o-o
+    left: o-o-o
+    right: o-o-o
+    <CanSpawn>k__BackingField: 0
+    <DebugColor>k__BackingField: {r: 1, g: 1, b: 1, a: 1}
+  - name: Cross
+    go: {fileID: 7974609231967009780, guid: 026900077f1f7124f8f5dae7c594daf6, type: 3}
+    rotation: {x: 0, y: 0, z: 0, w: 0}
+    top: o-c-o
+    bot: o-c-o
+    left: o-c-o
+    right: o-c-o
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 1, g: 1, b: 1, a: 1}
+  - name: Line Horizontal
+    go: {fileID: 4269813710423462843, guid: 9ccc0b6cf9ef5494abf20842f775acc4, type: 3}
+    rotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+    top: o-o-o
+    bot: o-o-o
+    left: o-c-o
+    right: o-c-o
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 1, g: 1, b: 1, a: 1}
+  - name: Line Vertical
+    go: {fileID: 4269813710423462843, guid: 9ccc0b6cf9ef5494abf20842f775acc4, type: 3}
+    rotation: {x: 0, y: 0, z: 0, w: 0}
+    top: o-c-o
+    bot: o-c-o
+    left: o-o-o
+    right: o-o-o
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 1, g: 1, b: 1, a: 1}
+  - name: L Shape TL
+    go: {fileID: 5458050698221521224, guid: c40965a1937bf284781f736e2d64fa22, type: 3}
+    rotation: {x: 0, y: 0, z: 0, w: 0}
+    top: o-c-o
+    bot: o-o-o
+    left: o-c-o
+    right: o-o-o
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 1, g: 1, b: 1, a: 1}
+  - name: L Shape TR
+    go: {fileID: 5458050698221521224, guid: c40965a1937bf284781f736e2d64fa22, type: 3}
+    rotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+    top: o-c-o
+    bot: o-o-o
+    left: o-o-o
+    right: o-c-o
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 1, g: 1, b: 1, a: 1}
+  - name: L Shape BL
+    go: {fileID: 5458050698221521224, guid: c40965a1937bf284781f736e2d64fa22, type: 3}
+    rotation: {x: 0, y: 0.70710677, z: 0, w: -0.70710677}
+    top: o-o-o
+    bot: o-c-o
+    left: o-c-o
+    right: o-o-o
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 1, g: 1, b: 1, a: 1}
+  - name: L Shape BR
+    go: {fileID: 5458050698221521224, guid: c40965a1937bf284781f736e2d64fa22, type: 3}
+    rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+    top: o-o-o
+    bot: o-c-o
+    left: o-o-o
+    right: o-c-o
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 1, g: 1, b: 1, a: 1}
+  - name: T Shape T
+    go: {fileID: 497046090306402088, guid: 2e241b8f5fbffcd4181d51090cf87a00, type: 3}
+    rotation: {x: 0, y: 0.70710677, z: 0, w: -0.70710677}
+    top: o-o-o
+    bot: o-c-o
+    left: o-c-o
+    right: o-c-o
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 1, g: 1, b: 1, a: 1}
+  - name: T Shape B
+    go: {fileID: 497046090306402088, guid: 2e241b8f5fbffcd4181d51090cf87a00, type: 3}
+    rotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+    top: o-c-o
+    bot: o-o-o
+    left: o-c-o
+    right: o-c-o
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 1, g: 1, b: 1, a: 1}
+  - name: T Shape L
+    go: {fileID: 497046090306402088, guid: 2e241b8f5fbffcd4181d51090cf87a00, type: 3}
+    rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+    top: o-c-o
+    bot: o-c-o
+    left: o-o-o
+    right: o-c-o
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 1, g: 1, b: 1, a: 1}
+  - name: T Shape R
+    go: {fileID: 497046090306402088, guid: 2e241b8f5fbffcd4181d51090cf87a00, type: 3}
+    rotation: {x: 0, y: 0, z: 0, w: 0}
+    top: o-c-o
+    bot: o-c-o
+    left: o-c-o
+    right: o-o-o
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 1, g: 1, b: 1, a: 1}
+  - name: Dead End T
+    go: {fileID: 8332934554522973631, guid: 62403d4076ed65943b0009b37d0f42e2, type: 3}
+    rotation: {x: 0, y: 0.70710677, z: 0, w: -0.70710677}
+    top: o-o-o
+    bot: o-c-o
+    left: o-o-o
+    right: o-o-o
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 1, g: 1, b: 1, a: 1}
+  - name: Dead End B
+    go: {fileID: 8332934554522973631, guid: 62403d4076ed65943b0009b37d0f42e2, type: 3}
+    rotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+    top: o-c-o
+    bot: o-o-o
+    left: o-o-o
+    right: o-o-o
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 1, g: 1, b: 1, a: 1}
+  - name: Dead End L
+    go: {fileID: 8332934554522973631, guid: 62403d4076ed65943b0009b37d0f42e2, type: 3}
+    rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+    top: o-o-o
+    bot: o-o-o
+    left: o-o-o
+    right: o-c-o
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 1, g: 1, b: 1, a: 1}
+  - name: Dead End T
+    go: {fileID: 8332934554522973631, guid: 62403d4076ed65943b0009b37d0f42e2, type: 3}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    top: o-o-o
+    bot: o-o-o
+    left: o-c-o
+    right: o-o-o
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 1, g: 1, b: 1, a: 1}
+  - name: Floor
+    go: {fileID: 5849393861115226587, guid: e57d770c44522914e85e22e81b40b3bc, type: 3}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    top: o-o-o
+    bot: o-o-o
+    left: o-o-o
+    right: o-o-o
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 1, g: 1, b: 1, a: 1}
+  borderPrefabs:
+  - name: TL OuterL
+    go: {fileID: 7567673570395398937, guid: f1256c15074cfea41bc423535b98c380, type: 3}
+    rotation: {x: 0, y: 0, z: 0, w: 0}
+    top: c-c-c
+    bot: c-c-o
+    left: c-c-c
+    right: c-c-o
+    <CanSpawn>k__BackingField: 0
+    <DebugColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
+  - name: TR OuterL
+    go: {fileID: 7567673570395398937, guid: f1256c15074cfea41bc423535b98c380, type: 3}
+    rotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+    top: c-c-c
+    bot: c-c-o
+    left: c-c-o
+    right: c-c-c
+    <CanSpawn>k__BackingField: 0
+    <DebugColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
+  - name: BR OuterL
+    go: {fileID: 7567673570395398937, guid: f1256c15074cfea41bc423535b98c380, type: 3}
+    rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+    top: o-c-c
+    bot: c-c-c
+    left: o-c-c
+    right: c-c-c
+    <CanSpawn>k__BackingField: 0
+    <DebugColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
+  - name: BL OuterL
+    go: {fileID: 7567673570395398937, guid: f1256c15074cfea41bc423535b98c380, type: 3}
+    rotation: {x: 0, y: 0.70710677, z: 0, w: -0.70710677}
+    top: o-c-c
+    bot: c-c-c
+    left: c-c-c
+    right: o-c-c
+    <CanSpawn>k__BackingField: 0
+    <DebugColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
+  - name: OuterI T
+    go: {fileID: 5403173869912493250, guid: 581a3687ac1dacf4f8a18a5ca9c389c3, type: 3}
+    rotation: {x: 0, y: 0, z: 0, w: 0}
+    top: c-c-c
+    bot: o-o-o
+    left: c-c-o
+    right: c-c-o
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
+  - name: OuterI R
+    go: {fileID: 5403173869912493250, guid: 581a3687ac1dacf4f8a18a5ca9c389c3, type: 3}
+    rotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+    top: o-c-c
+    bot: o-c-c
+    left: o-o-o
+    right: c-c-c
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
+  - name: OuterI B
+    go: {fileID: 5403173869912493250, guid: 581a3687ac1dacf4f8a18a5ca9c389c3, type: 3}
+    rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+    top: o-o-o
+    bot: o-c-c
+    left: o-o-o
+    right: o-c-c
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
+  - name: OuterI L
+    go: {fileID: 5403173869912493250, guid: 581a3687ac1dacf4f8a18a5ca9c389c3, type: 3}
+    rotation: {x: 0, y: 0.70710677, z: 0, w: -0.70710677}
+    top: c-c-o
+    bot: c-c-o
+    left: c-c-c
+    right: o-o-o
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}

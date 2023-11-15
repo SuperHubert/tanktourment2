@@ -444,6 +444,7 @@ MonoBehaviour:
   - {fileID: 3479644327446319484}
   - {fileID: 3643493553551610036}
   layerGameobjects:
+  - {fileID: 5510632380216159349}
   - {fileID: 418632721961027998}
   - {fileID: 5986467494715023511}
   - {fileID: 5925696095241948726}
@@ -490,6 +491,7 @@ MonoBehaviour:
     <Damage>k__BackingField: 1
     <ExplosionRadius>k__BackingField: 1
   maxHp: 3
+  <SpawnHeight>k__BackingField: 0.3
   movementDirection: {x: 0, y: 0}
   headDirection: {x: 0, y: 0, z: 0}
   currentHp: 0

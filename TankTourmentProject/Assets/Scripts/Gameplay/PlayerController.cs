@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     [field: SerializeField] public PlayerInput PlayerInput { get; private set; }
     [field: SerializeField] public TankController TankController { get; private set; }
     [field: SerializeField] public CameraController CameraController { get; private set; }
+    public int Layer { get; private set; }
 
     public static event Action<PlayerController> OnPlayerJoin;
     public static event Action<PlayerController> OnPlayerLeave;
@@ -15,6 +16,11 @@ public class PlayerController : MonoBehaviour
     {
         OnPlayerJoin = null;
         OnPlayerLeave = null;
+    }
+
+    public void SetLayer(int layer)
+    {
+        Layer = layer;
     }
     
     private void Start()

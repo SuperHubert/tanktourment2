@@ -20,10 +20,15 @@ public class CameraController : MonoBehaviour
         target = tr;
 
         hasTarget = target != null;
-        
+
+
         Cam.enabled = hasTarget;
 
+        if(!hasTarget) return;
+        
         CamTransform.position = target.position + offset; 
+        
+        CamTransform.LookAt(target);
     }
     
     private void Update()

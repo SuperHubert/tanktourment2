@@ -65,12 +65,9 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        //Debug.Log($"Trigger : {other.gameObject.name}");
+        Debug.Log($"Trigger : {other.gameObject.name} by {owner.name}");
         
-        if (other.TryGetComponent(out Tank tank))
-        {
-            if(tank == owner) return;
-        }
+        if (other.gameObject.layer == owner.gameObject.layer) return;
         
         gameObject.SetActive(false);
 

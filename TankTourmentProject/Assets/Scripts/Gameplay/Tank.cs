@@ -10,7 +10,7 @@ public class Tank : MonoBehaviour, IDamageable
     [SerializeField] private Transform canonTip;
     [field:SerializeField] public Renderer[] ColoredRenderers { get; private set; }
     [SerializeField] public GameObject[] layerGameobjects;
-    
+
     [Header("Settings")]
     [SerializeField] private bool moveTowardsDirection = false;
     [SerializeField] private float maxSpeed = 10f;
@@ -21,6 +21,7 @@ public class Tank : MonoBehaviour, IDamageable
     [SerializeField] private Projectile.ProjectileData projectileData;
     [Space]
     [SerializeField] private int maxHp;
+    [field: SerializeField] public float SpawnHeight { get; private set; } = 1f;
 
     [Header("Debug")]
     [SerializeField] private Vector2 movementDirection;

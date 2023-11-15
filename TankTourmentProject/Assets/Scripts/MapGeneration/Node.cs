@@ -17,6 +17,8 @@ namespace MapGeneration
         public Color debugColor = Color.white;
 
         public List<Node> neighbors { get; private set; } = new List<Node>();
+        
+        public WorldTile Tile { get; private set; }
 
         public int Entropy
         {
@@ -154,6 +156,11 @@ namespace MapGeneration
             }
             
             return false; 
+        }
+        
+        public void SetTile(WorldTile tile)
+        {
+            Tile = tile;
         }
     }
 }
