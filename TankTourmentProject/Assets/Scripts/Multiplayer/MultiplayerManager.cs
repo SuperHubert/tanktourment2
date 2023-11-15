@@ -12,12 +12,14 @@ public class MultiplayerManager : MonoBehaviour
     [SerializeField] private TankManager tankManager;
     [SerializeField] private WaveCollapseManager waveCollapseManager;
     [SerializeField] private TankSelectionManager tankSelectionManager;
+    [SerializeField] private PointsManager pointsManager;
     [SerializeField] private Camera mainCamera;
 
     [Header("Settings")]
     [SerializeField] private int layerPlayer0 = 10;
     [SerializeField] public int minPlayer = 2;
     [SerializeField] private float borderMultiplier = 1f;
+    
 
     [SerializeField] private List<PlayerController> playerControllers = new List<PlayerController>();
     [SerializeField] private List<PlayerController> inactivePlayerControllers = new List<PlayerController>();
@@ -146,6 +148,9 @@ public class MultiplayerManager : MonoBehaviour
         
         mainCamera.transform.position = generationData.WorldCenter;
         mainCamera.orthographicSize = Vector2.Distance(Vector2.zero, worldSize * 0.5f * 0.80f);
+        
+        pointsManager.SetPlayers(ActivePlayers);
+        pointsManager.SetPoints(generationData.ControlTilePositions,generationData.Scale);
     }
 
     private void OnMapGenerated()

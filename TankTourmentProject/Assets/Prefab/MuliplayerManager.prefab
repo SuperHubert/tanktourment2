@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 8807036370339533938}
   - component: {fileID: 6702745651168192591}
-  - component: {fileID: 6191463346219485045}
   - component: {fileID: 2394796766702861415}
+  - component: {fileID: 6191463346219485045}
   - component: {fileID: 8838535159309284989}
+  - component: {fileID: 2721971204016645279}
   m_Layer: 0
   m_Name: MuliplayerManager
   m_TagString: Untagged
@@ -82,6 +83,29 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &2394796766702861415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3770755211667358811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a36cfe6703583524e8f3ac51ae1ea504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerInputManager: {fileID: 6702745651168192591}
+  tankManager: {fileID: 6191463346219485045}
+  waveCollapseManager: {fileID: 2839526565459127063}
+  tankSelectionManager: {fileID: 8838535159309284989}
+  pointsManager: {fileID: 2721971204016645279}
+  mainCamera: {fileID: 0}
+  layerPlayer0: 10
+  minPlayer: 2
+  borderMultiplier: 0.995
+  playerControllers: []
+  inactivePlayerControllers: []
 --- !u!114 &6191463346219485045
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,28 +125,6 @@ MonoBehaviour:
   respawnCamSpeedMultiplier: 10
   tanks: []
   isRunning: 0
---- !u!114 &2394796766702861415
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3770755211667358811}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a36cfe6703583524e8f3ac51ae1ea504, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerInputManager: {fileID: 6702745651168192591}
-  tankManager: {fileID: 6191463346219485045}
-  waveCollapseManager: {fileID: 2839526565459127063}
-  tankSelectionManager: {fileID: 8838535159309284989}
-  mainCamera: {fileID: 0}
-  layerPlayer0: 10
-  minPlayer: 2
-  borderMultiplier: 0.995
-  playerControllers: []
-  inactivePlayerControllers: []
 --- !u!114 &8838535159309284989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,6 +153,25 @@ MonoBehaviour:
   - {r: 1, g: 0, b: 0.9999995, a: 1}
   tanks:
   - {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173, type: 3}
+--- !u!114 &2721971204016645279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3770755211667358811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7988c0862074df46bdccb67523716bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointsToWin: 3
+  pointsRate: 1
+  pointsPerKill: 0
+  controlPointPrefab: {fileID: 8460308238442232698, guid: d09e2731b99bb7a44a33c8fb15d4e900,
+    type: 3}
+  pointDuration: 0
+  pointSpawnTime: 0
 --- !u!1001 &4876559475843118403
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -9,6 +9,17 @@ public class PlayerController : MonoBehaviour
     [field: SerializeField] public CameraController CameraController { get; private set; }
     public int Layer { get; private set; }
 
+    private PointsManager.PointAmount pointAmount;
+
+    public PointsManager.PointAmount PointAmount
+    {
+        get
+        {
+            return pointAmount ??= new PointsManager.PointAmount();
+        }
+        private set => pointAmount = value;
+    }
+
     public static event Action<PlayerController> OnPlayerJoin;
     public static event Action<PlayerController> OnPlayerLeave;
 

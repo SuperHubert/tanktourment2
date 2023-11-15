@@ -135,9 +135,10 @@ namespace MapGeneration
             }
 
             var spawnTiles = spawnPositionNodes.Select(node => node.Tile.SpawnPosition).ToList();
+            var pointTiles = controlPointsNodes.Select(node => node.Tile.SpawnPosition).ToList();
             var worldCenter = new Vector3(Width * (offset + scale.x) * 0.5f,10, Height * (offset + scale.z) * 0.5f);
             
-            data = new GenerationData(spawnTiles,worldCenter);
+            data = new GenerationData(spawnTiles,worldCenter,scale,pointTiles);
             
             // Wall around the connectors
             // Collapse the rest :happy:
@@ -449,12 +450,16 @@ namespace MapGeneration
     public class GenerationData
     {
         public List<Vector3> SpawnTilePositions { get; }
+        public List<Vector3> ControlTilePositions { get; }
         public Vector3 WorldCenter { get; }
-        
-        public GenerationData(List<Vector3> spawnTilePositions,Vector3 worldCenter)
+        public Vector3 Scale { get; }
+
+        public GenerationData(List<Vector3> spawnTilePositions,Vector3 worldCenter,Vector3 scale,List<Vector3> controlTilePositions)
         {
             SpawnTilePositions = spawnTilePositions;
+            ControlTilePositions = controlTilePositions;
             WorldCenter = worldCenter;
+            Scale = scale;
         }
     }
 }

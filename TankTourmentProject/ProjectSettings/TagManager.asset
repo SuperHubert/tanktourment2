@@ -12,7 +12,7 @@ TagManager:
   - Water
   - UI
   - Ground
-  - Wheels
+  - ControlPoint
   - Projectile
   - Walls
   - P0

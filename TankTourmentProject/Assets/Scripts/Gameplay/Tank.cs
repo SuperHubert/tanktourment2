@@ -31,18 +31,20 @@ public class Tank : MonoBehaviour, IDamageable
     [SerializeField] private Vector3 headDirection;
     [SerializeField] private int currentHp;
     [SerializeField] private LayerMask layersToCheck;
+    
+    private PointsManager.PointAmount pointAmount;
+    
     public int Layer { get; private set; }
     public event Action<Tank> OnTankKilled;
     public event Action OnTankRespawned;
     public event Action<int,bool> OnLayerVisibleUpdated;
-    
     public Vector3 Position => transform.position;
 
     public void SetStatic()
     {
         rb.isKinematic = true;
     }
-
+    
     public void SetLayer(int layer)
     {
         Layer = layer;
@@ -53,6 +55,11 @@ public class Tank : MonoBehaviour, IDamageable
 
         layersToCheck = baseLayersToCheck;
         layersToCheck &=  ~(1 << Layer);
+    }
+    
+    public void SetPointAmount(PointsManager.PointAmount pa)
+    {
+        pointAmount = pa;
     }
     
     public void HandleMovementInputs(Vector2 inputs)
@@ -182,6 +189,17 @@ public class Tank : MonoBehaviour, IDamageable
         }
 
         OnLayerVisibleUpdated?.Invoke(other.Layer,visible);
+    }
+
+    [ContextMenu("AAAAAAAAA")]
+    public void IncreaseScore()
+    {
+        pointAmount.IncreaseAmount(420);
+    }
+    
+    public void IncreaseScore(float amount)
+    {
+        pointAmount.IncreaseAmount(amount);
     }
 }
 

@@ -62,7 +62,7 @@ public class TankManager : MonoBehaviour
         return spawnPoint;
     }
 
-    public void SpawnTank(PlayerController controller)
+    private void SpawnTank(PlayerController controller)
     {
         var pos = NextAvailableSpawnPoint();
         pos.y += tankPrefab.SpawnHeight;
@@ -81,6 +81,8 @@ public class TankManager : MonoBehaviour
         tank.OnTankRespawned += ResetCamSpeed;
         
         tank.OnLayerVisibleUpdated += controller.CameraController.SetLayerVisible;
+
+        tank.SetPointAmount(controller.PointAmount);
         
         tanks.Add(tank);
         
