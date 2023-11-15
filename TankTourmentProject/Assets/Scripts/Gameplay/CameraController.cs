@@ -10,6 +10,8 @@ public class CameraController : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private Vector3 offset;
     [SerializeField] private float speed;
+    private float speedMultiplier = 1f;
+    private float Speed => speed * speedMultiplier;
 
     [Header("Debug")]
     [SerializeField] private Transform target;
@@ -28,6 +30,11 @@ public class CameraController : MonoBehaviour
         CamTransform.position = target.position + offset; 
         
         CamTransform.LookAt(target);
+    }
+    
+    public void SetSpeedMultiplier(float multiplier)
+    {
+        speedMultiplier = multiplier;
     }
     
     private void Update()
@@ -51,7 +58,7 @@ public class CameraController : MonoBehaviour
 
         var targetPos = target.position + offset; //TODO: offset this by the input direction if aiming
         
-        CamTransform.position = Vector3.MoveTowards(pos, targetPos, speed * Time.deltaTime);
+        CamTransform.position = Vector3.MoveTowards(pos, targetPos, Speed * Time.deltaTime);
     }
 
     public void SetLayerVisible(int layer, bool visible)
