@@ -31,6 +31,7 @@ namespace MapGeneration
         
         [field:Header("Prefabs")]
         [field:SerializeField] private List<PrefabData> tilePrefabs;
+        [field:SerializeField] private List<PrefabData> borderPrefabs;
         
         private Node[,] nodes;
 
@@ -78,7 +79,6 @@ namespace MapGeneration
             
             tile.Renderer.material = mat;
             tile.Node = nodes[i, j];
-
         }
     
         private void GenerateMap()
@@ -189,9 +189,7 @@ namespace MapGeneration
                 var randX = Random.Range(a.x, b.x);
                 var randY = Random.Range(a.y, b.y);
                 
-                nodes[randX, randY].SelectTile(prefabData);
-                GenerateVisualFor(randX, randY);
-                PropagateWave(nodes[randX, randY]);
+                SelectShowPropagate(randX, randY, prefabData);
                 
                 addedNodes.Add(nodes[randX, randY]);
             }
@@ -203,7 +201,27 @@ namespace MapGeneration
                 yield return new WaitForSeconds(creationSpeed);
                 IterateWaveCollapse();
             }
-            //GenerateVisualMap();
+            SetBorders();
+        }
+
+        private void SetBorders()
+        {
+            SelectShowPropagate(0, 0, borderPrefabs[3], false);
+            SelectShowPropagate(Width-1, 0, borderPrefabs[2], false);
+            SelectShowPropagate(Width-1, Height-1, borderPrefabs[1], false);
+            SelectShowPropagate(0, Height-1, borderPrefabs[0], false);
+            
+            for (int i = 1; i < Width-1; i++)
+            {
+                SelectShowPropagate(i, 0, borderPrefabs[6], false);
+                SelectShowPropagate(i, Height-1, borderPrefabs[4], false);
+            }
+            
+            for (int i = 1; i < Height-1; i++)
+            {
+                SelectShowPropagate(0, i, borderPrefabs[7], false);
+                SelectShowPropagate(Width-1, i, borderPrefabs[5], false);
+            }
         }
     
         private void InitNodes()
@@ -373,6 +391,13 @@ namespace MapGeneration
                     if (!nodesToUpdate.Contains(nodeToUpdate)) nodesToUpdate.Add(nodeToUpdate);
                 }
             }
+        }
+
+        private void SelectShowPropagate(int i, int j, PrefabData prefabData, bool propagate = true)
+        {
+            nodes[i, j].SelectTile(prefabData);
+            GenerateVisualFor(i, j);
+            if(propagate) PropagateWave(nodes[i, j]);
         }
     }
 
