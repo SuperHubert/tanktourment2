@@ -189,7 +189,7 @@ GameObject:
   - component: {fileID: 4676924565265052763}
   - component: {fileID: 1656741890688491916}
   m_Layer: 0
-  m_Name: SFXSource (1)
+  m_Name: SFXSource
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

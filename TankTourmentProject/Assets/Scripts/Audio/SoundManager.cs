@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class SoundManager : MonoBehaviour
 { 
     public static SoundManager instance;
     [SerializeField] private AudioSource musicSource, EffectSource;
+    [SerializeField] private AudioMixer audioMixer;
     [SerializeField] private AudioClip music;
     private void Awake()
     {
@@ -21,8 +23,18 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    public void PlaySond(AudioClip clip)
+    public void PlaySound(AudioClip clip)
     {
         EffectSource.PlayOneShot(clip);
     }
+    
+    public void ChangeMusicVolume(float volume)
+    { 
+        audioMixer.SetFloat("MusiqueVolume", volume);
+    }
+    public void ChangeEffectVolume(float volume)
+    { 
+        audioMixer.SetFloat("SFXVolume", volume);
+    }
+    
 }
