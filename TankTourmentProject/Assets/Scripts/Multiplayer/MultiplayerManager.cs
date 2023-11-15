@@ -90,7 +90,8 @@ public class MultiplayerManager : MonoBehaviour
     {
         tankSelectionManager.OnPlayerReadyChanged -= TryStartGame;
         
-        tankSelectionManager.ShowColors(false);
+        
+        tankSelectionManager.HideSelections();
         
         // create map
         

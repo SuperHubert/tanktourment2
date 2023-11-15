@@ -8,6 +8,9 @@ public class TankSelection : MonoBehaviour
 {
     [field: SerializeField] public Transform TankTr { get; private set; }
     [field: SerializeField] public Transform CamTr { get; private set; }
+    
+    [SerializeField] private GameObject readyIndicatorGo; //TODO, put something on canvas jsp
+    
     [SerializeField] private Transform rotator;
     
     [SerializeField] private GameObject[] allGameObjects;
@@ -39,6 +42,7 @@ public class TankSelection : MonoBehaviour
         SetLayer(layer);
         
         IsReady = false;
+        readyIndicatorGo.SetActive(IsReady);
         OnReadyChanged?.Invoke(IsReady);
         
         ConnectInputs();
@@ -68,6 +72,7 @@ public class TankSelection : MonoBehaviour
         IsReady = !IsReady;
         
         // Feedback
+        readyIndicatorGo.SetActive(IsReady);
         
         OnReadyChanged?.Invoke(IsReady);
     }
