@@ -97,7 +97,10 @@ MonoBehaviour:
   tankPrefab: {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173,
     type: 3}
   spawnPoints: []
-  respawnDuration: 0
+  respawnDuration: 1.5
+  respawnCamSpeedMultiplier: 10
+  tanks: []
+  isRunning: 0
 --- !u!114 &2394796766702861415
 MonoBehaviour:
   m_ObjectHideFlags: 0

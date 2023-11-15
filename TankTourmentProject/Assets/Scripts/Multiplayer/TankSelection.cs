@@ -35,8 +35,6 @@ public class TankSelection : MonoBehaviour
         var camTr = playerController.CameraController.CamTransform;
         var cam = playerController.CameraController.Cam;
         
-        cam.cullingMask |= (1 << layer);
-        
         camTr.SetPositionAndRotation(CamTr.position,CamTr.rotation);
             
         SetLayer(layer);

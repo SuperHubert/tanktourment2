@@ -11,10 +11,31 @@ public class TankManager : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private Vector3[] spawnPoints;
     [SerializeField] private float respawnDuration;
+    [SerializeField] private float respawnCamSpeedMultiplier;
     
     private List<Vector3> availableSpawnPoints = new List<Vector3>();
-    private List<Tank> tanks = new List<Tank>();
+    [SerializeField] private List<Tank> tanks = new List<Tank>();
     
+    [SerializeField] private bool isRunning = false;
+
+    public void SetRunning(bool value)
+    {
+        isRunning = value;
+    }
+    
+    public void Update()
+    {
+        if(!isRunning) return;
+
+        foreach (var tank0 in tanks)
+        {
+            foreach (var tank1 in tanks)
+            {
+                tank0.CheckVisible(tank1);
+            }
+        }
+    }
+
     public void SpawnTanks(List<PlayerController> controllers)
     {
         foreach (var controller in controllers)
@@ -57,6 +78,9 @@ public class TankManager : MonoBehaviour
         tank.RespawnValues();
         
         tank.OnTankKilled += Killed;
+        tank.OnTankRespawned += ResetCamSpeed;
+        
+        tank.OnLayerVisibleUpdated += controller.CameraController.SetLayerVisible;
         
         tanks.Add(tank);
         
@@ -67,27 +91,39 @@ public class TankManager : MonoBehaviour
         
         void Killed(Tank killer)
         {
+            controller.CameraController.SetSpeedMultiplier(respawnCamSpeedMultiplier);
+            
             OnTankKilled(tank,killer);
         }
+
+        void ResetCamSpeed()
+        {
+            controller.CameraController.SetSpeedMultiplier(1f);
+        }
+        
     }
 
     private void OnTankKilled(Tank tank, Tank killer)
     {
         Debug.Log($"{killer.name} killed {tank.name}");
         
-        StartCoroutine(WaitRespawn(tank));
-    }
-    
-    IEnumerator WaitRespawn(Tank tank)
-    {
-        yield return new WaitForSeconds(respawnDuration);
-        
         var pos = NextAvailableSpawnPoint();
         pos.y += tankPrefab.SpawnHeight;
         
         tank.transform.position = pos;
         
-        tank.RespawnValues();
+        StartCoroutine(WaitRespawn());
+        
+        return;
+        
+        IEnumerator WaitRespawn()
+        {
+            yield return new WaitForSeconds(respawnDuration);
+        
+            tank.RespawnValues();
+        }
     }
+    
+    
     
 }
