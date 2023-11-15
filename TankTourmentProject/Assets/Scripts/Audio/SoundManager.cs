@@ -9,7 +9,7 @@ public class SoundManager : MonoBehaviour
     public static SoundManager instance;
     [SerializeField] private AudioSource musicSource, EffectSource;
     [SerializeField] private AudioMixer audioMixer;
-    [SerializeField] private AudioClip music;
+    [SerializeField] private AudioClip music, validateEffect;
     private void Awake()
     {
         if (instance == null)
@@ -34,6 +34,7 @@ public class SoundManager : MonoBehaviour
     }
     public void ChangeEffectVolume(float volume)
     { 
+        PlaySound(validateEffect);
         audioMixer.SetFloat("SFXVolume", volume);
     }
     
