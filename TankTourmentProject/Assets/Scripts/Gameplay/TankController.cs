@@ -52,7 +52,6 @@ public class TankController : MonoBehaviour
 
     private void SwitchControlSchemes(PlayerInput context)
     {
-        Debug.Log(context.currentControlScheme);
         useMouse = context.currentControlScheme == KeyboardControlScheme;
     }
 

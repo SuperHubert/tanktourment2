@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 8807036370339533938}
   - component: {fileID: 6702745651168192591}
   - component: {fileID: 6191463346219485045}
+  - component: {fileID: 2394796766702861415}
+  - component: {fileID: 8838535159309284989}
   m_Layer: 0
   m_Name: MuliplayerManager
   m_TagString: Untagged
@@ -71,7 +73,7 @@ MonoBehaviour:
   m_PlayerPrefab: {fileID: 7326542362435752075, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
     type: 3}
   m_SplitScreen: 1
-  m_MaintainAspectRatioInSplitScreen: 0
+  m_MaintainAspectRatioInSplitScreen: 1
   m_FixedNumberOfSplitScreens: -1
   m_SplitScreenRect:
     serializedVersion: 2
@@ -93,3 +95,51 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tankPrefab: {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173,
     type: 3}
+  spawnPoints: []
+  respawnDuration: 0
+--- !u!114 &2394796766702861415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3770755211667358811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a36cfe6703583524e8f3ac51ae1ea504, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerInputManager: {fileID: 6702745651168192591}
+  tankManager: {fileID: 6191463346219485045}
+  waveCollapseManager: {fileID: 0}
+  tankSelectionManager: {fileID: 8838535159309284989}
+  layerPlayer0: 10
+  playerControllers: []
+--- !u!114 &8838535159309284989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3770755211667358811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2356a789b2607f646a563c89485ce713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorSelectionPrefab: {fileID: 4608430649544783538, guid: c45c2059a02ef57469205bae577663ce,
+    type: 3}
+  colorSelectionLayout: {fileID: 0}
+  tankSelectionPrefab: {fileID: 4266593263457250113, guid: 168e1a366b3b4d34d9e44398be8f16f5,
+    type: 3}
+  colors:
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 1, g: 0.5, b: 0, a: 1}
+  - {r: 1, g: 1, b: 0, a: 1}
+  - {r: 0.25, g: 1, b: 0, a: 1}
+  - {r: 0, g: 1, b: 0.9999995, a: 1}
+  - {r: 0, g: 0, b: 1, a: 1}
+  - {r: 0.5000005, g: 0, b: 1, a: 1}
+  - {r: 1, g: 0, b: 0.9999995, a: 1}
+  tanks:
+  - {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173, type: 3}

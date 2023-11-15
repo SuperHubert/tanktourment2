@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 33367990276353771}
   - component: {fileID: 3479644327446319484}
   - component: {fileID: 5081913770575365803}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -217,7 +217,7 @@ GameObject:
   - component: {fileID: 6395908329052466396}
   - component: {fileID: 3643493553551610036}
   - component: {fileID: 8572544915351866016}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -370,7 +370,7 @@ Transform:
   m_GameObject: {fileID: 5510632380216159349}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.635, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -440,6 +440,15 @@ MonoBehaviour:
   rb: {fileID: 6034856823885727613}
   headTransform: {fileID: 5652426724392423080}
   canonTip: {fileID: 2329134908684325603}
+  <ColoredRenderers>k__BackingField:
+  - {fileID: 3479644327446319484}
+  - {fileID: 3643493553551610036}
+  layerGameobjects:
+  - {fileID: 418632721961027998}
+  - {fileID: 5986467494715023511}
+  - {fileID: 5925696095241948726}
+  - {fileID: 4886954892170269299}
+  - {fileID: 6075677794799863245}
   moveTowardsDirection: 1
   maxSpeed: 25
   acceleration: 10
@@ -496,7 +505,7 @@ GameObject:
   - component: {fileID: 7681517529458473317}
   - component: {fileID: 6073844401477798427}
   - component: {fileID: 5219336396422222709}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: Chain Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -601,7 +610,7 @@ GameObject:
   - component: {fileID: 5710846446826568753}
   - component: {fileID: 8203270999725700230}
   - component: {fileID: 3020539300926765765}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: Chain Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -706,7 +715,7 @@ GameObject:
   - component: {fileID: 7037653427323149652}
   - component: {fileID: 6341396113957719724}
   - component: {fileID: 6289084389327300079}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Canon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
