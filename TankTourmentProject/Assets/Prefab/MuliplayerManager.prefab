@@ -167,11 +167,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pointsToWin: 3
   pointsRate: 1
-  pointsPerKill: 0
+  pointsToCapture: 20
   controlPointPrefab: {fileID: 8460308238442232698, guid: d09e2731b99bb7a44a33c8fb15d4e900,
     type: 3}
-  pointDuration: 0
-  pointSpawnTime: 0
 --- !u!1001 &4876559475843118403
 PrefabInstance:
   m_ObjectHideFlags: 0

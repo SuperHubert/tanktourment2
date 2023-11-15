@@ -6,6 +6,8 @@ public class Projectile : MonoBehaviour
     [Header("Components")]
     [SerializeField] private Rigidbody rb;
     [SerializeField] private TrailRenderer trailRenderer;
+    
+    [SerializeField] private ParticleSystem explosionPrefab;
 
     [Serializable]
     public struct ProjectileData
@@ -66,11 +68,16 @@ public class Projectile : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == owner.gameObject.layer) return;
-        
-        gameObject.SetActive(false);
 
         var position = transform.position;
         
+        var explo = ObjectPooler.Pool(explosionPrefab, position, Quaternion.identity);
+        explo.Stop();
+        explo.Play();
+
+        gameObject.SetActive(false);
+
+
         var data = new DamageData(position, owner, damage);
         
         // TODO - explosion feedback

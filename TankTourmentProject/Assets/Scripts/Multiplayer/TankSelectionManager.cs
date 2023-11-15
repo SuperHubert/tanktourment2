@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class TankSelectionManager : MonoBehaviour
 {
@@ -62,6 +63,12 @@ public class TankSelectionManager : MonoBehaviour
         selection.SetTanks(tanks);
         
         selection.OnReadyChanged += TryStartGame;
+
+        selection.OnColorChanged += playerController.SetColor;
+        
+        var color = colors[Random.Range(0, colors.Count)]; // TODO - remove when color selection is added
+        
+        selection.ChangeColor(color);
         
         return selection;
     }

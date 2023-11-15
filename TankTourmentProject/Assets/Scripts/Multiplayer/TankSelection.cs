@@ -21,6 +21,7 @@ public class TankSelection : MonoBehaviour
     public event Action<int> OnSelectedColorIndexChanged; 
     public bool IsReady { get; private set; }
     public event Action<bool> OnReadyChanged; 
+    public event Action<Color> OnColorChanged;
     
     private PlayerController playerController;
     
@@ -80,13 +81,10 @@ public class TankSelection : MonoBehaviour
         color = col;
         foreach (var tank in tankModels)
         {
-            foreach (var rend in tank.ColoredRenderers)
-            {
-                var mat = rend.material;
-                mat.color = color;
-                rend.material = mat;
-            }
+            tank.SetColor(color);
         }
+        
+        OnColorChanged?.Invoke(color);
     }
 
     public void SetLayer(int layer)

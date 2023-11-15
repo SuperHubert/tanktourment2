@@ -72,6 +72,7 @@ public class TankManager : MonoBehaviour
         var tank = Instantiate(prefab,pos, Quaternion.identity);
 
         tank.SetLayer(controller.Layer);
+        tank.SetColor(controller.Color);
         
         tank.gameObject.name = $"GameTank ({LayerMask.LayerToName(controller.Layer)})";
         

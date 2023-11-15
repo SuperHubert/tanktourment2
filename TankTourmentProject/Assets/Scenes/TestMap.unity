@@ -2459,6 +2459,7 @@ MonoBehaviour:
   height: 19
   offset: 1
   scale: {x: 4, y: 2, z: 4}
+  noFun: 0
   spawnPosition: {x: 0, y: 0}
   spawnSize: {x: 3, y: 3}
   connectorsPosition: {x: 1, y: 5}
@@ -2979,6 +2980,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: MapManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 5643361891096779731, guid: 55e9e126334137d4598d884dd152e7e6,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

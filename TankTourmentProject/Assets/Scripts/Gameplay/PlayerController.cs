@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
     [field: SerializeField] public PlayerInput PlayerInput { get; private set; }
     [field: SerializeField] public TankController TankController { get; private set; }
     [field: SerializeField] public CameraController CameraController { get; private set; }
+    
+    public Color Color { get; private set; }
     public int Layer { get; private set; }
 
     private PointsManager.PointAmount pointAmount;
@@ -34,6 +36,11 @@ public class PlayerController : MonoBehaviour
         CameraController.SetLayerVisible(Layer,false);
         Layer = layer;
         CameraController.SetLayerVisible(Layer,true);
+    }
+
+    public void SetColor(Color color)
+    {
+        Color = color;
     }
     
     private void Start()

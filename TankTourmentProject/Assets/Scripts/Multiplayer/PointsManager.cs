@@ -1,18 +1,22 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class PointsManager : MonoBehaviour
 {
     [Header("Settings")]
-    [SerializeField] private float pointsToWin = 3f;
-    [SerializeField] private float pointsRate;
-    [SerializeField] private float pointsPerKill;
+    [SerializeField] private int pointsToWin = 3;
+    [SerializeField] private float pointsRate = 1/45f;
+    [SerializeField] private float pointsToCapture = 1;
     [Space]
     [SerializeField] private ControlPoint controlPointPrefab;
-    [SerializeField] private float pointDuration;
-    [SerializeField] private float pointSpawnTime;
+    [SerializeField] private float controlPointAlpha = 0.5f;
+
+    private ControlPoint currentPoint;
+    private ControlPoint nextPoint;
     
     private List<PlayerController> playerPoints = new ();
     
@@ -23,23 +27,56 @@ public class PointsManager : MonoBehaviour
     public void SetPlayers(IEnumerable<PlayerController> players)
     {
         playerPoints.Clear();
-        foreach (var player in players)
+        
+        var playersList = players.ToList();
+        
+        foreach (var player in playersList)
         {
             playerPoints.Add(player);
             
-            player.PointAmount.OnAmountChanged += CheckVictory;
+            player.PointAmount.OnPercentChanged += IncreaseCapture;
+
+            player.PointAmount.OnCaptureIncreased += CheckVictory;
+            
+            player.PointAmount.OnCaptureIncreased += OnPointCaptured;
 
             continue;
-            
+
+            void IncreaseCapture()
+            {
+                var progress = player.PointAmount.PointPercent / pointsToCapture;
+                
+                Debug.Log($"Player {player.gameObject.name} progress : {progress}");
+
+                var color = player.Color;
+                color.a = controlPointAlpha;
+                
+                currentPoint.ShowProgress(progress, color);
+                
+                if (player.PointAmount.PointPercent < pointsToCapture) return;
+                
+                player.PointAmount.IncreaseCapture();
+            }
+
             void CheckVictory()
             {
-                var notWin = player.PointAmount.Amount < pointsToWin;
-                
-                Debug.Log($"{player.gameObject.name} points : {player.PointAmount.Amount} ({!notWin})");
+                var notWin = player.PointAmount.PointCaptured < pointsToWin;
                 
                 if(notWin) return;
                 
                 OnPlayerWin?.Invoke(player);
+            }
+        }
+        
+        return;
+
+        void OnPointCaptured()
+        {
+            NextPoint();
+            
+            foreach (var player in playersList)
+            {
+                player.PointAmount.ResetCapturePercent();
             }
         }
     }
@@ -61,22 +98,54 @@ public class PointsManager : MonoBehaviour
             controlPoints.Add(controlPoint);
             
             controlPoint.OnTankStay += IncreaseScoreForTank;
+            
+            controlPoint.Deactivate();
         }
+
+        nextPoint = controlPoints[Random.Range(0, controlPoints.Count)];
+        NextPoint();
     }
     
     private void IncreaseScoreForTank(Tank tank)
     {
-        tank.IncreaseScore(pointsRate * Time.deltaTime);
+        tank.IncreaseCapturePercent(pointsRate * Time.deltaTime);
+    }
+
+    private void NextPoint()
+    {
+        if(currentPoint != null) currentPoint.Deactivate();
+        
+        currentPoint = nextPoint;
+        
+        currentPoint.Activate();
+        
+        var availablePoints = controlPoints.Where(point => point != currentPoint).ToList();
+        
+        nextPoint = availablePoints[Random.Range(0, availablePoints.Count)];
     }
     
     public class PointAmount
     {
-        public float Amount { get; private set; }
-        public event Action OnAmountChanged;
-        public void IncreaseAmount(float amount)
+        public int PointCaptured { get; private set; }
+        public float PointPercent { get; private set; }
+        public event Action OnPercentChanged;
+        public event Action OnCaptureIncreased;
+
+        public void ResetCapturePercent()
         {
-            Amount += amount;
-            OnAmountChanged?.Invoke();
+            PointPercent = 0;
+            OnPercentChanged?.Invoke();
+        }
+        public void IncreaseCapturePercent(float amount)
+        {
+            PointPercent += amount;
+            OnPercentChanged?.Invoke();
+        }
+
+        public void IncreaseCapture()
+        {
+            PointCaptured++;
+            OnCaptureIncreased?.Invoke();
         }
     }
 }

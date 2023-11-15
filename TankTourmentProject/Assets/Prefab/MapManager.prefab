@@ -49,6 +49,7 @@ MonoBehaviour:
   height: 19
   offset: 2
   scale: {x: 1, y: 1, z: 1}
+  noFun: 0
   spawnPosition: {x: 0, y: 0}
   spawnSize: {x: 3, y: 3}
   connectorsPosition: {x: 1, y: 5}
@@ -57,7 +58,7 @@ MonoBehaviour:
   controlPSize: {x: 3, y: 5}
   tilePrefabs:
   - name: Control point
-    go: {fileID: -2538792677096696554, guid: 4679937d1bbb2814e9374ee3f28570a2, type: 3}
+    go: {fileID: 5849393861115226587, guid: e57d770c44522914e85e22e81b40b3bc, type: 3}
     rotation: {x: 0, y: 0, z: 0, w: 0}
     top: o-o-o
     bot: o-o-o

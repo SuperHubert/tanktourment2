@@ -71,4 +71,12 @@ public class CameraController : MonoBehaviour
         }
         Cam.cullingMask &= ~(1 << layer);
     }
+
+    public void SetCameraRect(Vector2 position, Vector2 size)
+    {
+        var rect = Cam.rect;
+        rect.position = position;
+        rect.size = size;
+        Cam.rect = rect;
+    }
 }

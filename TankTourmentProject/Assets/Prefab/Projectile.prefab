@@ -75,6 +75,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 8481775901940470557}
   trailRenderer: {fileID: 5375676318208347008}
+  explosionPrefab: {fileID: 4980666697088499066, guid: 672bc3661bde65f46814f9a690d34f3a,
+    type: 3}
 --- !u!1 &9125159026861925585
 GameObject:
   m_ObjectHideFlags: 0

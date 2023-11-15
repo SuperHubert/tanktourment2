@@ -33,6 +33,7 @@ public class Tank : MonoBehaviour, IDamageable
     [SerializeField] private LayerMask layersToCheck;
     
     private PointsManager.PointAmount pointAmount;
+    public Color Color { get; private set; }
     
     public int Layer { get; private set; }
     public event Action<Tank> OnTankKilled;
@@ -60,6 +61,17 @@ public class Tank : MonoBehaviour, IDamageable
     public void SetPointAmount(PointsManager.PointAmount pa)
     {
         pointAmount = pa;
+    }
+
+    public void SetColor(Color color)
+    {
+        Color = color;
+        foreach (var rend in ColoredRenderers)
+        {
+            var mat = rend.material;
+            mat.color = Color;
+            rend.material = mat;
+        }
     }
     
     public void HandleMovementInputs(Vector2 inputs)
@@ -191,15 +203,9 @@ public class Tank : MonoBehaviour, IDamageable
         OnLayerVisibleUpdated?.Invoke(other.Layer,visible);
     }
 
-    [ContextMenu("AAAAAAAAA")]
-    public void IncreaseScore()
+    public void IncreaseCapturePercent(float amount)
     {
-        pointAmount.IncreaseAmount(420);
-    }
-    
-    public void IncreaseScore(float amount)
-    {
-        pointAmount.IncreaseAmount(amount);
+        pointAmount.IncreaseCapturePercent(amount);
     }
 }
 
