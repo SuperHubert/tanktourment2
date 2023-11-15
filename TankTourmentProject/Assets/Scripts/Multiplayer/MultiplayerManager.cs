@@ -18,7 +18,7 @@ public class MultiplayerManager : MonoBehaviour
     [SerializeField] public int minPlayer = 2;
 
     [SerializeField] private List<PlayerController> playerControllers = new List<PlayerController>();
-    private List<PlayerController> inactivePlayerControllers = new List<PlayerController>();
+    [SerializeField] private List<PlayerController> inactivePlayerControllers = new List<PlayerController>();
 
 
     private bool isInGame = false;
@@ -39,6 +39,8 @@ public class MultiplayerManager : MonoBehaviour
 
     private void AddPlayer(PlayerController playerController)
     {
+        playerController.gameObject.SetActive(true);
+        
         playerControllers.Add(playerController);
         
         if (inactivePlayerControllers.Contains(playerController)) inactivePlayerControllers.Remove(playerController);
@@ -48,6 +50,8 @@ public class MultiplayerManager : MonoBehaviour
     
     private void RemovePlayer(PlayerController playerController)
     {
+        playerController.gameObject.SetActive(false);
+        
         inactivePlayerControllers.Add(playerController);
 
         OnPlayersUpdate();

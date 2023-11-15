@@ -38,7 +38,6 @@ public class Tank : MonoBehaviour, IDamageable
 
     public void SetLayer(int layer)
     {
-        Debug.Log($"Setting layer of {gameObject.name} to {layer}",gameObject);
         foreach (var go in layerGameobjects)
         {
             go.layer = layer;

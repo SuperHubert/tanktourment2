@@ -88,7 +88,6 @@ public class TankSelection : MonoBehaviour
 
     public void SetLayer(int layer)
     {
-        Debug.Log($"Setting layer of {gameObject.name} to {layer}",gameObject);
         foreach (var go in allGameObjects)
         {
             go.layer = layer;
