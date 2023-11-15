@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1293208005837616873}
+  - component: {fileID: 5849393861115226587}
   m_Layer: 0
   m_Name: floor
   m_TagString: Untagged
@@ -32,6 +33,20 @@ Transform:
   - {fileID: 8968343330739340121}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5849393861115226587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6291588452339563067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a14feea63570a5a4db7bac0b2d4cd13d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Renderer>k__BackingField: {fileID: 8205344506298795257}
+  neighbors: []
 --- !u!1001 &3895699954737405292
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -100,6 +115,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 59bd55994001089428c46b499ef043bf, type: 3}
+--- !u!23 &8205344506298795257 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5174481134989629845, guid: 59bd55994001089428c46b499ef043bf,
+    type: 3}
+  m_PrefabInstance: {fileID: 3895699954737405292}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8968343330739340121 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5360896307224813109, guid: 59bd55994001089428c46b499ef043bf,

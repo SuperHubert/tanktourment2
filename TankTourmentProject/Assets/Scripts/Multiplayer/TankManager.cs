@@ -14,10 +14,13 @@ public class TankManager : MonoBehaviour
     
     private List<Transform> availableSpawnPoints = new List<Transform>();
     private List<Tank> tanks = new List<Tank>();
-
-    public void Start()
+    
+    public void SpawnTanks(List<PlayerController> controllers)
     {
-        PlayerController.OnPlayerSpawned += SpawnTank;
+        foreach (var controller in controllers)
+        {
+            SpawnTank(controller);
+        }
     }
     
     private Vector3 NextAvailableSpawnPoint()

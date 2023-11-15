@@ -8,6 +8,8 @@ public class Tank : MonoBehaviour, IDamageable
     [SerializeField] private Rigidbody rb;
     [SerializeField] private Transform headTransform;
     [SerializeField] private Transform canonTip;
+    [field:SerializeField] public Renderer[] ColoredRenderers { get; private set; }
+    [SerializeField] public GameObject[] layerGameobjects;
     
     [Header("Settings")]
     [SerializeField] private bool moveTowardsDirection = false;
@@ -28,6 +30,19 @@ public class Tank : MonoBehaviour, IDamageable
     public event Action<Tank> OnTankKilled;
     
     public Vector3 Position => transform.position;
+
+    public void SetStatic()
+    {
+        rb.isKinematic = true;
+    }
+
+    public void SetLayer(int layer)
+    {
+        foreach (var go in layerGameobjects)
+        {
+            go.layer = layer;
+        }
+    }
     
     public void HandleMovementInputs(Vector2 inputs)
     {
