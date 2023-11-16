@@ -806,6 +806,7 @@ MonoBehaviour:
       m_NumAlphaKeys: 2
     <Damage>k__BackingField: 45
     <ExplosionRadius>k__BackingField: 1
+    <ExplosionOffset>k__BackingField: 0.5
   maxHp: 100
   <SpawnHeight>k__BackingField: 0.3
   movementDirection: {x: 0, y: 0}

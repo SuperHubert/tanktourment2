@@ -16,6 +16,7 @@ public class Projectile : MonoBehaviour
         [field: SerializeField] public Gradient Color { get; private set; }
         [field: SerializeField] public int Damage { get; private set; }
         [field: SerializeField] public float ExplosionRadius { get; private set; }
+        [field: SerializeField] public float ExplosionOffset { get; private set; }
     }
 
     public struct DamageData
@@ -36,6 +37,7 @@ public class Projectile : MonoBehaviour
     
     private int damage;
     private float explosionRadius;
+    private float explosionOffset;
     
     public void OnEnable()
     {
@@ -61,6 +63,7 @@ public class Projectile : MonoBehaviour
         
         damage = data.Damage;
         explosionRadius = data.ExplosionRadius;
+        explosionOffset = data.ExplosionOffset;
         
         rb.AddForce(velocity);
     }
@@ -70,9 +73,11 @@ public class Projectile : MonoBehaviour
         
         if (other.gameObject.layer == owner.gameObject.layer) return;
         SoundManager.instance.PlaySound(SoundManager.instance.explosion);
-        var position = transform.position;
+        var transform1 = transform;
+        var position = transform1.position - transform1.forward.normalized * explosionOffset;
         
         var explo = ObjectPooler.Pool(explosionPrefab, position, Quaternion.identity);
+        explo.gameObject.transform.localScale = Vector3.one * explosionRadius * 0.8f;
         explo.Stop();
         explo.Play();
 
@@ -84,7 +89,7 @@ public class Projectile : MonoBehaviour
         // TODO - explosion feedback
         //fx
         //maybe push stuff around
-        
+
         var colliders = Physics.OverlapSphere(position, explosionRadius);
         
         foreach (var col in colliders)
