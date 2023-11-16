@@ -735,7 +735,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 6034856823885727613}
-  headTransform: {fileID: 5652426724392423080}
+  <HeadTransform>k__BackingField: {fileID: 5652426724392423080}
   canonTip: {fileID: 2329134908684325603}
   <ColoredRenderers>k__BackingField:
   - {fileID: 3479644327446319484}

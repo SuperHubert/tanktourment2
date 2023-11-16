@@ -80,6 +80,7 @@ public class TankSelectionManager : MonoBehaviour
         selection.SetTanks(tanks,tankOffset);
         selection.SetColorCooldown(colorMoveCooldown);
 
+        var tankIndex = 0;
         var colorIndex = 0;
         
         playerController.TankSelectionData.OnReadyChanged += TryStartGame;
@@ -95,12 +96,16 @@ public class TankSelectionManager : MonoBehaviour
 
         void ChangeTankIndex(int change)
         {
-            var index = playerController.TankSelectionData.SelectedTankIndex + change;
+            var index = tankIndex + change;
             
             if (index < 0) index = tanks.Length - 1;
             else if (index >= tanks.Length) index = 0;
 
-            playerController.TankSelectionData.SetTankIndex(index);
+            tankIndex = index;
+            
+            var tank = tanks[index];
+            
+            playerController.TankSelectionData.SetTankIndex(tank);
             
             var dir = selection.TankTr.right * -1f * tankOffset * index;
             var dest = selection.TankTrOrigin + dir;

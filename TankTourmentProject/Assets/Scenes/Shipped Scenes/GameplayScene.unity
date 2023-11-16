@@ -985,6 +985,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2394796766702861415, guid: 509b571c29abc374c9cffd3860f8bd1e,
         type: 3}
+      propertyPath: minPlayer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2394796766702861415, guid: 509b571c29abc374c9cffd3860f8bd1e,
+        type: 3}
       propertyPath: mainCamera
       value: 
       objectReference: {fileID: 1323421977}

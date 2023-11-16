@@ -6,20 +6,19 @@ public class Tank : MonoBehaviour, IDamageable
 {
     [Header("Components")]
     [SerializeField] private Rigidbody rb;
-    [SerializeField] private Transform headTransform;
+    [field: SerializeField] public Transform HeadTransform { get; private set; }
     [SerializeField] private Transform canonTip;
     [field:SerializeField] public Renderer[] ColoredRenderers { get; private set; }
     [SerializeField] public GameObject[] layerGameobjects;
     [SerializeField] private Transform[] raycastOrigins;
 
     [Header("Settings")]
-    [SerializeField, Range(-1f, 1f),Tooltip("0 is 180°, -1 360 and 1 0°")] private float maxVisibilityAngle = 0f;
-    [SerializeField] private LayerMask baseLayersToCheck;
     [SerializeField] private bool moveTowardsDirection = false;
     [SerializeField] private float maxSpeed = 10f;
     [SerializeField] private float acceleration = 10f;
     [SerializeField] private float maxTurnSpeed = 10f;
     [SerializeField] private float headRotationSpeed = 360f;
+    [field: SerializeField, Range(0f, 360f), Tooltip("°")] public float MaxVisibilityAngle { get; private set; } = 90f;
     [Space]
     [SerializeField] private Projectile projectilePrefab;
     [SerializeField] private float shootCooldown = 1f;
@@ -34,7 +33,6 @@ public class Tank : MonoBehaviour, IDamageable
     [SerializeField] private Vector2 movementDirection;
     [SerializeField] private Vector3 headDirection;
     [SerializeField] private int currentHp;
-    [SerializeField] private LayerMask layersToCheck;
     
     public PointsManager.PointAmount PointAmount { get; private set; }
     public Color Color { get; private set; }
@@ -42,7 +40,6 @@ public class Tank : MonoBehaviour, IDamageable
     public int Layer { get; private set; }
     public event Action<Tank> OnTankKilled;
     public event Action OnTankRespawned;
-    public event Action<int,bool> OnLayerVisibleUpdated;
     public Vector3 Position => transform.position;
 
     public void SetStatic()
@@ -57,9 +54,6 @@ public class Tank : MonoBehaviour, IDamageable
         {
             go.layer = Layer;
         }
-
-        layersToCheck = baseLayersToCheck;
-        layersToCheck &=  ~(1 << Layer);
     }
     
     public void SetPointAmount(PointsManager.PointAmount pa)
@@ -116,7 +110,7 @@ public class Tank : MonoBehaviour, IDamageable
     {
         if(headDirection == Vector3.zero) return;
         
-        headTransform.forward = headDirection; // TODO : make it smooth (lerp)
+        HeadTransform.forward = headDirection; // TODO : make it smooth (lerp)
     }
 
     private void HandleMovement()
@@ -189,39 +183,7 @@ public class Tank : MonoBehaviour, IDamageable
             OnTankKilled?.Invoke(data.Shooter);
         }
     }
-
-    public void CheckVisible(Tank other)
-    {
-        if(other == this) return;
-        
-        var dif = (other.transform.position - transform.position).normalized;
-        var dot = Vector3.Dot(dif, headTransform.forward);
-
-        if (dot < maxVisibilityAngle)
-        {
-            OnLayerVisibleUpdated?.Invoke(other.Layer,false);
-            return;
-        }
-        
-        var visible = false;
-        foreach (var tr in other.raycastOrigins)
-        {
-            dif = tr.position - headTransform.position;
-            var dir = Vector3.Normalize(dif);
-            
-            var dist = dif.magnitude * 1.1f;
-
-            if (!Physics.Raycast(headTransform.position, dir, out var hit, dist, layersToCheck)) continue;
-            
-            if (hit.collider.gameObject.layer != other.gameObject.layer) continue;
-            
-            visible = true;
-            break;
-        }
-
-        OnLayerVisibleUpdated?.Invoke(other.Layer,visible);
-    }
-
+    
     public void IncreaseCapturePercent(float amount)
     {
         PointAmount.IncreaseCapturePercent(amount);

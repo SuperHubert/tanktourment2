@@ -24,19 +24,6 @@ public class TankManager : MonoBehaviour
         isRunning = value;
     }
     
-    public void Update()
-    {
-        if(!isRunning) return;
-
-        foreach (var tank0 in tanks)
-        {
-            foreach (var tank1 in tanks)
-            {
-                tank0.CheckVisible(tank1);
-            }
-        }
-    }
-
     public void SpawnTanks(List<PlayerController> controllers)
     {
         foreach (var controller in controllers)
@@ -72,8 +59,10 @@ public class TankManager : MonoBehaviour
     {
         var pos = NextAvailableSpawnPoint();
         pos.y += tankPrefab.SpawnHeight;
+        
+        var data = controller.TankSelectionData;
 
-        var prefab = availableTanksModels[controller.TankSelectionData.SelectedTankIndex]; //TODO, put it in arguments
+        var prefab = data.SelectedTank; //TODO, put it in arguments
         
         var tank = Instantiate(prefab,pos, Quaternion.identity);
 
@@ -87,14 +76,12 @@ public class TankManager : MonoBehaviour
         tank.OnTankKilled += Killed;
         tank.OnTankRespawned += ResetCamSpeed;
         
-        tank.OnLayerVisibleUpdated += controller.CameraController.SetLayerVisible;
-
         tank.SetPointAmount(controller.PointAmount);
         
         tanks.Add(tank);
         
         controller.TankController.ConnectTank(tank);
-        controller.CameraController.SetTarget(tank.transform);
+        controller.CameraController.SetTarget(tank.transform,tank.HeadTransform,data);
 
         return;
         
