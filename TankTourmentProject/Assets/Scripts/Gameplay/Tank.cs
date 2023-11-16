@@ -36,13 +36,18 @@ public class Tank : MonoBehaviour, IDamageable
     [SerializeField] private Vector2 movementDirection;
     [SerializeField] private Vector3 headDirection;
     private int currentHp;
+    
+    [Header("Heal")]
+    [SerializeField] private int healAmount = 1;
+    [SerializeField] private float healCooldown = 1f;
+    private float currentHealCooldown = 0f;
 
     public int CurrentHp
     {
         get => currentHp;
         set
         {
-            currentHp = value;
+            currentHp = (value > maxHp) ? maxHp : value;
             foreach (var rend in ColoredRenderers)
             {
                 rend.material.SetFloat(Hp,currentHp / (float) maxHp);
@@ -60,9 +65,12 @@ public class Tank : MonoBehaviour, IDamageable
     public event Action OnTankRespawned;
     public Vector3 Position => transform.position;
 
+    
     public void SetStatic()
     {
+        
         rb.isKinematic = true;
+        currentHp = maxHp;
     }
     
     public void SetLayer(int layer)
@@ -116,11 +124,22 @@ public class Tank : MonoBehaviour, IDamageable
         
         OnTankRespawned?.Invoke();
     }
+    private void DecreaseHealthRegenCoolDown()
+    {
+        currentHealCooldown += Time.deltaTime;
+        if (currentHealCooldown >= healCooldown)
+        {
+            currentHealCooldown = 0f;
+            CurrentHp += healAmount;
+        }
+    }
     
     private void Update()
     {
         DecreaseCooldown();
+        DecreaseHealthRegenCoolDown();
         HandleHeadRotation();
+        
     }
 
     private void FixedUpdate()
