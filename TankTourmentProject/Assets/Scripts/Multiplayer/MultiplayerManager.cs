@@ -189,7 +189,7 @@ public class MultiplayerManager : MonoBehaviour
             var worldSize = new Vector2(worldCenter.x*2,worldCenter.z*2);
         
             mainCamera.transform.position = generationData.WorldCenter;
-            mainCamera.orthographicSize = Vector2.Distance(Vector2.zero, worldSize * 0.5f * 0.80f);
+            mainCamera.orthographicSize = Vector2.Distance(Vector2.zero, worldSize * (0.5f * 0.80f));
         
             pointsManager.SetPoints(generationData.ControlTilePositions,generationData.Scale);
             pointsManager.SetPlayers(ActivePlayers);

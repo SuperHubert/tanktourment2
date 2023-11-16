@@ -975,6 +975,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 98743e328c0029e4fbc84b80df6603e9, type: 3}
+--- !u!114 &1532132192 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6620418622605109719, guid: 98743e328c0029e4fbc84b80df6603e9,
+    type: 3}
+  m_PrefabInstance: {fileID: 1389583183}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1da3ce048e55294d8f339449552ac08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2071924256
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -983,6 +995,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2394796766702861415, guid: 509b571c29abc374c9cffd3860f8bd1e,
+        type: 3}
+      propertyPath: uiManager
+      value: 
+      objectReference: {fileID: 1532132192}
     - target: {fileID: 2394796766702861415, guid: 509b571c29abc374c9cffd3860f8bd1e,
         type: 3}
       propertyPath: mainCamera

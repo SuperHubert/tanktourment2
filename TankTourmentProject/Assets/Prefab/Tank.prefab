@@ -805,10 +805,13 @@ MonoBehaviour:
         m_NumAlphaKeys: 2
       <Damage>k__BackingField: 45
       <ExplosionRadius>k__BackingField: 1
+      <ExplosionForce>k__BackingField: 350
       <ExplosionOffset>k__BackingField: 0.3
     <ShootCooldown>k__BackingField: 1
+    <ShootKnockBackForce>k__BackingField: 0
     <SelfDamageMultiplier>k__BackingField: 1
     <HealAmount>k__BackingField: 1
+    <TimeBetweenHeal>k__BackingField: 1
     <HealCooldown>k__BackingField: 1
   moveTowardsDirection: 1
   <SpawnHeight>k__BackingField: 0.3

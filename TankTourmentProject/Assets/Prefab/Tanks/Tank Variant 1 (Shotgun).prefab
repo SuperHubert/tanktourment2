@@ -436,6 +436,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173,
         type: 3}
+      propertyPath: stats.<ShootKnockBackForce>k__BackingField
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173,
+        type: 3}
       propertyPath: stats.<SelfDamageMultiplier>k__BackingField
       value: 0
       objectReference: {fileID: 0}
@@ -443,6 +448,11 @@ PrefabInstance:
         type: 3}
       propertyPath: stats.<ProjectileData>k__BackingField.<Damage>k__BackingField
       value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173,
+        type: 3}
+      propertyPath: stats.<ProjectileData>k__BackingField.<ExplosionForce>k__BackingField
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

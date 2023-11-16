@@ -25,6 +25,7 @@ public class Tank : MonoBehaviour, IDamageable
         [field: Space]
         [field: SerializeField] public Projectile.ProjectileData ProjectileData { get; private set; }
         [field: SerializeField] public float ShootCooldown { get; private set; } = 1f;
+        [field: SerializeField] public float ShootKnockBackForce { get; private set; } = 0f;
         [field: SerializeField] public float SelfDamageMultiplier { get; private set; } = 1f;
         [field: Space]
         [field: SerializeField] public int HealAmount { get; private set; } = 1;
@@ -219,10 +220,14 @@ public class Tank : MonoBehaviour, IDamageable
         if(currentShootCooldown > 0 ) return;
         currentShootCooldown = stats.ShootCooldown;
         SoundManager.instance.PlaySound(SoundManager.instance.shoot);
+        
         foreach (var shotOrigin in shotOrigins)
         {
-            var projectile =  ObjectPooler.Pool(projectilePrefab,shotOrigin.position,shotOrigin.rotation);
+            var position = shotOrigin.position;
+            var projectile =  ObjectPooler.Pool(projectilePrefab,position,shotOrigin.rotation);
         
+            rb.AddExplosionForce(stats.ShootKnockBackForce, position, 1f, 0f);
+            
             projectile.Shoot(stats.ProjectileData,this);
         }
         
@@ -231,6 +236,12 @@ public class Tank : MonoBehaviour, IDamageable
 
     public void TakeDamage(Projectile.DamageData data)
     {
+        var explosionOrigin = data.ExplosionOrigin;
+        var explosionForce = data.Shooter.stats.ProjectileData.ExplosionForce;
+        var radius = data.Shooter.stats.ProjectileData.ExplosionRadius;
+        
+        rb.AddExplosionForce(explosionForce, explosionOrigin, radius, 0f);
+        
         float damage = data.Damage;
         if (data.Shooter == this) damage *= stats.SelfDamageMultiplier;
         CurrentHp -= damage;

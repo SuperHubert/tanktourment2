@@ -16,14 +16,15 @@ public class Projectile : MonoBehaviour
         [field: SerializeField] public Gradient Color { get; private set; }
         [field: SerializeField] public int Damage { get; private set; }
         [field: SerializeField] public float ExplosionRadius { get; private set; }
+        [field: SerializeField] public float ExplosionForce { get; private set; }
         [field: SerializeField] public float ExplosionOffset { get; private set; }
     }
 
     public struct DamageData
     {
-        [field: SerializeField] public Vector3 ExplosionOrigin { get; private set; }
-        [field: SerializeField] public Tank Shooter  { get; private set; }
-        [field: SerializeField] public int Damage { get; private set; }
+        public Vector3 ExplosionOrigin { get;}
+        public Tank Shooter  { get; }
+        public int Damage { get;}
         
         public DamageData(Vector3 explosionOrigin, Tank shooter, int damage)
         {
