@@ -65,10 +65,7 @@ namespace MapGeneration
             {
                 Debug.Log($"No spawnables: {Position}");
                 
-                DebugNeighbors(neighbors[0], Enums.Direction.Left);
-                DebugNeighbors(neighbors[2], Enums.Direction.Top);
-                DebugNeighbors(neighbors[4], Enums.Direction.Right);
-                DebugNeighbors(neighbors[6], Enums.Direction.Bottom);
+                WaveCollapseManager.Instance.DebugNeighbors(Position.x, Position.y);
             }
             
             TileTypeSelected = spawnables[Random.Range(0, spawnables.Count)];

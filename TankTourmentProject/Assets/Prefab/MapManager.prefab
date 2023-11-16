@@ -260,7 +260,7 @@ MonoBehaviour:
     go: {fileID: 7567673570395398937, guid: f1256c15074cfea41bc423535b98c380, type: 3}
     rotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
     top: c-c-c
-    bot: c-c-o
+    bot: o-c-c
     left: c-c-o
     right: c-c-c
     <CanSpawn>k__BackingField: 0
@@ -277,7 +277,7 @@ MonoBehaviour:
   - name: BL OuterL
     go: {fileID: 7567673570395398937, guid: f1256c15074cfea41bc423535b98c380, type: 3}
     rotation: {x: 0, y: 0.70710677, z: 0, w: -0.70710677}
-    top: o-c-c
+    top: c-c-o
     bot: c-c-c
     left: c-c-c
     right: o-c-c
@@ -306,7 +306,7 @@ MonoBehaviour:
     rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
     top: o-o-o
     bot: o-c-c
-    left: o-o-o
+    left: o-c-c
     right: o-c-c
     <CanSpawn>k__BackingField: 1
     <DebugColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
