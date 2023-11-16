@@ -113,8 +113,6 @@ public class TankManager : MonoBehaviour
 
     private void OnTankKilled(Tank tank, Tank killer)
     {
-        Debug.Log($"{killer.name} killed {tank.name}");
-        
         var pos = NextAvailableSpawnPoint();
         pos.y += tankPrefab.SpawnHeight;
         

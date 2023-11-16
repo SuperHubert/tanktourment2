@@ -141,8 +141,6 @@ public class TankSelection : MonoBehaviour
         
         currentColorCooldown = colorCooldown;
         
-        Debug.Log("Color selection Vector 2: " + move);
-        
         OnColorChanged?.Invoke(move);
     }
 

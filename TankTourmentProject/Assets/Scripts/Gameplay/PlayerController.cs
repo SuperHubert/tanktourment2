@@ -77,9 +77,6 @@ public class TankSelectionData
     public void SetTankIndex(int index)
     {
         SelectedTankIndex = index;
-        
-        Debug.Log("Changed selected tank index to " + index);
-        
         OnSelectedTankIndexChanged?.Invoke(index);
     }
     
