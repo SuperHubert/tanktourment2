@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 public class TankSelection : MonoBehaviour
 {
     [field: SerializeField] public Transform TankTr { get; private set; }
+    public Vector3 TankTrOrigin { get; private set; }
     [field: SerializeField] public Transform CamTr { get; private set; }
     
     [SerializeField] private GameObject readyIndicatorGo; //TODO, put something on canvas jsp
@@ -14,23 +15,37 @@ public class TankSelection : MonoBehaviour
     [SerializeField] private Transform rotator;
     
     [SerializeField] private GameObject[] allGameObjects;
-
-    public int SelectedTankIndex { get; private set; }
-    public event Action<int> OnSelectedTankIndexChanged; 
-    public int SelectedColorIndex { get; private set; }
-    public event Action<int> OnSelectedColorIndexChanged; 
-    public bool IsReady { get; private set; }
-    public event Action<bool> OnReadyChanged; 
+    
+    public event Action<Vector2> OnColorChanged;
+    public event Action<int> OnTankChanged;
     
     private PlayerController playerController;
+    private TankSelectionData tankSelectionData => playerController.TankSelectionData;
     
     private readonly List<Tank> tankModels = new List<Tank>();
     
-    private Color color;
+    private InputAction acceptAction;
+    private InputAction moveAction;
+    private InputAction lookAction;
+    private InputAction shootAction;
+    private InputAction shootAction2;
+    private InputAction pointerLookAction;
+    
+    private float colorCooldown;
+    private float currentColorCooldown;
 
     public void ConnectToPlayerController(PlayerController controller,int layer)
     {
         playerController = controller;
+        
+        var inputs = playerController.PlayerInput;
+        
+        acceptAction = inputs.actions["Accept"];
+        moveAction = inputs.actions["Move"];
+        lookAction = inputs.actions["Look"];
+        shootAction = inputs.actions["Shoot"];
+        shootAction2 = inputs.actions["Shoot2"];
+        pointerLookAction = inputs.actions["LookMouse"];
         
         var camTr = playerController.CameraController.CamTransform;
         var cam = playerController.CameraController.Cam;
@@ -39,53 +54,100 @@ public class TankSelection : MonoBehaviour
             
         SetLayer(layer);
         
-        IsReady = false;
-        readyIndicatorGo.SetActive(IsReady);
-        OnReadyChanged?.Invoke(IsReady);
+        readyIndicatorGo.SetActive(tankSelectionData.IsReady);
         
         ConnectInputs();
     }
 
+    public void SetColorCooldown(float value)
+    {
+        colorCooldown = value;
+        currentColorCooldown = colorCooldown;
+    }
+
+    public void CleanupEvents()
+    {
+        OnColorChanged = null;
+        OnTankChanged = null;
+    }
+
     private void ConnectInputs()
     {
-        var inputs = playerController.PlayerInput;
+        acceptAction.performed += ToggleReady;
         
-        inputs.actions["Shoot"].performed += ToggleReady;
+        moveAction.performed += HandleMoveInput;
+        moveAction.canceled += HandleMoveInput;
+
+        shootAction.performed += NextTank;
+        shootAction2.performed += PreviousTank;
     }
     
     public void DisconnectInputs()
     {
-        var inputs = playerController.PlayerInput;
+        acceptAction.performed -= ToggleReady;
         
-        inputs.actions["Shoot"].performed -= ToggleReady;
-    }
-
-    private void HandleMoveInput(InputAction.CallbackContext context)
-    {
+        moveAction.performed -= HandleMoveInput;
+        moveAction.canceled -= HandleMoveInput;
         
-    }
-
-    private void ToggleReady(InputAction.CallbackContext context)
-    {
-        IsReady = !IsReady;
-        
-        // Feedback
-        readyIndicatorGo.SetActive(IsReady);
-        
-        OnReadyChanged?.Invoke(IsReady);
+        shootAction.performed -= NextTank;
+        shootAction2.performed -= PreviousTank;
     }
     
+    private void ToggleReady(InputAction.CallbackContext context)
+    {
+        tankSelectionData.SetReady(!tankSelectionData.IsReady);
+        
+        // Feedback
+        readyIndicatorGo.SetActive(tankSelectionData.IsReady);
+    }
+    
+    private void HandleMoveInput(InputAction.CallbackContext context)
+    {
+        ChangeColor();
+    }
+    
+    private void NextTank(InputAction.CallbackContext context)
+    {
+        OnTankChanged?.Invoke(1);
+    }
+    
+    private void PreviousTank(InputAction.CallbackContext context)
+    {
+        OnTankChanged?.Invoke(-1);
+    }
+
+    private void Update()
+    {
+        if (currentColorCooldown > 0)
+        {
+            currentColorCooldown -= Time.deltaTime;
+        }
+        
+        ChangeColor();
+    }
+
+    private void ChangeColor()
+    {
+        var move = moveAction.ReadValue<Vector2>();
+
+        if (move == Vector2.zero)
+        {
+            currentColorCooldown = 0;
+            return;
+        }   
+        
+        if(currentColorCooldown > 0) return;
+        
+        currentColorCooldown = colorCooldown;
+        
+        OnColorChanged?.Invoke(move);
+    }
+
     public void ChangeColor(Color col)
     {
-        color = col;
         foreach (var tank in tankModels)
         {
-            foreach (var rend in tank.ColoredRenderers)
-            {
-                var mat = rend.material;
-                mat.color = color;
-                rend.material = mat;
-            }
+            tank.SetColor(col);
         }
     }
 
@@ -102,40 +164,19 @@ public class TankSelection : MonoBehaviour
         }
     }
 
-    public void SetTanks(List<Tank> tanksToSpawn)
+    public void SetTanks(Tank[] tanksToSpawn,float tankOffset)
     {
         tankModels.Clear();
-        foreach (var tankToSpawn in tanksToSpawn)
+
+        TankTrOrigin = TankTr.position;
+        
+        for (var index = 0; index < tanksToSpawn.Length; index++)
         {
+            var tankToSpawn = tanksToSpawn[index];
             var model = Instantiate(tankToSpawn, TankTr);
+            model.transform.localPosition = Vector3.right * tankOffset * index;
             model.SetStatic();
             tankModels.Add(model);
         }
-    }
-
-    public void SetColorIndex(int index)
-    {
-        SelectedColorIndex = index;
-        OnSelectedColorIndexChanged?.Invoke(SelectedColorIndex);
-    }
-    
-    public void NextTank()
-    {
-        SelectedTankIndex++;
-        if (SelectedTankIndex >= tankModels.Count)
-        {
-            SelectedTankIndex = 0;
-        }
-        OnSelectedTankIndexChanged?.Invoke(SelectedTankIndex);
-    }
-    
-    public void PreviousTank()
-    {
-        SelectedTankIndex--;
-        if (SelectedTankIndex < 0)
-        {
-            SelectedTankIndex = tankModels.Count - 1;
-        }
-        OnSelectedTankIndexChanged?.Invoke(SelectedTankIndex);
     }
 }

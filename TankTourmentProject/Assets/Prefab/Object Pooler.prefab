@@ -49,3 +49,6 @@ MonoBehaviour:
   - <Prefab>k__BackingField: {fileID: 1762853231439752696, guid: 1ca3f6586ae5293459d036e318da4e40,
       type: 3}
     <MaxAmount>k__BackingField: 100
+  - <Prefab>k__BackingField: {fileID: 5909403994555456533, guid: 672bc3661bde65f46814f9a690d34f3a,
+      type: 3}
+    <MaxAmount>k__BackingField: 100

@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 8807036370339533938}
   - component: {fileID: 6702745651168192591}
-  - component: {fileID: 6191463346219485045}
   - component: {fileID: 2394796766702861415}
+  - component: {fileID: 6191463346219485045}
   - component: {fileID: 8838535159309284989}
+  - component: {fileID: 2721971204016645279}
   m_Layer: 0
   m_Name: MuliplayerManager
   m_TagString: Untagged
@@ -69,7 +70,7 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings: []
       m_Flags: 0
-    m_Reference: {fileID: 8410524774125049291, guid: 57517f6771625c64590a6fb591415a80,
+    m_Reference: {fileID: 8534286324882233138, guid: 57517f6771625c64590a6fb591415a80,
       type: 3}
   m_PlayerPrefab: {fileID: 7326542362435752075, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
     type: 3}
@@ -82,25 +83,6 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!114 &6191463346219485045
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3770755211667358811}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 634d30013e0c14949bd90abc3c6bb789, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tankPrefab: {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173,
-    type: 3}
-  spawnPoints: []
-  respawnDuration: 1.5
-  respawnCamSpeedMultiplier: 10
-  tanks: []
-  isRunning: 0
 --- !u!114 &2394796766702861415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,12 +99,36 @@ MonoBehaviour:
   tankManager: {fileID: 6191463346219485045}
   waveCollapseManager: {fileID: 2839526565459127063}
   tankSelectionManager: {fileID: 8838535159309284989}
+  pointsManager: {fileID: 2721971204016645279}
   mainCamera: {fileID: 0}
   layerPlayer0: 10
   minPlayer: 2
   borderMultiplier: 0.995
   playerControllers: []
   inactivePlayerControllers: []
+--- !u!114 &6191463346219485045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3770755211667358811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 634d30013e0c14949bd90abc3c6bb789, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tankPrefab: {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173,
+    type: 3}
+  availableTanksModels:
+  - {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173, type: 3}
+  - {fileID: 6984433726715992453, guid: 72e8a04fd4976cd408df5d34b099ff14, type: 3}
+  - {fileID: 6984433726715992453, guid: 7078a26df0a1f1f44a77f3b3b2c15442, type: 3}
+  spawnPoints: []
+  respawnDuration: 1.5
+  respawnCamSpeedMultiplier: 10
+  tanks: []
+  isRunning: 0
 --- !u!114 &8838535159309284989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,8 +155,34 @@ MonoBehaviour:
   - {r: 0, g: 0, b: 1, a: 1}
   - {r: 0.5000005, g: 0, b: 1, a: 1}
   - {r: 1, g: 0, b: 0.9999995, a: 1}
+  colorMoveCooldown: 0.5
+  columns: 4
   tanks:
   - {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173, type: 3}
+  tankOffset: 2
+  tankRotationSpeed: 10
+  tankMoveDuration: 1
+--- !u!114 &2721971204016645279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3770755211667358811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7988c0862074df46bdccb67523716bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointsToWin: 3
+  pointsRate: 1
+  pointsToCapture: 20
+  controlPointPrefab: {fileID: 8460308238442232698, guid: d09e2731b99bb7a44a33c8fb15d4e900,
+    type: 3}
+  controlPointIndicatorColor: {r: 0.29799998, g: 0.29799998, b: 0.29799998, a: 0.69803923}
+  controlPointPreviewColor: {r: 1, g: 1, b: 1, a: 0.32941177}
+  controlPointContestedColor: {r: 0, g: 0, b: 0, a: 1}
+  controlPointAlpha: 0.7
 --- !u!1001 &4876559475843118403
 PrefabInstance:
   m_ObjectHideFlags: 0

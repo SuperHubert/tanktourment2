@@ -19,8 +19,12 @@ public class Tank : MonoBehaviour, IDamageable
     [SerializeField] private float maxSpeed = 10f;
     [SerializeField] private float acceleration = 10f;
     [SerializeField] private float maxTurnSpeed = 10f;
+    [SerializeField] private float headRotationSpeed = 360f;
     [Space]
     [SerializeField] private Projectile projectilePrefab;
+    [SerializeField] private float shootCooldown = 1f;
+    private float currentShootCooldown = 0f;
+    [SerializeField] private Transform[] shotOrigins;
     [SerializeField] private Projectile.ProjectileData projectileData;
     [Space]
     [SerializeField] private int maxHp;
@@ -31,18 +35,21 @@ public class Tank : MonoBehaviour, IDamageable
     [SerializeField] private Vector3 headDirection;
     [SerializeField] private int currentHp;
     [SerializeField] private LayerMask layersToCheck;
+    
+    public PointsManager.PointAmount PointAmount { get; private set; }
+    public Color Color { get; private set; }
+    
     public int Layer { get; private set; }
     public event Action<Tank> OnTankKilled;
     public event Action OnTankRespawned;
     public event Action<int,bool> OnLayerVisibleUpdated;
-    
     public Vector3 Position => transform.position;
 
     public void SetStatic()
     {
         rb.isKinematic = true;
     }
-
+    
     public void SetLayer(int layer)
     {
         Layer = layer;
@@ -53,6 +60,22 @@ public class Tank : MonoBehaviour, IDamageable
 
         layersToCheck = baseLayersToCheck;
         layersToCheck &=  ~(1 << Layer);
+    }
+    
+    public void SetPointAmount(PointsManager.PointAmount pa)
+    {
+        PointAmount = pa;
+    }
+
+    public void SetColor(Color color)
+    {
+        Color = color;
+        foreach (var rend in ColoredRenderers)
+        {
+            var mat = rend.material;
+            mat.color = Color;
+            rend.material = mat;
+        }
     }
     
     public void HandleMovementInputs(Vector2 inputs)
@@ -79,6 +102,7 @@ public class Tank : MonoBehaviour, IDamageable
     
     private void Update()
     {
+        DecreaseCooldown();
         HandleHeadRotation();
     }
 
@@ -130,12 +154,24 @@ public class Tank : MonoBehaviour, IDamageable
         
         rb.MoveRotation(rotation);
     }
+
+    private void DecreaseCooldown()
+    {
+        if(currentShootCooldown <= 0 ) return;
+        currentShootCooldown -= Time.deltaTime;
+    }
     
     public void Shoot()
     {
-        var projectile =  ObjectPooler.Pool(projectilePrefab,canonTip.position,canonTip.rotation);
+        if(currentShootCooldown > 0 ) return;
+        currentShootCooldown = shootCooldown;
         
-        projectile.Shoot(projectileData,this);
+        foreach (var shotOrigin in shotOrigins)
+        {
+            var projectile =  ObjectPooler.Pool(projectilePrefab,shotOrigin.position,shotOrigin.rotation);
+        
+            projectile.Shoot(projectileData,this);
+        }
         
         //TODO - don't forget animation
     }
@@ -143,6 +179,8 @@ public class Tank : MonoBehaviour, IDamageable
     public void TakeDamage(Projectile.DamageData data)
     {
         currentHp -= data.Damage;
+        
+        // TODO Update shader here
         
         if(currentHp <= 0)
         {
@@ -182,6 +220,11 @@ public class Tank : MonoBehaviour, IDamageable
         }
 
         OnLayerVisibleUpdated?.Invoke(other.Layer,visible);
+    }
+
+    public void IncreaseCapturePercent(float amount)
+    {
+        PointAmount.IncreaseCapturePercent(amount);
     }
 }
 

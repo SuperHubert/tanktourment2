@@ -49,6 +49,7 @@ MonoBehaviour:
   height: 19
   offset: 2
   scale: {x: 1, y: 1, z: 1}
+  noFun: 0
   spawnPosition: {x: 0, y: 0}
   spawnSize: {x: 3, y: 3}
   connectorsPosition: {x: 1, y: 5}
@@ -57,7 +58,7 @@ MonoBehaviour:
   controlPSize: {x: 3, y: 5}
   tilePrefabs:
   - name: Control point
-    go: {fileID: -2538792677096696554, guid: 4679937d1bbb2814e9374ee3f28570a2, type: 3}
+    go: {fileID: 5849393861115226587, guid: e57d770c44522914e85e22e81b40b3bc, type: 3}
     rotation: {x: 0, y: 0, z: 0, w: 0}
     top: o-o-o
     bot: o-o-o
@@ -316,5 +317,41 @@ MonoBehaviour:
     bot: c-c-o
     left: c-c-c
     right: o-o-o
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
+  - name: OuterT T
+    go: {fileID: 1899728047077581414, guid: 1a9d3846ba5b95b4e82c37cfd3b89449, type: 3}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    top: c-c-c
+    bot: o-c-o
+    left: c-c-o
+    right: c-c-o
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
+  - name: OuterT R
+    go: {fileID: 1899728047077581414, guid: 1a9d3846ba5b95b4e82c37cfd3b89449, type: 3}
+    rotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+    top: o-c-c
+    bot: o-c-c
+    left: o-c-o
+    right: c-c-c
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
+  - name: OuterT B
+    go: {fileID: 1899728047077581414, guid: 1a9d3846ba5b95b4e82c37cfd3b89449, type: 3}
+    rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+    top: o-c-o
+    bot: c-c-c
+    left: o-c-c
+    right: o-c-c
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
+  - name: OuterT L
+    go: {fileID: 1899728047077581414, guid: 1a9d3846ba5b95b4e82c37cfd3b89449, type: 3}
+    rotation: {x: 0, y: 0.70710677, z: 0, w: -0.70710677}
+    top: c-c-o
+    bot: c-c-o
+    left: c-c-c
+    right: o-c-o
     <CanSpawn>k__BackingField: 1
     <DebugColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}

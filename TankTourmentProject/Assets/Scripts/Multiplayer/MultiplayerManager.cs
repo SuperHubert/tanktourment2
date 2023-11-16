@@ -12,12 +12,14 @@ public class MultiplayerManager : MonoBehaviour
     [SerializeField] private TankManager tankManager;
     [SerializeField] private WaveCollapseManager waveCollapseManager;
     [SerializeField] private TankSelectionManager tankSelectionManager;
+    [SerializeField] private PointsManager pointsManager;
     [SerializeField] private Camera mainCamera;
 
     [Header("Settings")]
     [SerializeField] private int layerPlayer0 = 10;
     [SerializeField] public int minPlayer = 2;
     [SerializeField] private float borderMultiplier = 1f;
+    
 
     [SerializeField] private List<PlayerController> playerControllers = new List<PlayerController>();
     [SerializeField] private List<PlayerController> inactivePlayerControllers = new List<PlayerController>();
@@ -29,6 +31,13 @@ public class MultiplayerManager : MonoBehaviour
     
     private void Start()
     {
+        Setup();
+    }
+
+    private void Setup()
+    {
+        playerInputManager.EnableJoining();
+        
         PlayerController.CleanupEvents();
         
         isInGame = false;
@@ -39,10 +48,14 @@ public class MultiplayerManager : MonoBehaviour
         tankSelectionManager.OnPlayerReadyChanged += TryStartGame;
         
         tankSelectionManager.ShowColors(false);
+        
+        tankSelectionManager.SetAvailableTanks(tankManager.GetAvailableTankModels());
     }
 
     private void AddPlayer(PlayerController playerController)
     {
+        playerController.CameraController.Cam.enabled = true;
+        
         playerController.gameObject.SetActive(true);
         
         playerControllers.Add(playerController);
@@ -91,9 +104,7 @@ public class MultiplayerManager : MonoBehaviour
             size *= borderMultiplier;
             position += (1 - borderMultiplier) * 0.5f * (Vector2.one - size);
             
-            rect.position = position;
-            rect.size = size;
-            controller.CameraController.Cam.rect = rect;
+            controller.CameraController.SetCameraRect(position,size);
         }
 
 
@@ -122,9 +133,16 @@ public class MultiplayerManager : MonoBehaviour
 
     private void LaunchGame()
     {
-        tankSelectionManager.OnPlayerReadyChanged -= TryStartGame;
+        playerInputManager.DisableJoining();
+        
+        PlayerController.OnPlayerJoin += AddPlayer;
+        PlayerController.OnPlayerLeave += RemovePlayer;
+        
+        tankSelectionManager.OnPlayerReadyChanged += TryStartGame;
         
         waveCollapseManager.OnMapGenerated += OnMapGenerated;
+        
+        pointsManager.OnPlayerWin += OnPlayerWin;
         
         tankSelectionManager.HideSelections();
         
@@ -146,6 +164,11 @@ public class MultiplayerManager : MonoBehaviour
         
         mainCamera.transform.position = generationData.WorldCenter;
         mainCamera.orthographicSize = Vector2.Distance(Vector2.zero, worldSize * 0.5f * 0.80f);
+        
+        pointsManager.SetPoints(generationData.ControlTilePositions,generationData.Scale);
+        pointsManager.SetPlayers(ActivePlayers);
+
+        isInGame = true;
     }
 
     private void OnMapGenerated()
@@ -163,5 +186,20 @@ public class MultiplayerManager : MonoBehaviour
         }
     }
 
-    
+    private void OnPlayerWin(PlayerController playerController)
+    {
+        pointsManager.OnPlayerWin -= OnPlayerWin;
+
+        tankManager.SetRunning(false);
+
+        foreach (var controller in playerControllers)
+        {
+            controller.CameraController.Cam.enabled = false;
+        }
+        
+        playerController.CameraController.Cam.enabled = true;
+        playerController.CameraController.SetCameraRect(Vector2.zero, Vector2.one);
+        
+        Debug.Log($"{playerController} won the game!");
+    }
 }
