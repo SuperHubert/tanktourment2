@@ -122,8 +122,6 @@ public class TankSelectionManager : MonoBehaviour
             if(current < 0) current += colors.Count;
             
             current %= colors.Count;
-
-            Debug.Log($"Color index : {current}");
             
             ChangeColor(current,true);
         }
