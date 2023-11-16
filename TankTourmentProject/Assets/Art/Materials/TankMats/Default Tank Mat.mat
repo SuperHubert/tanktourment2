@@ -39,6 +39,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _Bits: 32
+    - _Hp: 1
     - _MaxDarkness: 0.489
     - _Noise: 500
     - _QueueControl: 0
