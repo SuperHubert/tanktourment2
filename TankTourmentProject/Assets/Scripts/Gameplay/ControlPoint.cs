@@ -101,6 +101,8 @@ public class ControlPoint : MonoBehaviour
         var tank = other.gameObject.GetComponent<Tank>();
         if(tank == null) return;
         
+        tank.SetVisibilityOverride(360);
+        
         tanksOnControlPoint.Add(tank);
         
         tank.OnTankKilled += RemoveTankFromList;
@@ -118,6 +120,8 @@ public class ControlPoint : MonoBehaviour
 
     private void RemoveTankFromList(Tank tank)
     {
+        tank.SetVisibilityOverride(-1);
+        
         tank.OnTankKilled -= RemoveTankFromList;
         tanksOnControlPoint.Remove(tank);
     }

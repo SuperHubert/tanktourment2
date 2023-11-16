@@ -81,7 +81,7 @@ public class TankManager : MonoBehaviour
         tanks.Add(tank);
         
         controller.TankController.ConnectTank(tank);
-        controller.CameraController.SetTarget(tank.transform,tank.HeadTransform,data);
+        controller.CameraController.SetTarget(tank);
 
         return;
         

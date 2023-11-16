@@ -758,15 +758,12 @@ MonoBehaviour:
   - {fileID: 326202385347944148}
   - {fileID: 5145974136510533220}
   - {fileID: 6867674333276778088}
-  maxVisibilityAngle: 0
-  baseLayersToCheck:
-    serializedVersion: 2
-    m_Bits: 15936
   moveTowardsDirection: 1
   maxSpeed: 25
   acceleration: 10
   maxTurnSpeed: 450
   headRotationSpeed: 360
+  maxVisibilityAngle: 90
   projectilePrefab: {fileID: -5813340783634412977, guid: 1ca3f6586ae5293459d036e318da4e40,
     type: 3}
   shootCooldown: 1
@@ -810,10 +807,6 @@ MonoBehaviour:
   <SpawnHeight>k__BackingField: 0.3
   movementDirection: {x: 0, y: 0}
   headDirection: {x: 0, y: 0, z: 0}
-  currentHp: 0
-  layersToCheck:
-    serializedVersion: 2
-    m_Bits: 15936
 --- !u!1 &5925696095241948726
 GameObject:
   m_ObjectHideFlags: 0

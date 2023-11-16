@@ -27,16 +27,15 @@ public class CameraController : MonoBehaviour
     private float Speed => speed * speedMultiplier;
 
     [Header("Debug")]
-    private Transform target;
+    private Tank target;
     private bool hasTarget = false;
-    [SerializeField] private float fowAngle;
     
     private Transform fowRotationTarget;
 
-    public void SetTarget(Transform moveTarget,Transform fowRotTarget,TankSelectionData data)
+    public void SetTarget(Tank tank)
     {
-        target = moveTarget;
-        fowRotationTarget = fowRotTarget;
+        target = tank;
+        fowRotationTarget = tank.HeadTransform;
 
         hasTarget = target != null;
 
@@ -44,9 +43,9 @@ public class CameraController : MonoBehaviour
 
         if(!hasTarget) return;
         
-        CamTransform.position = target.position + offset; 
+        CamTransform.position = target.Position + offset; 
         
-        CamTransform.LookAt(target);
+        CamTransform.LookAt(target.Position );
 
         var w = Screen.width;
         var h = Screen.height;
@@ -66,15 +65,13 @@ public class CameraController : MonoBehaviour
         OverlayCam.enabled = true;
         
         fowFogImage.color = fogColor;
-
-        fowAngle = data.SelectedTank.MaxVisibilityAngle;
     }
 
     private void OnDisable()
     {
         visibleRenderTexture.DiscardContents();
     }
-
+    
     public void SetFow(float angle)
     {
         angle /= 360;
@@ -108,24 +105,25 @@ public class CameraController : MonoBehaviour
     private void Update()
     {
         MoveWithTarget();
-        SetFow(fowAngle);
+        
+        UpdateFow();
     }
 
-    [ContextMenu("Look At Target")]
-    private void LookAtTarget()
+    private void UpdateFow()
     {
         if(!hasTarget) return;
         
-        CamTransform.LookAt(target);
+        SetFow(target.MaxVisibilityAngle);
     }
-
+    
+    
     private void MoveWithTarget()
     {
         if(!hasTarget) return;
         
         var pos = CamTransform.position;
 
-        var targetPos = target.position + offset; //TODO: offset this by the input direction if aiming
+        var targetPos = target.Position  + offset; //TODO: offset this by the input direction if aiming
         
         CamTransform.position = Vector3.MoveTowards(pos, targetPos, Speed * Time.deltaTime);
     }
