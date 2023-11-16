@@ -32,7 +32,7 @@ public class Tank : MonoBehaviour, IDamageable
     [SerializeField] private int currentHp;
     [SerializeField] private LayerMask layersToCheck;
     
-    private PointsManager.PointAmount pointAmount;
+    public PointsManager.PointAmount PointAmount { get; private set; }
     public Color Color { get; private set; }
     
     public int Layer { get; private set; }
@@ -60,7 +60,7 @@ public class Tank : MonoBehaviour, IDamageable
     
     public void SetPointAmount(PointsManager.PointAmount pa)
     {
-        pointAmount = pa;
+        PointAmount = pa;
     }
 
     public void SetColor(Color color)
@@ -205,7 +205,7 @@ public class Tank : MonoBehaviour, IDamageable
 
     public void IncreaseCapturePercent(float amount)
     {
-        pointAmount.IncreaseCapturePercent(amount);
+        PointAmount.IncreaseCapturePercent(amount);
     }
 }
 

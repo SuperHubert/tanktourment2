@@ -13,6 +13,9 @@ public class PointsManager : MonoBehaviour
     [SerializeField] private float pointsToCapture = 1;
     [Space]
     [SerializeField] private ControlPoint controlPointPrefab;
+    [SerializeField] private Color controlPointIndicatorColor = Color.gray;
+    [SerializeField] private Color controlPointPreviewColor = Color.grey;
+    [SerializeField] private Color controlPointContestedColor = Color.black;
     [SerializeField] private float controlPointAlpha = 0.5f;
 
     private ControlPoint currentPoint;
@@ -46,8 +49,6 @@ public class PointsManager : MonoBehaviour
             {
                 var progress = player.PointAmount.PointPercent / pointsToCapture;
                 
-                Debug.Log($"Player {player.gameObject.name} progress : {progress}");
-
                 var color = player.Color;
                 color.a = controlPointAlpha;
                 
@@ -93,13 +94,12 @@ public class PointsManager : MonoBehaviour
             newScale *= 1.5f;
             
             controlPoint.transform.localScale = newScale;
-            Debug.Log($"Spawned Point, (scale : {scale})", controlPoint);
             
             controlPoints.Add(controlPoint);
             
             controlPoint.OnTankStay += IncreaseScoreForTank;
             
-            controlPoint.Deactivate();
+            controlPoint.SetValues(pointsToCapture, controlPointPreviewColor, controlPointIndicatorColor,controlPointContestedColor);
         }
 
         nextPoint = controlPoints[Random.Range(0, controlPoints.Count)];
@@ -110,7 +110,7 @@ public class PointsManager : MonoBehaviour
     {
         tank.IncreaseCapturePercent(pointsRate * Time.deltaTime);
     }
-
+    
     private void NextPoint()
     {
         if(currentPoint != null) currentPoint.Deactivate();
@@ -122,6 +122,8 @@ public class PointsManager : MonoBehaviour
         var availablePoints = controlPoints.Where(point => point != currentPoint).ToList();
         
         nextPoint = availablePoints[Random.Range(0, availablePoints.Count)];
+        
+        nextPoint.ShowPreview();
     }
     
     public class PointAmount

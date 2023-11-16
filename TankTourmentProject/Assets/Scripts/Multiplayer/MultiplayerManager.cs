@@ -31,6 +31,13 @@ public class MultiplayerManager : MonoBehaviour
     
     private void Start()
     {
+        Setup();
+    }
+
+    private void Setup()
+    {
+        playerInputManager.EnableJoining();
+        
         PlayerController.CleanupEvents();
         
         isInGame = false;
@@ -45,6 +52,8 @@ public class MultiplayerManager : MonoBehaviour
 
     private void AddPlayer(PlayerController playerController)
     {
+        playerController.CameraController.Cam.enabled = true;
+        
         playerController.gameObject.SetActive(true);
         
         playerControllers.Add(playerController);
@@ -122,7 +131,12 @@ public class MultiplayerManager : MonoBehaviour
 
     private void LaunchGame()
     {
-        tankSelectionManager.OnPlayerReadyChanged -= TryStartGame;
+        playerInputManager.DisableJoining();
+        
+        PlayerController.OnPlayerJoin += AddPlayer;
+        PlayerController.OnPlayerLeave += RemovePlayer;
+        
+        tankSelectionManager.OnPlayerReadyChanged += TryStartGame;
         
         waveCollapseManager.OnMapGenerated += OnMapGenerated;
         
@@ -151,6 +165,8 @@ public class MultiplayerManager : MonoBehaviour
         
         pointsManager.SetPoints(generationData.ControlTilePositions,generationData.Scale);
         pointsManager.SetPlayers(ActivePlayers);
+
+        isInGame = true;
     }
 
     private void OnMapGenerated()
