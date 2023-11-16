@@ -10,46 +10,55 @@ public class Tank : MonoBehaviour, IDamageable
     [field:SerializeField] public Renderer[] ColoredRenderers { get; private set; }
     [SerializeField] public GameObject[] layerGameobjects;
     [SerializeField] private Transform[] raycastOrigins;
-
-    [Header("Settings")]
-    [SerializeField] private bool moveTowardsDirection = false;
-    [SerializeField] private float maxSpeed = 10f;
-    [SerializeField] private float acceleration = 10f;
-    [SerializeField] private float maxTurnSpeed = 10f;
-    [SerializeField] private float headRotationSpeed = 360f;
-    [SerializeField, Range(0f, 360f), Tooltip("°")] private float maxVisibilityAngle = 90f;
-    [SerializeField] private float visibilityOverride = -1f;
-    public float MaxVisibilityAngle =>  currentHp > 0 ? visibilityOverride < 0 ? maxVisibilityAngle : visibilityOverride : 0;
-    
-    [Space]
-    [SerializeField] private Projectile projectilePrefab;
-    [SerializeField] private float shootCooldown = 1f;
-    private float currentShootCooldown = 0f;
     [SerializeField] private Transform[] shotOrigins;
-    [SerializeField] private Projectile.ProjectileData projectileData;
-    [Space]
-    [SerializeField] private int maxHp;
+    [SerializeField] private Projectile projectilePrefab;
+    
+    [Serializable]
+    private class TankStats
+    {
+        [field: SerializeField] public int MaxHp { get; private set; }
+        [field: SerializeField] public float MaxSpeed { get; private set; } = 10f;
+        [field: SerializeField] public float Acceleration { get; private set; } = 10f;
+        [field: SerializeField] public float MaxTurnSpeed { get; private set; } = 10f;
+        [field: SerializeField] public float HeadRotationSpeed { get; private set; }= 360f;
+        [field: SerializeField, Range(0f, 360f), Tooltip("°")] public float MaxVisibilityAngle{  get; private set; } = 90f;
+        [field: Space]
+        [field: SerializeField] public Projectile.ProjectileData ProjectileData { get; private set; }
+        [field: SerializeField] public float ShootCooldown { get; private set; } = 1f;
+        [field: SerializeField] public float SelfDamageMultiplier { get; private set; } = 1f;
+        [field: Space]
+        [field: SerializeField] public int HealAmount { get; private set; } = 1;
+
+        [field: SerializeField] public float TimeBetweenHeal { get; private set; } = 1f;
+        [field: SerializeField] public float HealCooldown { get; private set; } = 1f;
+        
+    }
+
+    [SerializeField] private TankStats stats;
+    
+    [Header("Settings")]
+    [SerializeField] private bool moveTowardsDirection = true;
+    public float MaxVisibilityAngle =>  currentHp > 0 ? visibilityOverride < 0 ? stats.MaxVisibilityAngle : visibilityOverride : 0;
     [field: SerializeField] public float SpawnHeight { get; private set; } = 1f;
 
     [Header("Debug")]
+    [SerializeField] private float visibilityOverride = -1f;
     [SerializeField] private Vector2 movementDirection;
     [SerializeField] private Vector3 headDirection;
-    private int currentHp;
     
-    [Header("Heal")]
-    [SerializeField] private int healAmount = 1;
-    [SerializeField] private float healCooldown = 1f;
+    private float currentHp;
     private float currentHealCooldown = 0f;
+    private float currentShootCooldown = 0f;
 
-    public int CurrentHp
+    public float CurrentHp
     {
         get => currentHp;
         set
         {
-            currentHp = (value > maxHp) ? maxHp : value;
+            currentHp = (value > stats.MaxHp) ? stats.MaxHp : value;
             foreach (var rend in ColoredRenderers)
             {
-                rend.material.SetFloat(Hp,currentHp / (float) maxHp);
+                rend.material.SetFloat(Hp,currentHp / stats.MaxHp);
             }
         }
     }
@@ -63,12 +72,11 @@ public class Tank : MonoBehaviour, IDamageable
     public event Action<Tank,Tank> OnTankKilled;
     public event Action OnTankRespawned;
     public Vector3 Position => transform.position;
-
     
     public void SetStatic()
     {
         rb.isKinematic = true;
-        currentHp = maxHp;
+        currentHp = stats.MaxHp;
     }
     
     public void SetLayer(int layer)
@@ -118,18 +126,19 @@ public class Tank : MonoBehaviour, IDamageable
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
-        CurrentHp = maxHp;
+        CurrentHp = stats.MaxHp;
         
         OnTankRespawned?.Invoke();
     }
     private void DecreaseHealthRegenCoolDown()
     {
-        currentHealCooldown += Time.deltaTime;
-        if (currentHealCooldown >= healCooldown)
-        {
-            currentHealCooldown = 0f;
-            CurrentHp += healAmount;
-        }
+        currentHealCooldown -= Time.deltaTime;
+        
+        if (currentHealCooldown > 0 || currentHp >= stats.MaxHp) return;
+        
+        currentHealCooldown = stats.TimeBetweenHeal;
+        
+        CurrentHp += stats.HealCooldown;
     }
     
     private void Update()
@@ -149,8 +158,18 @@ public class Tank : MonoBehaviour, IDamageable
     private void HandleHeadRotation()
     {
         if(headDirection == Vector3.zero) return;
+
+        if (stats.HeadRotationSpeed < 0)
+        {
+            HeadTransform.forward = headDirection; // TODO : make it smooth (lerp)
+            return;
+        }
         
-        HeadTransform.forward = headDirection; // TODO : make it smooth (lerp)
+        var targetRotation = Quaternion.LookRotation(headDirection);
+        var rotation = Quaternion.RotateTowards(HeadTransform.rotation, targetRotation, stats.HeadRotationSpeed * Time.fixedDeltaTime);
+
+        HeadTransform.rotation = rotation;
+        
     }
 
     private void HandleMovement()
@@ -166,9 +185,9 @@ public class Tank : MonoBehaviour, IDamageable
 
         var targetVelocity = moveTowardsDirection ? transform.forward : transform.forward * Mathf.Sign(movementDirection.y);
         
-        targetVelocity *= maxSpeed;
+        targetVelocity *= stats.MaxSpeed;
         
-        velocity = Vector3.MoveTowards(velocity, targetVelocity, acceleration * Time.fixedDeltaTime);
+        velocity = Vector3.MoveTowards(velocity, targetVelocity, stats.Acceleration * Time.fixedDeltaTime);
         
         rb.velocity = velocity;
     }
@@ -184,7 +203,7 @@ public class Tank : MonoBehaviour, IDamageable
 
         var target = moveTowardsDirection ? new Vector3(movementDirection.x,0,movementDirection.y) : (transform.right * movementDirection.x);
         var targetRotation = Quaternion.LookRotation(target);
-        var rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, maxTurnSpeed * Time.fixedDeltaTime);
+        var rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, stats.MaxTurnSpeed * Time.fixedDeltaTime);
         
         rb.MoveRotation(rotation);
     }
@@ -198,13 +217,13 @@ public class Tank : MonoBehaviour, IDamageable
     public void Shoot()
     {
         if(currentShootCooldown > 0 ) return;
-        currentShootCooldown = shootCooldown;
+        currentShootCooldown = stats.ShootCooldown;
         SoundManager.instance.PlaySound(SoundManager.instance.shoot);
         foreach (var shotOrigin in shotOrigins)
         {
             var projectile =  ObjectPooler.Pool(projectilePrefab,shotOrigin.position,shotOrigin.rotation);
         
-            projectile.Shoot(projectileData,this);
+            projectile.Shoot(stats.ProjectileData,this);
         }
         
         //TODO - don't forget animation
@@ -212,7 +231,11 @@ public class Tank : MonoBehaviour, IDamageable
 
     public void TakeDamage(Projectile.DamageData data)
     {
-        CurrentHp -= data.Damage;
+        float damage = data.Damage;
+        if (data.Shooter == this) damage *= stats.SelfDamageMultiplier;
+        CurrentHp -= damage;
+
+        currentHealCooldown = stats.HealCooldown;
 
         if (CurrentHp > 0) return;
         
@@ -223,7 +246,6 @@ public class Tank : MonoBehaviour, IDamageable
 
     public bool HitByObject(Vector3 position)
     {
-        
         foreach (var tr in raycastOrigins)
         {
             var dif = tr.position - position;
