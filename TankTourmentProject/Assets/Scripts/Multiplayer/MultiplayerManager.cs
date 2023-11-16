@@ -1,9 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using MapGeneration;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 public class MultiplayerManager : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class MultiplayerManager : MonoBehaviour
     [SerializeField] private WaveCollapseManager waveCollapseManager;
     [SerializeField] private TankSelectionManager tankSelectionManager;
     [SerializeField] private PointsManager pointsManager;
+    [FormerlySerializedAs("uiGameOver")] [SerializeField] private UIManager uiManager;
     [SerializeField] private Camera mainCamera;
 
     [Header("Settings")]
@@ -28,6 +30,7 @@ public class MultiplayerManager : MonoBehaviour
 
 
     private bool isInGame = false;
+    private LayerMask mainCameraMask;
     
     private void Start()
     {
@@ -144,38 +147,61 @@ public class MultiplayerManager : MonoBehaviour
         
         pointsManager.OnPlayerWin += OnPlayerWin;
         
-        tankSelectionManager.HideSelections();
+        uiManager.CanGenerateMap += GeneratedMap;
         
-        tankSelectionManager.ExitSelection();
+        playerControllers[0].OnGameCDFinished += OnGameCDFinished;
         
         foreach (var controller in playerControllers)
         {
-            controller.CameraController.Cam.enabled = false;
+            controller.CountdownForGameStart();
         }
         
-        // create map
+        return;
         
-        waveCollapseManager.GenerateMap(out var generationData);
+        void OnGameCDFinished()
+        {
+            playerControllers[0].OnGameCDFinished -= OnGameCDFinished;
+            
+            tankSelectionManager.HideSelections();
         
-        // set spawn points
-        tankManager.SetSpawnPoints(generationData.SpawnTilePositions);
+            tankSelectionManager.ExitSelection();
         
-        //move camera
-        var worldCenter = generationData.WorldCenter;
-        var worldSize = new Vector2(worldCenter.x*2,worldCenter.z*2);
-        
-        mainCamera.transform.position = generationData.WorldCenter;
-        mainCamera.orthographicSize = Vector2.Distance(Vector2.zero, worldSize * 0.5f * 0.80f);
-        
-        pointsManager.SetPoints(generationData.ControlTilePositions,generationData.Scale);
-        pointsManager.SetPlayers(ActivePlayers);
+            foreach (var controller in playerControllers)
+            {
+                controller.CameraController.Cam.enabled = false;
+            }
+            
+            uiManager.CountdownFirstTo(pointsManager.PointsToWin);
+        }
 
-        isInGame = true;
+        void GeneratedMap()
+        {
+            uiManager.CanGenerateMap -= GeneratedMap;
+            // create map
+        
+            waveCollapseManager.GenerateMap(out var generationData);
+        
+            // set spawn points
+            tankManager.SetSpawnPoints(generationData.SpawnTilePositions);
+        
+            //move camera
+            var worldCenter = generationData.WorldCenter;
+            var worldSize = new Vector2(worldCenter.x*2,worldCenter.z*2);
+        
+            mainCamera.transform.position = generationData.WorldCenter;
+            mainCamera.orthographicSize = Vector2.Distance(Vector2.zero, worldSize * 0.5f * 0.80f);
+        
+            pointsManager.SetPoints(generationData.ControlTilePositions,generationData.Scale);
+            pointsManager.SetPlayers(ActivePlayers);
+
+            isInGame = true;
+        }
     }
 
     private void OnMapGenerated()
     {
         // spawn tanks
+        mainCameraMask = mainCamera.cullingMask;
         mainCamera.cullingMask = 0;
         
         tankManager.SpawnTanks(playerControllers);
@@ -199,9 +225,18 @@ public class MultiplayerManager : MonoBehaviour
             controller.CameraController.Cam.enabled = false;
         }
         
-        playerController.CameraController.Cam.enabled = true;
-        playerController.CameraController.SetCameraRect(Vector2.zero, Vector2.one);
-        
         Debug.Log($"{playerController} won the game!");
+
+        mainCamera.cullingMask = mainCameraMask;
+        
+        uiManager.RestartGame += RestartGame;
+        
+        uiManager.ShowWinner(playerController);
+    }
+    
+    public void RestartGame()
+    {
+        uiManager.RestartGame -= RestartGame;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

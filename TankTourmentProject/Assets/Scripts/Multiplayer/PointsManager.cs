@@ -7,8 +7,8 @@ using Random = UnityEngine.Random;
 
 public class PointsManager : MonoBehaviour
 {
-    [Header("Settings")]
-    [SerializeField] private int pointsToWin = 3;
+    [field:Header("Settings")]
+    [field:SerializeField] public int PointsToWin { get; private set; } = 3;
     [SerializeField] private float pointsRate = 1/45f;
     [SerializeField] private float pointsToCapture = 1;
     [Space]
@@ -77,7 +77,7 @@ public class PointsManager : MonoBehaviour
 
             void CheckVictory()
             {
-                var notWin = player.PointAmount.PointCaptured < pointsToWin;
+                var notWin = player.PointAmount.PointCaptured < PointsToWin;
                 
                 if(notWin) return;
                 
