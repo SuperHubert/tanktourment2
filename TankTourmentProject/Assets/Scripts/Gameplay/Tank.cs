@@ -19,8 +19,12 @@ public class Tank : MonoBehaviour, IDamageable
     [SerializeField] private float maxSpeed = 10f;
     [SerializeField] private float acceleration = 10f;
     [SerializeField] private float maxTurnSpeed = 10f;
+    [SerializeField] private float headRotationSpeed = 360f;
     [Space]
     [SerializeField] private Projectile projectilePrefab;
+    [SerializeField] private float shootCooldown = 1f;
+    private float currentShootCooldown = 0f;
+    [SerializeField] private Transform[] shotOrigins;
     [SerializeField] private Projectile.ProjectileData projectileData;
     [Space]
     [SerializeField] private int maxHp;
@@ -98,6 +102,7 @@ public class Tank : MonoBehaviour, IDamageable
     
     private void Update()
     {
+        DecreaseCooldown();
         HandleHeadRotation();
     }
 
@@ -149,12 +154,24 @@ public class Tank : MonoBehaviour, IDamageable
         
         rb.MoveRotation(rotation);
     }
+
+    private void DecreaseCooldown()
+    {
+        if(currentShootCooldown <= 0 ) return;
+        currentShootCooldown -= Time.deltaTime;
+    }
     
     public void Shoot()
     {
-        var projectile =  ObjectPooler.Pool(projectilePrefab,canonTip.position,canonTip.rotation);
+        if(currentShootCooldown > 0 ) return;
+        currentShootCooldown = shootCooldown;
         
-        projectile.Shoot(projectileData,this);
+        foreach (var shotOrigin in shotOrigins)
+        {
+            var projectile =  ObjectPooler.Pool(projectilePrefab,shotOrigin.position,shotOrigin.rotation);
+        
+            projectile.Shoot(projectileData,this);
+        }
         
         //TODO - don't forget animation
     }
@@ -162,6 +179,8 @@ public class Tank : MonoBehaviour, IDamageable
     public void TakeDamage(Projectile.DamageData data)
     {
         currentHp -= data.Damage;
+        
+        // TODO Update shader here
         
         if(currentHp <= 0)
         {

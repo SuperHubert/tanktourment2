@@ -319,3 +319,39 @@ MonoBehaviour:
     right: o-o-o
     <CanSpawn>k__BackingField: 1
     <DebugColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
+  - name: OuterT T
+    go: {fileID: 1899728047077581414, guid: 1a9d3846ba5b95b4e82c37cfd3b89449, type: 3}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    top: c-c-c
+    bot: o-c-o
+    left: c-c-o
+    right: c-c-o
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
+  - name: OuterT R
+    go: {fileID: 1899728047077581414, guid: 1a9d3846ba5b95b4e82c37cfd3b89449, type: 3}
+    rotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
+    top: o-c-c
+    bot: o-c-c
+    left: o-c-o
+    right: c-c-c
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
+  - name: OuterT B
+    go: {fileID: 1899728047077581414, guid: 1a9d3846ba5b95b4e82c37cfd3b89449, type: 3}
+    rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
+    top: o-c-o
+    bot: c-c-c
+    left: o-c-c
+    right: o-c-c
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}
+  - name: OuterT L
+    go: {fileID: 1899728047077581414, guid: 1a9d3846ba5b95b4e82c37cfd3b89449, type: 3}
+    rotation: {x: 0, y: 0.70710677, z: 0, w: -0.70710677}
+    top: c-c-o
+    bot: c-c-o
+    left: c-c-c
+    right: o-c-o
+    <CanSpawn>k__BackingField: 1
+    <DebugColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0}

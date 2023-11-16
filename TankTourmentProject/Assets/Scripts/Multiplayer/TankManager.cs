@@ -7,8 +7,9 @@ public class TankManager : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] private Tank tankPrefab;
-    
+
     [Header("Settings")]
+    [SerializeField] private List<Tank> availableTanksModels = new List<Tank>();
     [SerializeField] private Vector3[] spawnPoints;
     [SerializeField] private float respawnDuration;
     [SerializeField] private float respawnCamSpeedMultiplier;
@@ -49,6 +50,11 @@ public class TankManager : MonoBehaviour
         spawnPoints = transforms.ToArray();
     }
     
+    public Tank[] GetAvailableTankModels()
+    {
+        return availableTanksModels.ToArray();
+    }
+    
     private Vector3 NextAvailableSpawnPoint()
     {
         if (availableSpawnPoints.Count == 0)
@@ -67,12 +73,12 @@ public class TankManager : MonoBehaviour
         var pos = NextAvailableSpawnPoint();
         pos.y += tankPrefab.SpawnHeight;
 
-        var prefab = tankPrefab; //TODO, put it in arguments
+        var prefab = availableTanksModels[controller.TankSelectionData.SelectedTankIndex]; //TODO, put it in arguments
         
         var tank = Instantiate(prefab,pos, Quaternion.identity);
 
         tank.SetLayer(controller.Layer);
-        tank.SetColor(controller.Color);
+        tank.SetColor(controller.TankSelectionData.SelectedColor);
         
         tank.gameObject.name = $"GameTank ({LayerMask.LayerToName(controller.Layer)})";
         
@@ -108,8 +114,6 @@ public class TankManager : MonoBehaviour
 
     private void OnTankKilled(Tank tank, Tank killer)
     {
-        Debug.Log($"{killer.name} killed {tank.name}");
-        
         var pos = NextAvailableSpawnPoint();
         pos.y += tankPrefab.SpawnHeight;
         

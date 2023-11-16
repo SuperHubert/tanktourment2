@@ -1,23 +1,30 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Collections;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using DG.Tweening;
+using UnityEngine.UI;
 
 public class TankSelectionManager : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] private UIColorSelection colorSelectionPrefab;
-    [SerializeField] private Transform colorSelectionLayout;
+    [SerializeField] private GridLayoutGroup colorSelectionLayout;
 
     [SerializeField] private TankSelection tankSelectionPrefab;
     
     [Header("Settings")]
     [SerializeField] private List<Color> colors = new List<Color>();
+    [SerializeField] private float colorMoveCooldown = 0.5f;
+    [SerializeField] private int columns = 4;
     public List<Color> Colors => colors; 
 
-    [SerializeField] private List<Tank> tanks = new List<Tank>();
+    [SerializeField,ReadOnly] private Tank[] tanks;
+    [SerializeField] private float tankOffset = 2f;
+    [SerializeField] private float tankRotationSpeed = 10f;
+    [SerializeField] private float tankMoveDuration = 1f;
     
     private List<UIColorSelection> colorSelections = new List<UIColorSelection>();
     
@@ -29,12 +36,22 @@ public class TankSelectionManager : MonoBehaviour
     {
         foreach (var color in colors)
         {
-            var colorSelection = Instantiate(colorSelectionPrefab, colorSelectionLayout);
+            var colorSelection = Instantiate(colorSelectionPrefab, colorSelectionLayout.transform);
 
             colorSelection.SetColor(color);
             
+            colorSelection.RefreshAppearance();
+            
             colorSelections.Add(colorSelection);
+            
         }
+        
+        colorSelectionLayout.constraintCount = columns;
+    }
+
+    public void SetAvailableTanks(Tank[] availableTanks)
+    {
+        tanks = availableTanks;
     }
     
     public void ShowColors(bool value)
@@ -60,22 +77,69 @@ public class TankSelectionManager : MonoBehaviour
         
         tankSelections.Add(playerController, selection);
         
-        selection.SetTanks(tanks);
-        
-        selection.OnReadyChanged += TryStartGame;
+        selection.SetTanks(tanks,tankOffset);
+        selection.SetColorCooldown(colorMoveCooldown);
 
-        selection.OnColorChanged += playerController.SetColor;
+        var colorIndex = 0;
         
-        var color = colors[Random.Range(0, colors.Count)]; // TODO - remove when color selection is added
+        playerController.TankSelectionData.OnReadyChanged += TryStartGame;
+        playerController.TankSelectionData.OnSelectedColorChanged += selection.ChangeColor;
         
-        selection.ChangeColor(color);
+        selection.OnTankChanged += ChangeTankIndex;
+        selection.OnColorChanged += ChangeColorIndex;
+        
+        ChangeTankIndex(0);
+        ChangeColor(colorIndex,false);
         
         return selection;
+
+        void ChangeTankIndex(int change)
+        {
+            var index = playerController.TankSelectionData.SelectedTankIndex + change;
+            
+            if (index < 0) index = tanks.Length - 1;
+            else if (index >= tanks.Length) index = 0;
+
+            playerController.TankSelectionData.SetTankIndex(index);
+            
+            var dir = selection.TankTr.right * -1f * tankOffset * index;
+            var dest = selection.TankTrOrigin + dir;
+            
+            selection.TankTr.DOMove(dest,tankMoveDuration);
+        }
+
+        void ChangeColorIndex(Vector2 dir)
+        {
+            var x = dir.x;
+            var y = dir.y;
+
+            var current = colorIndex;
+            
+            if (x > 0) current++;
+            else if (x < 0) current--;
+            else if (y > 0) current -= columns;
+            else if (y < 0) current += columns;
+
+            if(current < 0) current += colors.Count;
+            
+            current %= colors.Count;
+            
+            ChangeColor(current,true);
+        }
+
+        void ChangeColor(int index,bool removeSelection)
+        {
+            if(removeSelection) colorSelections[colorIndex].RemoveSelection();
+            colorIndex = index;
+            colorSelections[colorIndex].AddSelection();
+            
+            playerController.TankSelectionData.SetColor(colors[colorIndex]);
+        }
     }
 
     private void TryStartGame(bool _)
     {
-        var readyPlayers = tankSelections.Where(kvp => kvp.Value.IsReady).Select(kvp => kvp.Key).ToList();
+        var readyPlayers = tankSelections.Keys.Where(p => p.TankSelectionData.IsReady).ToList();
         
         Debug.Log($"Invoking {readyPlayers.Count} ready");
         
@@ -86,6 +150,7 @@ public class TankSelectionManager : MonoBehaviour
     {
         foreach (var selections in tankSelections.Values)
         {
+            selections.CleanupEvents();
             selections.DisconnectInputs();
         }
     }

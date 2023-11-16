@@ -49,7 +49,7 @@ public class PointsManager : MonoBehaviour
             {
                 var progress = player.PointAmount.PointPercent / pointsToCapture;
                 
-                var color = player.Color;
+                var color = player.TankSelectionData.SelectedColor;
                 color.a = controlPointAlpha;
                 
                 currentPoint.ShowProgress(progress, color);
