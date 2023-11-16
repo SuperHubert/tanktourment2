@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Renderer>k__BackingField: {fileID: 8205344506298795257}
-  neighbors: []
+  spawnTransform: {fileID: 0}
 --- !u!1001 &322405901019745323
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -223,11 +223,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.x
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6619073891953609009, guid: b22eff69730fd224893f5f3903ea773d,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6619073891953609009, guid: b22eff69730fd224893f5f3903ea773d,
         type: 3}
