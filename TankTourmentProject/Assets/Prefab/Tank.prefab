@@ -765,8 +765,11 @@ MonoBehaviour:
   - {fileID: 2329134908684325603}
   projectilePrefab: {fileID: -5813340783634412977, guid: 1ca3f6586ae5293459d036e318da4e40,
     type: 3}
+  wheelTrailHandlers:
+  - {fileID: 3595316836830698785}
+  - {fileID: 1886167165947893542}
   stats:
-    <MaxHp>k__BackingField: 100
+    <MaxHp>k__BackingField: 1
     <MaxSpeed>k__BackingField: 10
     <Acceleration>k__BackingField: 10
     <MaxTurnSpeed>k__BackingField: 350
@@ -1272,6 +1275,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eda82808aae449c46824da83ebccc91b, type: 3}
+--- !u!114 &3595316836830698785 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3192284349479038465, guid: eda82808aae449c46824da83ebccc91b,
+    type: 3}
+  m_PrefabInstance: {fileID: 2137068174384493344}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0c1e66e66ab13e489ce867e60d548df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &5507282840063460613 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5892301225733174821, guid: eda82808aae449c46824da83ebccc91b,
@@ -1346,6 +1361,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eda82808aae449c46824da83ebccc91b, type: 3}
+--- !u!114 &1886167165947893542 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3192284349479038465, guid: eda82808aae449c46824da83ebccc91b,
+    type: 3}
+  m_PrefabInstance: {fileID: 3918209434482440487}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0c1e66e66ab13e489ce867e60d548df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &7468637268287442690 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5892301225733174821, guid: eda82808aae449c46824da83ebccc91b,

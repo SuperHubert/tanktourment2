@@ -6,6 +6,7 @@ public class Tank : MonoBehaviour, IDamageable
 {
     [Header("Components")]
     [SerializeField] private Rigidbody rb;
+    public Rigidbody Rb => rb;
     [field: SerializeField] public Transform HeadTransform { get; private set; }
     [field:SerializeField] public Renderer[] ColoredRenderers { get; private set; }
     [SerializeField] public GameObject[] layerGameobjects;
@@ -13,6 +14,8 @@ public class Tank : MonoBehaviour, IDamageable
     [SerializeField] private Transform[] shotOriginsLeft;
     [SerializeField] private Transform[] shotOriginsRight;
     [SerializeField] private Projectile projectilePrefab;
+    [Space]
+    [SerializeField] private WheelTrailHandler[] wheelTrailHandlers;
     
     [Serializable]
     public class TankStats
@@ -36,7 +39,7 @@ public class Tank : MonoBehaviour, IDamageable
         [field: SerializeField] public float HealCooldown { get; private set; } = 1f;
         
     }
-
+    [Space]
     [SerializeField] private TankStats stats;
     public TankStats Stats => stats;
     
@@ -68,6 +71,7 @@ public class Tank : MonoBehaviour, IDamageable
             }
         }
     }
+    public bool IsAlive => currentHp > 0;
     
     private static readonly int Hp = Shader.PropertyToID("_Hp");
 
@@ -127,12 +131,20 @@ public class Tank : MonoBehaviour, IDamageable
 
     public void RespawnValues()
     {
-        gameObject.SetActive(true);
+        ShowLayerObjects(true);
+        
+        Array.ForEach(wheelTrailHandlers,handler => handler.ConnectToTank(this));
+        
+        rb.isKinematic = false;
         
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
         CurrentHp = stats.MaxHp;
+
+        currentHealCooldown = 0f;
+        currentShotCooldownLeft = 0f;
+        currentShotCooldownRight = 0f;
         
         OnTankRespawned?.Invoke();
     }
@@ -149,14 +161,15 @@ public class Tank : MonoBehaviour, IDamageable
     
     private void Update()
     {
+        if(!IsAlive) return;
         DecreaseCooldown();
         DecreaseHealthRegenCoolDown();
         HandleHeadRotation();
-        
     }
 
     private void FixedUpdate()
     {
+        if(!IsAlive) return;
         HandleMovement();
         HandleRotation();
     }
@@ -258,6 +271,8 @@ public class Tank : MonoBehaviour, IDamageable
 
     private void Shoot(IEnumerable<Transform> origin)
     {
+        if(!IsAlive) return;
+        
         foreach (var shotOrigin in origin)
         {
             SoundManager.instance.PlaySound(SoundManager.instance.shoot);
@@ -273,6 +288,8 @@ public class Tank : MonoBehaviour, IDamageable
 
     public void TakeDamage(Projectile.DamageData data)
     {
+        if(!IsAlive) return;
+        
         var explosionOrigin = data.ExplosionOrigin;
         var explosionForce = data.Shooter.stats.ProjectileData.ExplosionForce;
         var radius = data.Shooter.stats.ProjectileData.ExplosionRadius;
@@ -286,10 +303,28 @@ public class Tank : MonoBehaviour, IDamageable
         currentHealCooldown = stats.HealCooldown;
 
         if (CurrentHp > 0) return;
+
+        Kill(data.Shooter);
+    }
+
+    private void Kill(Tank killer)
+    {
+        ShowLayerObjects(false);
         
-        gameObject.SetActive(false);
-            
-        OnTankKilled?.Invoke(this,data.Shooter);
+        rb.isKinematic = true;
+        
+        Array.ForEach(wheelTrailHandlers,handler => handler.StopEmission());
+        
+        OnTankKilled?.Invoke(this,killer);
+    }
+
+    private void ShowLayerObjects(bool value)
+    {
+        foreach (var go in layerGameobjects)
+        {
+            go.SetActive(value);
+        }
+        gameObject.SetActive(true);
     }
 
     public bool HitByObject(Vector3 position)

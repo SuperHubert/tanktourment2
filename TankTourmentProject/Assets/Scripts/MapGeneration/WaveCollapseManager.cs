@@ -96,7 +96,7 @@ namespace MapGeneration
             if (!useDefault) prefabToInstantiate = node.TileTypeSelected;
 
             var pos = new Vector3(i * (offset + scale.x) + 0.5f, 0, j * (scale.z + offset) + 0.5f);
-            var tile = Instantiate(prefabToInstantiate.go, pos, prefabToInstantiate.rotation, useDefault ? transform : null);
+            var tile = Instantiate(prefabToInstantiate.go, pos, prefabToInstantiate.rotation, transform);
             tile.transform.localScale = scale;
             
             var mat = tile.Renderer.material;
