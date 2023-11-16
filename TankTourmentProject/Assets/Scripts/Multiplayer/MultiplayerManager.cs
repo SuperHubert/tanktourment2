@@ -146,6 +146,8 @@ public class MultiplayerManager : MonoBehaviour
         
         tankSelectionManager.HideSelections();
         
+        tankSelectionManager.ExitSelection();
+        
         foreach (var controller in playerControllers)
         {
             controller.CameraController.Cam.enabled = false;
