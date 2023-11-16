@@ -1249,6 +1249,7 @@ MonoBehaviour:
   nextImage: {fileID: 6885822242414026828}
   borderOffset: 100
   borderViewRange: 175
+  scoreGo: {fileID: 8110980041970062829}
   ownImage: {fileID: 3701790064876710548}
   currentPercentText: {fileID: 5231673086746034509}
   totalPointsText: {fileID: 6955223643710181575}
@@ -1266,7 +1267,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4016319135350700641}
   m_Layer: 5
-  m_Name: GameObject
+  m_Name: Own Go
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class Tank : MonoBehaviour, IDamageable
 {
@@ -61,14 +60,13 @@ public class Tank : MonoBehaviour, IDamageable
     public Color Color { get; private set; }
     
     public int Layer { get; private set; }
-    public event Action<Tank> OnTankKilled;
+    public event Action<Tank,Tank> OnTankKilled;
     public event Action OnTankRespawned;
     public Vector3 Position => transform.position;
 
     
     public void SetStatic()
     {
-        
         rb.isKinematic = true;
         currentHp = maxHp;
     }
@@ -220,7 +218,7 @@ public class Tank : MonoBehaviour, IDamageable
         
         gameObject.SetActive(false);
             
-        OnTankKilled?.Invoke(data.Shooter);
+        OnTankKilled?.Invoke(this,data.Shooter);
     }
 
     public bool HitByObject(Vector3 position)

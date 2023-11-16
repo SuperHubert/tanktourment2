@@ -122,7 +122,7 @@ public class ControlPoint : MonoBehaviour
         RemoveTankFromList(tank);
     }
 
-    private void RemoveTankFromList(Tank tank)
+    private void RemoveTankFromList(Tank tank,Tank _ = null)
     {
         tank.SetVisibilityOverride(-1);
         
