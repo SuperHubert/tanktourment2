@@ -15,7 +15,7 @@ public class Tank : MonoBehaviour, IDamageable
     [SerializeField] private Projectile projectilePrefab;
     
     [Serializable]
-    private class TankStats
+    public class TankStats
     {
         [field: SerializeField] public int MaxHp { get; private set; }
         [field: SerializeField] public float MaxSpeed { get; private set; } = 10f;
@@ -38,6 +38,7 @@ public class Tank : MonoBehaviour, IDamageable
     }
 
     [SerializeField] private TankStats stats;
+    public TankStats Stats => stats;
     
     [Header("Settings")]
     [SerializeField] private LayerMask explosionLayers;
