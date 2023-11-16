@@ -1,19 +1,28 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ControlPointIndicator : MonoBehaviour
 {
+    [Header("Components")]
     [SerializeField] private Camera cam;
 
+    [Header("Position Settings")]
     [SerializeField] private Image currentImage;
     [SerializeField] private Image currentTrImage;
     [SerializeField] private Image nextImage;
     [SerializeField] private int borderOffset;
     [SerializeField] private int borderViewRange;
 
+    [Header("Score Settings")]
+    [SerializeField] private GameObject scoreGo;
+    [SerializeField] private Image ownImage;
+    [SerializeField] private TextMeshProUGUI currentPercentText;
+    [SerializeField] private TextMeshProUGUI totalPointsText;
+    
     [Header("Debug")]
     [SerializeField] private ControlPoint currentControlPoint;
     [SerializeField] private bool hasCurrent;
@@ -24,12 +33,29 @@ public class ControlPointIndicator : MonoBehaviour
     {
         currentTrImage.gameObject.SetActive(false);
         nextImage.gameObject.SetActive(false);
+        scoreGo.SetActive(false);
     }
 
-    public void SetColors(Color current, Color next)
+    public void SetIndicatorColors(Color current, Color next)
     {
         currentTrImage.color = current;
         nextImage.color = next;
+    }
+    
+    public void SetOwnColor(Color color)
+    {
+        ownImage.color = color;
+    }
+
+    public void UpdateOwnPercent(float percent)
+    {
+        ownImage.fillAmount = percent;
+        currentPercentText.text = $"{Mathf.FloorToInt(percent * 100)}";
+    }
+    
+    public void UpdateOwnScore(int score)
+    {
+        totalPointsText.text = $"{score}";
     }
     
     public void SetControlPoints(ControlPoint current, ControlPoint next)
@@ -44,6 +70,7 @@ public class ControlPointIndicator : MonoBehaviour
 
         currentTrImage.gameObject.SetActive(hasCurrent);
         nextImage.gameObject.SetActive(hasNext);
+        scoreGo.SetActive(true);
         
         currentImage.fillAmount = 0;
         

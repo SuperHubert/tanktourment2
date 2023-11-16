@@ -39,9 +39,13 @@ public class PointsManager : MonoBehaviour
         {
             playerPoints.Add(player);
             
+            player.ControlPointIndicator.SetOwnColor(player.TankSelectionData.SelectedColor);
+            
             player.ControlPointIndicator.SetControlPoints(currentPoint,nextPoint);
             
-            player.ControlPointIndicator.SetColors(controlPointIndicatorColor,controlPointPreviewColor);
+            player.ControlPointIndicator.SetIndicatorColors(controlPointIndicatorColor,controlPointPreviewColor);
+            
+            player.ControlPointIndicator.UpdateOwnPercent(0);
             
             player.PointAmount.OnPercentChanged += IncreaseCapture;
 
@@ -62,9 +66,13 @@ public class PointsManager : MonoBehaviour
                 
                 currentPoint.ShowProgress(progress, color);
                 
+                player.ControlPointIndicator.UpdateOwnPercent(progress);
+                
                 if (player.PointAmount.PointPercent < pointsToCapture) return;
                 
                 player.PointAmount.IncreaseCapture();
+                
+                player.ControlPointIndicator.UpdateOwnScore(player.PointAmount.PointCaptured);
             }
 
             void CheckVictory()
@@ -85,6 +93,8 @@ public class PointsManager : MonoBehaviour
             
             foreach (var player in playersList)
             {
+                player.ControlPointIndicator.UpdateOwnPercent(0);
+                
                 player.PointAmount.ResetCapturePercent();
             }
         }
