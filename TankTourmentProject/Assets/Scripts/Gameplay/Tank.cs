@@ -203,7 +203,25 @@ public class Tank : MonoBehaviour, IDamageable
             
         OnTankKilled?.Invoke(data.Shooter);
     }
-    
+
+    public bool HitByObject(Vector3 position)
+    {
+        
+        foreach (var tr in raycastOrigins)
+        {
+            var dif = tr.position - position;
+            var dir = Vector3.Normalize(dif);
+            
+            var dist = dif.magnitude * 1.1f;
+            
+            if (!Physics.Raycast(position, dir, out var hit, dist)) continue;
+            
+            if (hit.collider.gameObject.layer != gameObject.layer) continue;
+            return true;
+        }
+        return false;
+    }
+
     public void IncreaseCapturePercent(float amount)
     {
         PointAmount.IncreaseCapturePercent(amount);
@@ -213,4 +231,6 @@ public class Tank : MonoBehaviour, IDamageable
 public interface IDamageable
 {
     void TakeDamage(Projectile.DamageData data);
+
+    bool HitByObject(Vector3 position);
 }
