@@ -32,8 +32,23 @@ public class Tank : MonoBehaviour, IDamageable
     [Header("Debug")]
     [SerializeField] private Vector2 movementDirection;
     [SerializeField] private Vector3 headDirection;
-    [SerializeField] private int currentHp;
+    private int currentHp;
+
+    private int CurrentHp
+    {
+        get => currentHp;
+        set
+        {
+            currentHp = value;
+            foreach (var rend in ColoredRenderers)
+            {
+                rend.material.SetFloat(Hp,currentHp / (float) maxHp);
+            }
+        }
+    }
     
+    private static readonly int Hp = Shader.PropertyToID("_Hp");
+
     public PointsManager.PointAmount PointAmount { get; private set; }
     public Color Color { get; private set; }
     
@@ -89,7 +104,7 @@ public class Tank : MonoBehaviour, IDamageable
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
-        currentHp = maxHp;
+        CurrentHp = maxHp;
         
         OnTankRespawned?.Invoke();
     }
@@ -172,16 +187,13 @@ public class Tank : MonoBehaviour, IDamageable
 
     public void TakeDamage(Projectile.DamageData data)
     {
-        currentHp -= data.Damage;
+        CurrentHp -= data.Damage;
+
+        if (CurrentHp > 0) return;
         
-        // TODO Update shader here
-        
-        if(currentHp <= 0)
-        {
-            gameObject.SetActive(false);
+        gameObject.SetActive(false);
             
-            OnTankKilled?.Invoke(data.Shooter);
-        }
+        OnTankKilled?.Invoke(data.Shooter);
     }
     
     public void IncreaseCapturePercent(float amount)
