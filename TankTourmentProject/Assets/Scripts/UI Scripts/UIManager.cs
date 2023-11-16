@@ -6,6 +6,7 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI winnerText;
+    [SerializeField] private TextMeshProUGUI tipsText;
 
     public event Action CanGenerateMap;
     public event Action RestartGame;
@@ -15,6 +16,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         winnerText.gameObject.SetActive(false);
+        tipsText.gameObject.SetActive(false);
     }
 
     public void CountdownFirstTo(int points)
@@ -36,6 +38,7 @@ public class UIManager : MonoBehaviour
     public void ShowWinner(PlayerController playerController)
     {
         winnerText.gameObject.SetActive(true);
+        tipsText.gameObject.SetActive(true);
         
         winnerText.text = $"{LayerMask.LayerToName(playerController.Layer)} wins!";
         winnerText.color = playerController.TankSelectionData.SelectedColor;

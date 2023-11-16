@@ -42,19 +42,32 @@ public class ControlPoint : MonoBehaviour
     private void Update()
     {
         if(!active) return;
-        
-        if(tanksOnControlPoint.Count == 1) OnTankStay?.Invoke(tanksOnControlPoint[0]);
-        else ShowProgress(lastProgress, lastColor);
+
+        switch (tanksOnControlPoint.Count)
+        {
+            case 0:
+                ShowProgress(lastProgress, lastColor);
+                break;
+            case 1:
+                OnTankStay?.Invoke(tanksOnControlPoint[0]);
+                break;
+            default:
+                ShowProgress(lastProgress, Color.black);
+                break;
+        }
     }
 
     public void ShowProgress(float amount, Color color)
     {
+        if (Math.Abs(lastProgress - amount) > 0.05f) particleSystem.Stop();
+        
         lastProgress = amount;
         lastColor = color;
         progressImage.fillAmount = amount;
         progressImage.color = color;
         
         particleSystemParent.rotation = Quaternion.Euler(new Vector3(0f, 360 * amount, 0f));
+        if (particleSystem.isStopped) particleSystem.Play();
         
         var settings = particleSystem.main;
         settings.startColor = color;
