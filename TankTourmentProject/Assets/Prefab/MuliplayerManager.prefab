@@ -122,8 +122,8 @@ MonoBehaviour:
     type: 3}
   availableTanksModels:
   - {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173, type: 3}
-  - {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173, type: 3}
-  - {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173, type: 3}
+  - {fileID: 6984433726715992453, guid: 72e8a04fd4976cd408df5d34b099ff14, type: 3}
+  - {fileID: 6984433726715992453, guid: 7078a26df0a1f1f44a77f3b3b2c15442, type: 3}
   spawnPoints: []
   respawnDuration: 1.5
   respawnCamSpeedMultiplier: 10
@@ -155,11 +155,13 @@ MonoBehaviour:
   - {r: 0, g: 0, b: 1, a: 1}
   - {r: 0.5000005, g: 0, b: 1, a: 1}
   - {r: 1, g: 0, b: 0.9999995, a: 1}
+  colorMoveCooldown: 0.5
+  columns: 4
   tanks:
   - {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173, type: 3}
   tankOffset: 2
   tankRotationSpeed: 10
-  tankMoveSpeed: 10
+  tankMoveDuration: 1
 --- !u!114 &2721971204016645279
 MonoBehaviour:
   m_ObjectHideFlags: 0

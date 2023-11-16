@@ -766,8 +766,12 @@ MonoBehaviour:
   maxSpeed: 25
   acceleration: 10
   maxTurnSpeed: 450
+  headRotationSpeed: 360
   projectilePrefab: {fileID: -5813340783634412977, guid: 1ca3f6586ae5293459d036e318da4e40,
     type: 3}
+  shootCooldown: 1
+  shotOrigins:
+  - {fileID: 2329134908684325603}
   projectileData:
     <Velocity>k__BackingField: 1000
     <Color>k__BackingField:
@@ -800,9 +804,9 @@ MonoBehaviour:
       m_ColorSpace: -1
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    <Damage>k__BackingField: 1
+    <Damage>k__BackingField: 45
     <ExplosionRadius>k__BackingField: 1
-  maxHp: 3
+  maxHp: 100
   <SpawnHeight>k__BackingField: 0.3
   movementDirection: {x: 0, y: 0}
   headDirection: {x: 0, y: 0, z: 0}

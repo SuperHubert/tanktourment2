@@ -73,7 +73,7 @@ public class TankManager : MonoBehaviour
         var pos = NextAvailableSpawnPoint();
         pos.y += tankPrefab.SpawnHeight;
 
-        var prefab = tankPrefab; //TODO, put it in arguments
+        var prefab = availableTanksModels[controller.TankSelectionData.SelectedTankIndex]; //TODO, put it in arguments
         
         var tank = Instantiate(prefab,pos, Quaternion.identity);
 
