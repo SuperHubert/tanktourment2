@@ -13,6 +13,7 @@ public class TankManager : MonoBehaviour
     [SerializeField] private Vector3[] spawnPoints;
     [SerializeField] private float respawnDuration;
     [SerializeField] private float respawnCamSpeedMultiplier;
+    [SerializeField] private float minSpawnDistance = 5f;
     
     private List<Vector3> availableSpawnPoints = new List<Vector3>();
     [SerializeField] private List<Tank> tanks = new List<Tank>();
@@ -58,6 +59,22 @@ public class TankManager : MonoBehaviour
     private void SpawnTank(PlayerController controller)
     {
         var pos = NextAvailableSpawnPoint();
+
+        var validPos = false;
+        while (!validPos)
+        {
+            validPos = true;
+            foreach (var other in tanks)
+            {
+                if (Vector3.Distance(other.transform.position, pos) < minSpawnDistance)
+                {
+                    validPos = false;
+                    pos = NextAvailableSpawnPoint();
+                    break;
+                }
+            }
+        }
+        
         pos.y += tankPrefab.SpawnHeight;
         
         var data = controller.TankSelectionData;
