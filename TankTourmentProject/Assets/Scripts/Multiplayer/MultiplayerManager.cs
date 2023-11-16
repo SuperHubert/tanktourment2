@@ -135,10 +135,10 @@ public class MultiplayerManager : MonoBehaviour
     {
         playerInputManager.DisableJoining();
         
-        PlayerController.OnPlayerJoin += AddPlayer;
-        PlayerController.OnPlayerLeave += RemovePlayer;
+        PlayerController.OnPlayerJoin -= AddPlayer;
+        PlayerController.OnPlayerLeave -= RemovePlayer;
         
-        tankSelectionManager.OnPlayerReadyChanged += TryStartGame;
+        tankSelectionManager.OnPlayerReadyChanged -= TryStartGame;
         
         waveCollapseManager.OnMapGenerated += OnMapGenerated;
         

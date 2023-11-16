@@ -9,7 +9,8 @@ public class SoundManager : MonoBehaviour
     public static SoundManager instance;
     [SerializeField] private AudioSource musicSource, EffectSource;
     [SerializeField] private AudioMixer audioMixer;
-    [SerializeField] private AudioClip music, validateEffect;
+    [SerializeField] private AudioClip music;
+    public AudioClip validateEffect, cancelEffect, explosion, shoot, click;
     private void Awake()
     {
         if (instance == null)

@@ -165,7 +165,7 @@ public class Tank : MonoBehaviour, IDamageable
     {
         if(currentShootCooldown > 0 ) return;
         currentShootCooldown = shootCooldown;
-        
+        SoundManager.instance.PlaySound(SoundManager.instance.shoot);
         foreach (var shotOrigin in shotOrigins)
         {
             var projectile =  ObjectPooler.Pool(projectilePrefab,shotOrigin.position,shotOrigin.rotation);

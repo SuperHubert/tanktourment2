@@ -67,8 +67,9 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        
         if (other.gameObject.layer == owner.gameObject.layer) return;
-
+        SoundManager.instance.PlaySound(SoundManager.instance.explosion);
         var position = transform.position;
         
         var explo = ObjectPooler.Pool(explosionPrefab, position, Quaternion.identity);
