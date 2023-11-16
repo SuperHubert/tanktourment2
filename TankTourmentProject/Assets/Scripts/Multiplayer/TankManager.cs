@@ -85,11 +85,11 @@ public class TankManager : MonoBehaviour
 
         return;
         
-        void Killed(Tank killer)
+        void Killed(Tank killed,Tank killer)
         {
             controller.CameraController.SetSpeedMultiplier(respawnCamSpeedMultiplier);
             
-            OnTankKilled(tank,killer);
+            OnTankKilled(killed,killer);
         }
 
         void ResetCamSpeed()
