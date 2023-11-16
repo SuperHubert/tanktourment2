@@ -26,6 +26,7 @@ public class ControlPoint : MonoBehaviour
     private List<Tank> tanksOnControlPoint = new List<Tank>();
     
     public event Action<Tank> OnTankStay;
+    public event Action<float,Color> OnProgressChanged;
 
     public void SetValues(float max, Color previewCol, Color indicatorCol, Color contestedCol)
     {
@@ -57,6 +58,8 @@ public class ControlPoint : MonoBehaviour
         
         var settings = particleSystem.main;
         settings.startColor = color;
+        
+        OnProgressChanged?.Invoke(amount,color);
     }
     
     public void Activate()
