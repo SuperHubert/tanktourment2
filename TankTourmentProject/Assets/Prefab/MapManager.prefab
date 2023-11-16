@@ -67,7 +67,7 @@ MonoBehaviour:
     <CanSpawn>k__BackingField: 0
     <DebugColor>k__BackingField: {r: 1, g: 0, b: 0, a: 1}
   - name: Spawn Point
-    go: {fileID: 7409150216249584525, guid: d9b9f27b7541606418f302f8871485e3, type: 3}
+    go: {fileID: 5849393861115226587, guid: e57d770c44522914e85e22e81b40b3bc, type: 3}
     rotation: {x: 0, y: 0, z: 0, w: 0}
     top: o-o-o
     bot: o-o-o

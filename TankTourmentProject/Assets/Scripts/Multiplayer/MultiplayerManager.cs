@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using MapGeneration;
@@ -31,6 +30,7 @@ public class MultiplayerManager : MonoBehaviour
 
 
     private bool isInGame = false;
+    private LayerMask mainCameraMask;
     
     private void Start()
     {
@@ -146,27 +146,31 @@ public class MultiplayerManager : MonoBehaviour
         waveCollapseManager.OnMapGenerated += OnMapGenerated;
         
         pointsManager.OnPlayerWin += OnPlayerWin;
-
-        uiManager.OnGameCDFinished += OnGameCDFinished;
         
         uiManager.CanGenerateMap += GeneratedMap;
         
-        tankSelectionManager.HideSelections();
-        
-        tankSelectionManager.ExitSelection();
+        playerControllers[0].OnGameCDFinished += OnGameCDFinished;
         
         foreach (var controller in playerControllers)
         {
-            controller.CameraController.Cam.enabled = false;
+            controller.CountdownForGameStart();
         }
-        
-        uiManager.CountdownForGameStart();
         
         return;
         
         void OnGameCDFinished()
         {
-            uiManager.OnGameCDFinished -= OnGameCDFinished;
+            playerControllers[0].OnGameCDFinished -= OnGameCDFinished;
+            
+            tankSelectionManager.HideSelections();
+        
+            tankSelectionManager.ExitSelection();
+        
+            foreach (var controller in playerControllers)
+            {
+                controller.CameraController.Cam.enabled = false;
+            }
+            
             uiManager.CountdownFirstTo(pointsManager.PointsToWin);
         }
 
@@ -197,6 +201,7 @@ public class MultiplayerManager : MonoBehaviour
     private void OnMapGenerated()
     {
         // spawn tanks
+        mainCameraMask = mainCamera.cullingMask;
         mainCamera.cullingMask = 0;
         
         tankManager.SpawnTanks(playerControllers);
@@ -220,16 +225,18 @@ public class MultiplayerManager : MonoBehaviour
             controller.CameraController.Cam.enabled = false;
         }
         
-        //playerController.CameraController.Cam.enabled = true;
-        //playerController.CameraController.SetCameraRect(Vector2.zero, Vector2.one);
-        
         Debug.Log($"{playerController} won the game!");
+
+        mainCamera.cullingMask = mainCameraMask;
+        
+        uiManager.RestartGame += RestartGame;
         
         uiManager.ShowWinner(playerController);
     }
     
     public void RestartGame()
     {
+        uiManager.RestartGame -= RestartGame;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,6 +14,28 @@ public class PlayerController : MonoBehaviour
 
     private PointsManager.PointAmount pointAmount;
     private TankSelectionData tankSelectionData;
+    
+    public event Action OnGameCDFinished;
+    [SerializeField] private TextMeshProUGUI countDownText;
+    
+    public void CountdownForGameStart()
+    {
+        countDownText.gameObject.SetActive(true);
+        StartCoroutine(CountdownForGameStart(3));
+        
+        return;
+        
+        IEnumerator CountdownForGameStart(int seconds)
+        {
+            for (int i = seconds; i > 0; i--)
+            {
+                countDownText.text = i.ToString();
+                yield return new WaitForSeconds(1f);
+            }
+            OnGameCDFinished?.Invoke();
+            countDownText.gameObject.SetActive(false);
+        }
+    }
 
     public PointsManager.PointAmount PointAmount
     {
