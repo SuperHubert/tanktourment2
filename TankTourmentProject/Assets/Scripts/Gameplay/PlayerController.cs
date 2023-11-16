@@ -56,11 +56,13 @@ public class PlayerController : MonoBehaviour
     
     private void InvokeJoin(PlayerInput _)
     {
+        SoundManager.instance.PlaySound(SoundManager.instance.validateEffect);
         OnPlayerJoin?.Invoke(this);
     }
 
     private void InvokeLeave(PlayerInput _)
     {
+        SoundManager.instance.PlaySound(SoundManager.instance.cancelEffect);
         OnPlayerLeave?.Invoke(this);
     }
 }
@@ -82,12 +84,14 @@ public class TankSelectionData
     
     public void SetColor(Color color)
     {
+        //SoundManager.instance.PlaySound(SoundManager.instance.validateEffect);
         SelectedColor = color;
         OnSelectedColorChanged?.Invoke(SelectedColor);
     }
     
     public void SetReady(bool value)
     {
+        SoundManager.instance.PlaySound(SoundManager.instance.validateEffect);
         IsReady = value;
         OnReadyChanged?.Invoke(value);
     }

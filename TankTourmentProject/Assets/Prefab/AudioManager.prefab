@@ -45,7 +45,7 @@ AudioSource:
     type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.8
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -177,7 +177,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicSource: {fileID: 3812743847886091911}
   EffectSource: {fileID: 1656741890688491916}
+  audioMixer: {fileID: 24100000, guid: c27eb9f658a5f3d49b258ca1fa11dd59, type: 2}
   music: {fileID: 0}
+  validateEffect: {fileID: 8300000, guid: 085fbe8871518b44daf00e6da6278d82, type: 3}
+  cancelEffect: {fileID: 8300000, guid: 1a037b1fcbb647f4fb1865258afe56dc, type: 3}
+  explosion: {fileID: 8300000, guid: 523ab551acfef3543ab6a40cd96439c3, type: 3}
+  shoot: {fileID: 8300000, guid: c2f080e04749a104983d1ea8e511cdc2, type: 3}
 --- !u!1 &8414821722166113319
 GameObject:
   m_ObjectHideFlags: 0
@@ -223,7 +228,7 @@ AudioSource:
     type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.8
   m_Pitch: 1
   Loop: 0
   Mute: 0

@@ -9,8 +9,10 @@ namespace MapGeneration
 {
     public class WaveCollapseManager : MonoBehaviour
     {
+        public static WaveCollapseManager Instance { get; private set; } //Debug
+        
         [field:Header("Wave Collapse Manager")]
-        [SerializeField] private int creationSpeed;
+        [SerializeField] private float creationSpeed;
         [SerializeField] private int width;
         [SerializeField] private int height;
         [SerializeField] private float offset;
@@ -41,6 +43,35 @@ namespace MapGeneration
         private Node[,] nodes;
         
         public event Action OnMapGenerated;
+
+        private void Start()
+        {
+            Instance = this;
+        }
+
+        public void DebugNeighbors(int i, int j)
+        {
+            Debug.Log($"{i}, {j}");
+            
+            if (j > 0) Debug.Log($"Bot : {DebugAvaillables(i, j-1, Enums.Direction.Top)}");
+            if (j < Height-1) Debug.Log($"Top : {DebugAvaillables(i, j+1, Enums.Direction.Bottom)}");
+            if (i > 0) Debug.Log($"Left : {DebugAvaillables(i-1, j, Enums.Direction.Right)}");
+            if (i < Width-1) Debug.Log($"Right : {DebugAvaillables(i+1, j, Enums.Direction.Left)}"); 
+        }
+
+        private string DebugAvaillables(int i, int j, Enums.Direction direction)
+        {
+            if (nodes[i, j].IsCollapsed) return nodes[i, j].TileTypeSelected.GetPrefabConnexionNoSplit(direction);
+
+            string poss = "";
+            
+            foreach (var ttp in nodes[i, j].TileTypesPossibles)
+            {
+                poss += ttp.GetPrefabConnexionNoSplit(direction) + " ; ";
+            }
+
+            return poss;
+        }
 
         void GenerateVisualMap()
         {
@@ -196,44 +227,56 @@ namespace MapGeneration
 
         private void IterateNoFun()
         {
-            while (!IsFullyCollapsed())
+            while (!IsFullyCollapsed(1))
             {
-                IterateWaveCollapse();
+                IterateWaveCollapse(1);
             }
-            SetBorders();
+            SetBordersNoFun();
             
             OnMapGenerated?.Invoke();
         }
         
         IEnumerator IterateSlowly()
         {
-            while (!IsFullyCollapsed())
+            while (!IsFullyCollapsed(1))
             {
                 yield return new WaitForSeconds(creationSpeed);
-                IterateWaveCollapse();
+                IterateWaveCollapse(1);
             }
-            SetBorders();
             
+            // Borders
+            SelectShowPropagate(0, 0, borderPrefabs[3], true);
+            yield return new WaitForSeconds(creationSpeed);
+            
+            SelectShowPropagate(Width-1, 0, borderPrefabs[2], true);
+            yield return new WaitForSeconds(creationSpeed);
+            
+            SelectShowPropagate(Width-1, Height-1, borderPrefabs[1], true);
+            yield return new WaitForSeconds(creationSpeed);
+            
+            SelectShowPropagate(0, Height-1, borderPrefabs[0], true);
+            yield return new WaitForSeconds(creationSpeed);
+            
+            // Propagates
+            while (!IsFullyCollapsed(0))
+            {
+                IterateWaveCollapse(0);
+                yield return new WaitForSeconds(creationSpeed);
+            }
             OnMapGenerated?.Invoke();
         }
 
-        private void SetBorders()
+        private void SetBordersNoFun()
         {
-            SelectShowPropagate(0, 0, borderPrefabs[3], false);
-            SelectShowPropagate(Width-1, 0, borderPrefabs[2], false);
-            SelectShowPropagate(Width-1, Height-1, borderPrefabs[1], false);
-            SelectShowPropagate(0, Height-1, borderPrefabs[0], false);
+            SelectShowPropagate(0, 0, borderPrefabs[3], true);
+            SelectShowPropagate(Width-1, 0, borderPrefabs[2], true);
+            SelectShowPropagate(Width-1, Height-1, borderPrefabs[1], true);
+            SelectShowPropagate(0, Height-1, borderPrefabs[0], true);
             
-            for (int i = 1; i < Width-1; i++)
+            // Propagates
+            while (!IsFullyCollapsed(0))
             {
-                SelectShowPropagate(i, 0, borderPrefabs[6], false);
-                SelectShowPropagate(i, Height-1, borderPrefabs[4], false);
-            }
-            
-            for (int i = 1; i < Height-1; i++)
-            {
-                SelectShowPropagate(0, i, borderPrefabs[7], false);
-                SelectShowPropagate(Width-1, i, borderPrefabs[5], false);
+                IterateWaveCollapse(0);
             }
         }
     
@@ -245,6 +288,11 @@ namespace MapGeneration
             {
                 for (int j = 0; j < Height; j++)
                 {
+                    if (i == 0 || i == Width-1 || j == 0 || j == Height-1)
+                    {
+                        nodes[i, j] = new Node(new Vector2Int(i, j), borderPrefabs);
+                        continue;
+                    }
                     nodes[i, j] = new Node(new Vector2Int(i, j), tilePrefabs);
                 }
             }
@@ -275,11 +323,11 @@ namespace MapGeneration
             }
         }
     
-        private bool IsFullyCollapsed()
+        private bool IsFullyCollapsed(int borders = 1)
         {
-            for (int i = 1; i < Width-1; i++)
+            for (int i = borders; i < Width-borders; i++)
             {
-                for (int j = 1; j < Height-1; j++)
+                for (int j = borders; j < Height-borders; j++)
                 {
                     if (!nodes[i, j].IsCollapsed)
                         return false;
@@ -288,23 +336,23 @@ namespace MapGeneration
             return true;
         }
     
-        private void IterateWaveCollapse()
+        private void IterateWaveCollapse(int borders = 1)
         {
-            Node nodeToCollapse = GetMinEntropyNode();
+            Node nodeToCollapse = GetMinEntropyNode(borders);
             CollapseNode(nodeToCollapse);
             GenerateVisualFor(nodeToCollapse.Position.x, nodeToCollapse.Position.y);
             
             PropagateWave(nodeToCollapse);
         }
         
-        private Node GetMinEntropyNode()
+        private Node GetMinEntropyNode(int borders = 1)
         {
             List<Node> possiblesNodes = new List<Node>();
             int minEntropy = Int32.MaxValue;
             
-            for (int i = 1; i < Width-1; i++)
+            for (int i = borders; i < Width-borders; i++)
             {
-                for (int j = 1; j < Height-1; j++)
+                for (int j = borders; j < Height-borders; j++)
                 {
                     if (!nodes[i, j].IsCollapsed)
                     {
@@ -357,7 +405,7 @@ namespace MapGeneration
             }
         }
         
-        private void UpdateNode(Node nodeUpToDate, Enums.Direction direction, ref List<Node> nodesToUpdate)
+        private void UpdateNode(Node nodeUpToDate, Enums.Direction direction, ref List<Node> nodesToUpdate, int borders = 0)
         {
             /* Remove possibilities if it does not correspond to nodeUpToDate's selected or available */
             
@@ -380,7 +428,7 @@ namespace MapGeneration
                     break;
             }
             
-            if (x < 1 || x >= Width-1 || y < 1 || y >= Height-1) return;
+            if (x < borders || x >= Width-borders || y < borders || y >= Height-borders) return;
             
             Node nodeToUpdate = nodes[x, y];
             
