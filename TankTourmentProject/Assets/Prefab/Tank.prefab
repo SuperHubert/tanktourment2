@@ -813,8 +813,8 @@ MonoBehaviour:
     <ShootKnockBackForce>k__BackingField: 0
     <SelfDamageMultiplier>k__BackingField: 0.5
     <HealAmount>k__BackingField: 1
-    <TimeBetweenHeal>k__BackingField: 1
-    <HealCooldown>k__BackingField: 1
+    <TimeBetweenHeal>k__BackingField: 0.1
+    <HealCooldown>k__BackingField: 8
   explosionLayers:
     serializedVersion: 2
     m_Bits: 15872
