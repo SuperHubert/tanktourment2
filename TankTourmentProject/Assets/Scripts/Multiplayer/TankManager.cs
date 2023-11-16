@@ -7,8 +7,9 @@ public class TankManager : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] private Tank tankPrefab;
-    
+
     [Header("Settings")]
+    [SerializeField] private List<Tank> availableTanksModels = new List<Tank>();
     [SerializeField] private Vector3[] spawnPoints;
     [SerializeField] private float respawnDuration;
     [SerializeField] private float respawnCamSpeedMultiplier;
@@ -47,6 +48,11 @@ public class TankManager : MonoBehaviour
     public void SetSpawnPoints(List<Vector3> transforms)
     {
         spawnPoints = transforms.ToArray();
+    }
+    
+    public Tank[] GetAvailableTankModels()
+    {
+        return availableTanksModels.ToArray();
     }
     
     private Vector3 NextAvailableSpawnPoint()

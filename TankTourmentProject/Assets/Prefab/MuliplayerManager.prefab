@@ -70,7 +70,7 @@ MonoBehaviour:
       m_Interactions: 
       m_SingletonActionBindings: []
       m_Flags: 0
-    m_Reference: {fileID: 8410524774125049291, guid: 57517f6771625c64590a6fb591415a80,
+    m_Reference: {fileID: 8534286324882233138, guid: 57517f6771625c64590a6fb591415a80,
       type: 3}
   m_PlayerPrefab: {fileID: 7326542362435752075, guid: 8e2e9a7f2a9f36c4a9149ba0a5bd7f16,
     type: 3}
@@ -120,6 +120,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tankPrefab: {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173,
     type: 3}
+  availableTanksModels:
+  - {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173, type: 3}
+  - {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173, type: 3}
+  - {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173, type: 3}
   spawnPoints: []
   respawnDuration: 1.5
   respawnCamSpeedMultiplier: 10
@@ -153,6 +157,9 @@ MonoBehaviour:
   - {r: 1, g: 0, b: 0.9999995, a: 1}
   tanks:
   - {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173, type: 3}
+  tankOffset: 2
+  tankRotationSpeed: 10
+  tankMoveSpeed: 10
 --- !u!114 &2721971204016645279
 MonoBehaviour:
   m_ObjectHideFlags: 0

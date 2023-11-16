@@ -11,6 +11,7 @@ public class TankController : MonoBehaviour
     private InputAction moveAction;
     private InputAction lookAction;
     private InputAction shootAction;
+    private InputAction shootAction2;
     private InputAction pointerLookAction;
     
     private const string KeyboardControlScheme = "Keyboard & Mouse";
@@ -32,6 +33,7 @@ public class TankController : MonoBehaviour
         moveAction = playerInput.actions["Move"];
         lookAction = playerInput.actions["Look"];
         shootAction = playerInput.actions["Shoot"];
+        shootAction2 = playerInput.actions["Shoot2"];
         pointerLookAction = playerInput.actions["LookMouse"];
         
         playerInput.controlsChangedEvent.AddListener(SwitchControlSchemes);
@@ -69,8 +71,23 @@ public class TankController : MonoBehaviour
         lookAction.canceled += HandleHeadInputs;
         
         shootAction.started += HandleShooting;
+        shootAction2.started += HandleShooting;
         
         connected = true;
+    }
+
+    private void DisconnectInputs()
+    {
+        moveAction.performed -= HandleMovement;
+        moveAction.canceled -= HandleMovement;
+        
+        lookAction.performed -= HandleHeadInputs;
+        lookAction.canceled -= HandleHeadInputs;
+        
+        shootAction.started -= HandleShooting;
+        shootAction2.started -= HandleShooting;
+        
+        connected = false;
     }
     
     private void HandleMovement(InputAction.CallbackContext context)

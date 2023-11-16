@@ -41,6 +41,8 @@ public class MultiplayerManager : MonoBehaviour
         tankSelectionManager.OnPlayerReadyChanged += TryStartGame;
         
         tankSelectionManager.ShowColors(false);
+        
+        tankSelectionManager.SetAvailableTanks(tankManager.GetAvailableTankModels());
     }
 
     private void AddPlayer(PlayerController playerController)
