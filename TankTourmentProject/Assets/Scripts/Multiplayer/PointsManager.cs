@@ -18,6 +18,8 @@ public class PointsManager : MonoBehaviour
     [SerializeField] private Color controlPointContestedColor = Color.black;
     [SerializeField] private float controlPointAlpha = 0.5f;
 
+    public event Action<ControlPoint,ControlPoint> OnControlPointsSet;
+    
     private ControlPoint currentPoint;
     private ControlPoint nextPoint;
     
@@ -37,11 +39,15 @@ public class PointsManager : MonoBehaviour
         {
             playerPoints.Add(player);
             
+            player.ControlPointIndicator.SetControlPoints(currentPoint,nextPoint);
+            
             player.PointAmount.OnPercentChanged += IncreaseCapture;
 
             player.PointAmount.OnCaptureIncreased += CheckVictory;
             
             player.PointAmount.OnCaptureIncreased += OnPointCaptured;
+
+            OnControlPointsSet += player.ControlPointIndicator.SetControlPoints;
 
             continue;
 
@@ -124,6 +130,8 @@ public class PointsManager : MonoBehaviour
         nextPoint = availablePoints[Random.Range(0, availablePoints.Count)];
         
         nextPoint.ShowPreview();
+        
+        OnControlPointsSet?.Invoke(currentPoint,nextPoint);
     }
     
     public class PointAmount

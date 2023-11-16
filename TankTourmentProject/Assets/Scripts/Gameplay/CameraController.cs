@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -73,12 +74,19 @@ public class CameraController : MonoBehaviour
     
     private void Update()
     {
-        MoveWithTarget();
+        if(!hasTarget) return;
         
-        UpdateFow();
+        SetFowAngle(target.MaxVisibilityAngle);
     }
 
-    private void UpdateFow()
+    private void FixedUpdate()
+    {
+        MoveWithTarget();
+        
+        UpdateFowPosition();
+    }
+
+    private void UpdateFowPosition()
     {
         if(!hasTarget) return;
         
@@ -90,8 +98,6 @@ public class CameraController : MonoBehaviour
         pos.z = 0f;
 
         SetFowPosition(pos);
-        
-        SetFowAngle(target.MaxVisibilityAngle);
     }
     
     public void SetFowPosition(Vector3 position)

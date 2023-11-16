@@ -77,6 +77,7 @@ public class ControlPoint : MonoBehaviour
     {
         foreach (var tank in tanksOnControlPoint)
         {
+            tank.SetVisibilityOverride(-1);
             tank.OnTankKilled -= RemoveTankFromList;
         }
         
