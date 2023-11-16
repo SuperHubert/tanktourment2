@@ -102,7 +102,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -738,7 +738,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 6034856823885727613}
   <HeadTransform>k__BackingField: {fileID: 5652426724392423080}
-  canonTip: {fileID: 2329134908684325603}
   <ColoredRenderers>k__BackingField:
   - {fileID: 3479644327446319484}
   - {fileID: 3643493553551610036}
@@ -760,7 +759,9 @@ MonoBehaviour:
   - {fileID: 326202385347944148}
   - {fileID: 5145974136510533220}
   - {fileID: 6867674333276778088}
-  shotOrigins:
+  shotOriginsLeft:
+  - {fileID: 2329134908684325603}
+  shotOriginsRight:
   - {fileID: 2329134908684325603}
   projectilePrefab: {fileID: -5813340783634412977, guid: 1ca3f6586ae5293459d036e318da4e40,
     type: 3}
@@ -807,17 +808,22 @@ MonoBehaviour:
       <ExplosionRadius>k__BackingField: 1
       <ExplosionForce>k__BackingField: 350
       <ExplosionOffset>k__BackingField: 0.3
-    <ShootCooldown>k__BackingField: 1
+    <DualShooter>k__BackingField: 0
+    <ShootCooldown>k__BackingField: 0.75
     <ShootKnockBackForce>k__BackingField: 0
-    <SelfDamageMultiplier>k__BackingField: 1
+    <SelfDamageMultiplier>k__BackingField: 0.5
     <HealAmount>k__BackingField: 1
     <TimeBetweenHeal>k__BackingField: 1
     <HealCooldown>k__BackingField: 1
+  explosionLayers:
+    serializedVersion: 2
+    m_Bits: 15872
   moveTowardsDirection: 1
   <SpawnHeight>k__BackingField: 0.3
   visibilityOverride: -1
   movementDirection: {x: 0, y: 0}
   headDirection: {x: 0, y: 0, z: 0}
+  currentHp: 0
 --- !u!1 &5925696095241948726
 GameObject:
   m_ObjectHideFlags: 0

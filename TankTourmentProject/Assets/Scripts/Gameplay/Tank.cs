@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Tank : MonoBehaviour, IDamageable
@@ -6,11 +7,11 @@ public class Tank : MonoBehaviour, IDamageable
     [Header("Components")]
     [SerializeField] private Rigidbody rb;
     [field: SerializeField] public Transform HeadTransform { get; private set; }
-    [SerializeField] private Transform canonTip;
     [field:SerializeField] public Renderer[] ColoredRenderers { get; private set; }
     [SerializeField] public GameObject[] layerGameobjects;
     [SerializeField] private Transform[] raycastOrigins;
-    [SerializeField] private Transform[] shotOrigins;
+    [SerializeField] private Transform[] shotOriginsLeft;
+    [SerializeField] private Transform[] shotOriginsRight;
     [SerializeField] private Projectile projectilePrefab;
     
     [Serializable]
@@ -24,6 +25,7 @@ public class Tank : MonoBehaviour, IDamageable
         [field: SerializeField, Range(0f, 360f), Tooltip("°")] public float MaxVisibilityAngle{  get; private set; } = 90f;
         [field: Space]
         [field: SerializeField] public Projectile.ProjectileData ProjectileData { get; private set; }
+        [field: SerializeField] public bool DualShooter { get; private set; } = false;
         [field: SerializeField] public float ShootCooldown { get; private set; } = 1f;
         [field: SerializeField] public float ShootKnockBackForce { get; private set; } = 0f;
         [field: SerializeField] public float SelfDamageMultiplier { get; private set; } = 1f;
@@ -38,6 +40,7 @@ public class Tank : MonoBehaviour, IDamageable
     [SerializeField] private TankStats stats;
     
     [Header("Settings")]
+    [SerializeField] private LayerMask explosionLayers;
     [SerializeField] private bool moveTowardsDirection = true;
     public float MaxVisibilityAngle =>  currentHp > 0 ? visibilityOverride < 0 ? stats.MaxVisibilityAngle : visibilityOverride : 0;
     [field: SerializeField] public float SpawnHeight { get; private set; } = 1f;
@@ -47,9 +50,10 @@ public class Tank : MonoBehaviour, IDamageable
     [SerializeField] private Vector2 movementDirection;
     [SerializeField] private Vector3 headDirection;
     
-    private float currentHp;
+    [SerializeField] private float currentHp;
     private float currentHealCooldown = 0f;
-    private float currentShootCooldown = 0f;
+    private float currentShotCooldownLeft = 0f;
+    private float currentShotCooldownRight = 0f;
 
     public float CurrentHp
     {
@@ -77,7 +81,7 @@ public class Tank : MonoBehaviour, IDamageable
     public void SetStatic()
     {
         rb.isKinematic = true;
-        currentHp = stats.MaxHp;
+        CurrentHp = stats.MaxHp;
     }
     
     public void SetLayer(int layer)
@@ -211,18 +215,52 @@ public class Tank : MonoBehaviour, IDamageable
 
     private void DecreaseCooldown()
     {
-        if(currentShootCooldown <= 0 ) return;
-        currentShootCooldown -= Time.deltaTime;
+        DecreaseRight();
+        DecreaseLeft();
+        
+        return;
+        
+        void DecreaseRight()
+        {
+            if(currentShotCooldownRight <= 0 ) return;
+            currentShotCooldownRight -= Time.deltaTime;
+        }
+        
+        void DecreaseLeft()
+        {
+            if(currentShotCooldownLeft <= 0 ) return;
+            currentShotCooldownLeft -= Time.deltaTime;
+        }
+    }
+
+    public void ShootRight()
+    {
+        if (!stats.DualShooter)
+        {
+            ShootLeft();
+            return;
+        }
+        
+        if(currentShotCooldownRight > 0 ) return;
+        currentShotCooldownRight = stats.ShootCooldown;
+        
+        Shoot(shotOriginsRight);
     }
     
-    public void Shoot()
+    public void ShootLeft()
     {
-        if(currentShootCooldown > 0 ) return;
-        currentShootCooldown = stats.ShootCooldown;
-        SoundManager.instance.PlaySound(SoundManager.instance.shoot);
+        if(currentShotCooldownLeft > 0 ) return;
+        currentShotCooldownLeft = stats.ShootCooldown;
         
-        foreach (var shotOrigin in shotOrigins)
+        Shoot(shotOriginsLeft);
+    }
+
+    private void Shoot(IEnumerable<Transform> origin)
+    {
+        foreach (var shotOrigin in origin)
         {
+            SoundManager.instance.PlaySound(SoundManager.instance.shoot);
+            
             var position = shotOrigin.position;
             var projectile =  ObjectPooler.Pool(projectilePrefab,position,shotOrigin.rotation);
         
@@ -230,8 +268,6 @@ public class Tank : MonoBehaviour, IDamageable
             
             projectile.Shoot(stats.ProjectileData,this);
         }
-        
-        //TODO - don't forget animation
     }
 
     public void TakeDamage(Projectile.DamageData data)
@@ -264,7 +300,7 @@ public class Tank : MonoBehaviour, IDamageable
             
             var dist = dif.magnitude * 1.1f;
             
-            if (!Physics.Raycast(position, dir, out var hit, dist)) continue;
+            if (!Physics.Raycast(position, dir, out var hit, dist,explosionLayers)) continue;
             
             if (hit.collider.gameObject.layer != gameObject.layer) continue;
             return true;

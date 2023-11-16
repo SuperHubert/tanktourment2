@@ -69,10 +69,28 @@ public class Projectile : MonoBehaviour
         rb.AddForce(velocity);
     }
 
+    private void OnCollisionEnter(Collision other)
+    {
+        Debug.Log($"Collision {other.gameObject.name}");
+        OnCollide(other.gameObject);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log($"Trigger {other.gameObject.name}");
+        OnCollide(other.gameObject);
+    }
+    
+    private void OnCollide(GameObject go)
+    {
+        if (go.layer == owner.gameObject.layer)
+        {
+            Debug.Log($"{go.name} is on the same layer as {owner.gameObject.name}");
+            return;
+        }
         
-        if (other.gameObject.layer == owner.gameObject.layer) return;
+        Debug.Log($"{go.name}");
+        
         SoundManager.instance.PlaySound(SoundManager.instance.explosion);
         var transform1 = transform;
         var position = transform1.position - transform1.forward.normalized * explosionOffset;
@@ -90,18 +108,23 @@ public class Projectile : MonoBehaviour
         // TODO - explosion feedback
         //fx
         //maybe push stuff around
+        
+        if (go.TryGetComponent(out IDamageable mainDamageable))
+        {
+            mainDamageable.TakeDamage(data);
+        }
+        
 
         var colliders = Physics.OverlapSphere(position, explosionRadius);
         
         foreach (var col in colliders)
         {
             Debug.DrawLine(position,col.transform.position,Color.red,1f);
+
+            if (!col.TryGetComponent(out IDamageable damageable)) continue;
             
-            if (col.TryGetComponent(out IDamageable damageable))
-            {
-                //raycast to see if there is no wall between the explosion and the damageable
-                if (damageable.HitByObject(position)) damageable.TakeDamage(data);
-            }
+            //raycast to see if there is no wall between the explosion and the damageable
+            if (damageable.HitByObject(position) && damageable != mainDamageable) damageable.TakeDamage(data);
         }
     }
 

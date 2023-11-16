@@ -100,6 +100,7 @@ MonoBehaviour:
   waveCollapseManager: {fileID: 2839526565459127063}
   tankSelectionManager: {fileID: 8838535159309284989}
   pointsManager: {fileID: 2721971204016645279}
+  uiManager: {fileID: 0}
   mainCamera: {fileID: 0}
   layerPlayer0: 10
   minPlayer: 2
@@ -174,13 +175,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7988c0862074df46bdccb67523716bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointsToWin: 3
+  <PointsToWin>k__BackingField: 3
   pointsRate: 1
   pointsToCapture: 20
   controlPointPrefab: {fileID: 8460308238442232698, guid: d09e2731b99bb7a44a33c8fb15d4e900,
     type: 3}
-  controlPointIndicatorColor: {r: 0.29799998, g: 0.29799998, b: 0.29799998, a: 0.69803923}
-  controlPointPreviewColor: {r: 1, g: 1, b: 1, a: 0.32941177}
+  controlPointIndicatorColor: {r: 1, g: 1, b: 1, a: 0.32941177}
+  controlPointPreviewColor: {r: 0.29803923, g: 0.29803923, b: 0.29803923, a: 0.69803923}
   controlPointContestedColor: {r: 0, g: 0, b: 0, a: 1}
   controlPointAlpha: 0.7
 --- !u!1001 &4876559475843118403

@@ -70,8 +70,8 @@ public class TankController : MonoBehaviour
         lookAction.performed += HandleHeadInputs;
         lookAction.canceled += HandleHeadInputs;
         
-        shootAction.started += HandleShooting;
-        shootAction2.started += HandleShooting;
+        shootAction.started += HandleShootingLeft;
+        shootAction2.started += HandleShootingRight;
         
         connected = true;
     }
@@ -84,8 +84,8 @@ public class TankController : MonoBehaviour
         lookAction.performed -= HandleHeadInputs;
         lookAction.canceled -= HandleHeadInputs;
         
-        shootAction.started -= HandleShooting;
-        shootAction2.started -= HandleShooting;
+        shootAction.started -= HandleShootingLeft;
+        shootAction2.started -= HandleShootingRight;
         
         connected = false;
     }
@@ -115,9 +115,14 @@ public class TankController : MonoBehaviour
         tank.HandleHeadInputs(dir.normalized);
     }
     
-    private void HandleShooting(InputAction.CallbackContext context)
+    private void HandleShootingLeft(InputAction.CallbackContext context)
     {
-        tank.Shoot();
+        tank.ShootLeft();
+    }
+    
+    private void HandleShootingRight(InputAction.CallbackContext context)
+    {
+        tank.ShootRight();
     }
     
     
