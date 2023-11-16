@@ -29,7 +29,6 @@ public class TankSelectionManager : MonoBehaviour
     private List<UIColorSelection> colorSelections = new List<UIColorSelection>();
     
     private Dictionary<PlayerController,TankSelection> tankSelections = new Dictionary<PlayerController, TankSelection>();
-
     public event Action<List<PlayerController>> OnPlayerReadyChanged;
     
     private void Start()
@@ -79,12 +78,20 @@ public class TankSelectionManager : MonoBehaviour
         
         selection.SetTanks(tanks,tankOffset);
         selection.SetColorCooldown(colorMoveCooldown);
-
+        
+        var tankSelectionData = playerController.TankSelectionData;
+        
         var tankIndex = 0;
         var colorIndex = 0;
+
+        var count = 0;
+        while (count < colorSelections.Count && colorSelections[colorIndex].SelectionCount > 0)
+        {
+            colorIndex++;
+        }
         
-        playerController.TankSelectionData.OnReadyChanged += TryStartGame;
-        playerController.TankSelectionData.OnSelectedColorChanged += selection.ChangeColor; // TODO same for tank stats
+        tankSelectionData.OnReadyChanged += TryStartGame;
+        tankSelectionData.OnSelectedColorChanged += selection.ChangeColor; // TODO same for tank stats
         
         selection.OnTankChanged += ChangeTankIndex;
         selection.OnColorChanged += ChangeColorIndex;
@@ -96,6 +103,8 @@ public class TankSelectionManager : MonoBehaviour
 
         void ChangeTankIndex(int change)
         {
+            if(tankSelectionData.IsReady) return;
+            
             var index = tankIndex + change;
             
             if (index < 0) index = tanks.Length - 1;
@@ -115,6 +124,8 @@ public class TankSelectionManager : MonoBehaviour
 
         void ChangeColorIndex(Vector2 dir)
         {
+            if(tankSelectionData.IsReady) return;
+            
             var x = dir.x;
             var y = dir.y;
 
@@ -126,7 +137,6 @@ public class TankSelectionManager : MonoBehaviour
             else if (y < 0) current += columns;
 
             if(current < 0) current += colors.Count;
-            
             current %= colors.Count;
             
             ChangeColor(current,true);
@@ -134,6 +144,11 @@ public class TankSelectionManager : MonoBehaviour
 
         void ChangeColor(int index,bool removeSelection)
         {
+            if(index < 0) index = 0;
+            index %= colors.Count;
+            
+            if(playerController.TankSelectionData.IsReady) return;
+            
             if(removeSelection) colorSelections[colorIndex].RemoveSelection();
             colorIndex = index;
             colorSelections[colorIndex].AddSelection();
@@ -141,9 +156,12 @@ public class TankSelectionManager : MonoBehaviour
             playerController.TankSelectionData.SetColor(colors[colorIndex]);
         }
     }
+    
 
     private void TryStartGame(bool _)
     {
+        if(colorSelections.Any(selection => selection.SelectionCount > 1)) return;
+        
         var readyPlayers = tankSelections.Keys.Where(p => p.TankSelectionData.IsReady).ToList();
         
         Debug.Log($"Invoking {readyPlayers.Count} ready");

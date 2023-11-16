@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,8 +5,10 @@ public class UIColorSelection : MonoBehaviour
 {
     [field:SerializeField] public Image Image { get; private set; }
     [SerializeField] private GameObject selectedGo;
+    [SerializeField] private GameObject overSelectedGo;
     [Header("Debug")]
     [SerializeField] private int selectionCount = 0;
+    public int SelectionCount => selectionCount;
     
     public void SetColor(Color color)
     {
@@ -18,7 +18,8 @@ public class UIColorSelection : MonoBehaviour
     
     public void RefreshAppearance()
     {
-        selectedGo.SetActive(selectionCount > 0);
+        selectedGo.SetActive(selectionCount == 1);
+        overSelectedGo.SetActive(selectionCount > 1);
     }
 
     public void AddSelection()
