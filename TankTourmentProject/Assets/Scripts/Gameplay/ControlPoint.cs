@@ -9,6 +9,10 @@ public class ControlPoint : MonoBehaviour
 {
     [SerializeField] private Image progressImage;
     [SerializeField] private Image indicatorImage;
+
+    [SerializeField] private Transform particleSystemParent;
+    [SerializeField] private ParticleSystem particleSystem;
+    
     private float maxProgress;
     private Color contestedColor;
     private Color previewColor;
@@ -48,6 +52,11 @@ public class ControlPoint : MonoBehaviour
         lastColor = color;
         progressImage.fillAmount = amount;
         progressImage.color = color;
+        
+        particleSystemParent.rotation = Quaternion.Euler(new Vector3(0f, 360 * amount, 0f));
+        
+        var settings = particleSystem.main;
+        settings.startColor = color;
     }
     
     public void Activate()
