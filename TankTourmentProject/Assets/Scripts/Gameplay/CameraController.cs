@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -66,36 +65,6 @@ public class CameraController : MonoBehaviour
         
         fowFogImage.color = fogColor;
     }
-
-    private void OnDisable()
-    {
-        visibleRenderTexture.DiscardContents();
-    }
-    
-    public void SetFow(float angle)
-    {
-        angle /= 360;
-
-        fowMask.fillAmount = angle;
-        
-        if(!hasTarget) return;
-
-        var targetRot = Quaternion.Euler(0f, 0f, -fowRotationTarget.rotation.eulerAngles.y);
-
-        var pos = OverlayCam.WorldToViewportPoint(fowRotationTarget.position);
-        pos.x -= 0.5f;
-        pos.x *= 100;
-        pos.y -= 0.5f;
-        pos.y *= (100*(9/16f));
-        pos.z = 0f;
-
-        fowParentRotator.localPosition = pos;
-        fowParentRotator.localRotation = targetRot;
-
-        FowTr.localRotation = Quaternion.Euler(0f,0f,180*angle);
-        RenderTr.rotation = FowImageTr.rotation;
-        RenderTr.position = FowImageTr.position;
-    }
     
     public void SetSpeedMultiplier(float multiplier)
     {
@@ -113,7 +82,38 @@ public class CameraController : MonoBehaviour
     {
         if(!hasTarget) return;
         
-        SetFow(target.MaxVisibilityAngle);
+        var pos = OverlayCam.WorldToViewportPoint(fowRotationTarget.position);
+        pos.x -= 0.5f;
+        pos.x *= 100;
+        pos.y -= 0.5f;
+        pos.y *= (100*(9/16f));
+        pos.z = 0f;
+
+        SetFowPosition(pos);
+        
+        SetFowAngle(target.MaxVisibilityAngle);
+    }
+    
+    public void SetFowPosition(Vector3 position)
+    {
+        if(!hasTarget) return;
+
+        var targetRot = Quaternion.Euler(0f, 0f, -fowRotationTarget.rotation.eulerAngles.y);
+        
+        fowParentRotator.localPosition = position;
+        fowParentRotator.localRotation = targetRot;
+    }
+    
+    public void SetFowAngle(float angle)
+    {
+        angle /= 360;
+
+        fowMask.fillAmount = angle;
+        
+        FowTr.localRotation = Quaternion.Euler(0f,0f,180*angle);
+        
+        RenderTr.position = FowImageTr.position;
+        RenderTr.rotation = FowImageTr.rotation;
     }
     
     

@@ -12,7 +12,7 @@ public class TankSelection : MonoBehaviour
     
     [SerializeField] private GameObject readyIndicatorGo; //TODO, put something on canvas jsp
     
-    [SerializeField] private Transform rotator;
+    [SerializeField] private Canvas canvas;
     
     [SerializeField] private GameObject[] allGameObjects;
     
@@ -46,15 +46,21 @@ public class TankSelection : MonoBehaviour
         shootAction = inputs.actions["Shoot"];
         shootAction2 = inputs.actions["Shoot2"];
         pointerLookAction = inputs.actions["LookMouse"];
+
+        var camController = playerController.CameraController;
+        var camTr = camController.CamTransform;
+        var cam = camController.Cam;
         
-        var camTr = playerController.CameraController.CamTransform;
-        var cam = playerController.CameraController.Cam;
+        camController.SetFowAngle(0);
         
         camTr.SetPositionAndRotation(CamTr.position,CamTr.rotation);
-            
+        
         SetLayer(layer);
         
         readyIndicatorGo.SetActive(tankSelectionData.IsReady);
+
+        canvas.worldCamera = cam;
+        canvas.planeDistance = 0.5f;
         
         ConnectInputs();
     }
