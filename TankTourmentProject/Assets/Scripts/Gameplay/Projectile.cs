@@ -94,8 +94,7 @@ public class Projectile : MonoBehaviour
             if (col.TryGetComponent(out IDamageable damageable))
             {
                 //raycast to see if there is no wall between the explosion and the damageable
-                
-                damageable.TakeDamage(data);
+                if (damageable.HitByObject(position)) damageable.TakeDamage(data);
             }
         }
     }
