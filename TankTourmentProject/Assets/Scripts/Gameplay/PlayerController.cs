@@ -67,17 +67,17 @@ public class PlayerController : MonoBehaviour
 
 public class TankSelectionData
 {
-    public int SelectedTankIndex { get; private set; }
-    public event Action<int> OnSelectedTankIndexChanged; 
+    public Tank SelectedTank{ get; private set; }
+    public event Action<Tank> OnSelectedTankChanged; 
     public Color SelectedColor { get; private set; }
     public event Action<Color> OnSelectedColorChanged;
     public bool IsReady { get; private set; }
     public event Action<bool> OnReadyChanged;
 
-    public void SetTankIndex(int index)
+    public void SetTankIndex(Tank model)
     {
-        SelectedTankIndex = index;
-        OnSelectedTankIndexChanged?.Invoke(index);
+        SelectedTank = model;
+        OnSelectedTankChanged?.Invoke(SelectedTank);
     }
     
     public void SetColor(Color color)
