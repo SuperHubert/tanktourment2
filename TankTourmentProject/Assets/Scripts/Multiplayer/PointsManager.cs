@@ -41,6 +41,8 @@ public class PointsManager : MonoBehaviour
             
             player.ControlPointIndicator.SetControlPoints(currentPoint,nextPoint);
             
+            player.ControlPointIndicator.SetColors(controlPointIndicatorColor,controlPointPreviewColor);
+            
             player.PointAmount.OnPercentChanged += IncreaseCapture;
 
             player.PointAmount.OnCaptureIncreased += CheckVictory;
@@ -93,7 +95,7 @@ public class PointsManager : MonoBehaviour
         foreach (var point in points)
         {
             var controlPoint = Instantiate(controlPointPrefab, point, Quaternion.identity);
-            Vector3 newScale = controlPoint.transform.localScale;
+            var newScale = controlPoint.transform.localScale;
             newScale.x *= scale.x;
             newScale.y *= scale.y;
             newScale.z *= scale.z;

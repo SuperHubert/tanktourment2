@@ -9,44 +9,79 @@ public class ControlPointIndicator : MonoBehaviour
     [SerializeField] private Camera cam;
 
     [SerializeField] private Image currentImage;
+    [SerializeField] private Image currentTrImage;
     [SerializeField] private Image nextImage;
     [SerializeField] private int borderOffset;
+    [SerializeField] private int borderViewRange;
 
-    //[Header("Debug")]
-    private ControlPoint currentControlPoint;
-    private bool hasCurrent;
-    private ControlPoint nextControlPoint;
-    private bool hasNext;
+    [Header("Debug")]
+    [SerializeField] private ControlPoint currentControlPoint;
+    [SerializeField] private bool hasCurrent;
+    [SerializeField] private ControlPoint nextControlPoint;
+    [SerializeField] private bool hasNext;
+
+    private void Start()
+    {
+        currentTrImage.gameObject.SetActive(false);
+        nextImage.gameObject.SetActive(false);
+    }
+
+    public void SetColors(Color current, Color next)
+    {
+        currentTrImage.color = current;
+        nextImage.color = next;
+    }
     
     public void SetControlPoints(ControlPoint current, ControlPoint next)
     {
+        if (currentControlPoint != null) currentControlPoint.OnProgressChanged -= UpdateCurrentAppearance;
+        
         currentControlPoint = current;
-        hasCurrent = currentControlPoint != null;
         nextControlPoint = next;
+        
+        hasCurrent = currentControlPoint != null;
         hasNext = nextControlPoint != null;
-    }
 
-    public void FixedUpdate()
-    {
-        UpdateCurrent();
-        UpdateNext();
+        currentTrImage.gameObject.SetActive(hasCurrent);
+        nextImage.gameObject.SetActive(hasNext);
+        
+        currentImage.fillAmount = 0;
+        
+        if (!hasCurrent) return;
+        
+        UpdateCurrentAppearance(0, Color.clear);
+        currentControlPoint.OnProgressChanged += UpdateCurrentAppearance;
     }
-
-    private void UpdateCurrent()
+    
+    private void UpdateCurrentAppearance(float amount, Color color)
     {
         if(!hasCurrent) return;
         
-        UpdateImage(currentImage,currentControlPoint.transform.position);
+        currentImage.fillAmount = amount;
+        currentImage.color = color;
+    }
+    
+    public void FixedUpdate()
+    {
+        UpdateCurrentPosition();
+        UpdateNextPosition();
     }
 
-    private void UpdateNext()
+    private void UpdateCurrentPosition()
+    {
+        if(!hasCurrent) return;
+        
+        UpdateImage(currentTrImage.transform,currentControlPoint.transform.position);
+    }
+
+    private void UpdateNextPosition()
     {
         if(!hasNext) return;
         
-        UpdateImage(nextImage,nextControlPoint.transform.position);
+        UpdateImage(nextImage.transform,nextControlPoint.transform.position);
     }
 
-    private void UpdateImage(Image img,Vector3 position)
+    private void UpdateImage(Transform tr,Vector3 position)
     {
         position = cam.WorldToViewportPoint(position);
 
@@ -58,11 +93,24 @@ public class ControlPointIndicator : MonoBehaviour
         position.y -= 0.5f;
         position.y *= h;
         position.z = 0f;
+
+        var marginL = -(w / 2) + borderOffset;
+        var marginR = (w / 2) - borderOffset;
+        var marginT = (h / 2) - borderOffset;
+        var marginB = -(h / 2) + borderOffset;
+
+        var inFrame = (
+            position.x > marginL - borderViewRange &&
+            position.x < marginR + borderViewRange &&
+            position.y > marginB - borderViewRange && 
+            position.y < marginT + borderViewRange);
         
-        position.x = Mathf.Clamp(position.x, -(w/2)+borderOffset, (w/2) - borderOffset);
-        position.y = Mathf.Clamp(position.y , -(h/2)+borderOffset, (h/2) - borderOffset);
+        tr.gameObject.SetActive(!inFrame);
         
-        img.transform.localPosition = position;
+        position.x = Mathf.Clamp(position.x, marginL, marginR);
+        position.y = Mathf.Clamp(position.y , marginB, marginT);
+        
+        tr.localPosition = position;
     }
     
     
