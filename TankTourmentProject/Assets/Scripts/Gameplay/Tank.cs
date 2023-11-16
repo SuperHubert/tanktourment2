@@ -18,7 +18,10 @@ public class Tank : MonoBehaviour, IDamageable
     [SerializeField] private float acceleration = 10f;
     [SerializeField] private float maxTurnSpeed = 10f;
     [SerializeField] private float headRotationSpeed = 360f;
-    [field: SerializeField, Range(0f, 360f), Tooltip("°")] public float MaxVisibilityAngle { get; private set; } = 90f;
+    [SerializeField, Range(0f, 360f), Tooltip("°")] private float maxVisibilityAngle = 90f;
+    [SerializeField] private float visibilityOverride = -1f;
+    public float MaxVisibilityAngle =>  currentHp > 0 ? visibilityOverride < 0 ? maxVisibilityAngle : visibilityOverride : 0;
+    
     [Space]
     [SerializeField] private Projectile projectilePrefab;
     [SerializeField] private float shootCooldown = 1f;
@@ -34,7 +37,7 @@ public class Tank : MonoBehaviour, IDamageable
     [SerializeField] private Vector3 headDirection;
     private int currentHp;
 
-    private int CurrentHp
+    public int CurrentHp
     {
         get => currentHp;
         set
@@ -85,6 +88,11 @@ public class Tank : MonoBehaviour, IDamageable
             mat.color = Color;
             rend.material = mat;
         }
+    }
+
+    public void SetVisibilityOverride(float value)
+    {
+        visibilityOverride = value;
     }
     
     public void HandleMovementInputs(Vector2 inputs)
