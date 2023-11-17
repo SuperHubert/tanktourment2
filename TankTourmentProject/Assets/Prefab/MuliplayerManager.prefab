@@ -121,9 +121,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tankPrefab: {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173,
     type: 3}
+  tankLayer: 10
   availableTanksModels:
   - {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173, type: 3}
   - {fileID: 6984433726715992453, guid: 72e8a04fd4976cd408df5d34b099ff14, type: 3}
+  - {fileID: 7481991333203115793, guid: 681e83325d26ab648ab2e93446bcb47d, type: 3}
+  - {fileID: 7481991333203115793, guid: 454d349ce13f02847b6233550c26bf0c, type: 3}
   - {fileID: 6984433726715992453, guid: 7078a26df0a1f1f44a77f3b3b2c15442, type: 3}
   spawnPoints: []
   respawnDuration: 1.5
@@ -145,7 +148,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colorSelectionPrefab: {fileID: 4608430649544783538, guid: c45c2059a02ef57469205bae577663ce,
     type: 3}
-  colorSelectionLayout: {fileID: 0}
   tankSelectionPrefab: {fileID: 4266593263457250113, guid: 168e1a366b3b4d34d9e44398be8f16f5,
     type: 3}
   colors:

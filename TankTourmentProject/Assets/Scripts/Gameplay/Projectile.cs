@@ -52,8 +52,6 @@ public class Projectile : MonoBehaviour
     
     private void OnCollide(GameObject go)
     {
-        Debug.Log("Collided with " + go.name);
-        
         var transform1 = transform;
 
         var offset = currentData.ExplosionOffset;

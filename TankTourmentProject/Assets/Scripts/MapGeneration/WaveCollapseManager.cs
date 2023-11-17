@@ -112,14 +112,8 @@ namespace MapGeneration
             InitNodes();
         
             // Set Fix nodes
-            Debug.Log("Control Points");
-            
             SpawnPoints(controlPosition, controlPSize, tilePrefabs[0],controlPointsNodes);
-            
-            Debug.Log("Spawn Points");
             SpawnPoints(spawnPosition, spawnSize, tilePrefabs[1],spawnPositionNodes);
-            
-            Debug.Log("Connectors Points");
             SpawnPoints(connectorsPosition, connectorsSize, tilePrefabs[2],connectorNodes);
 
             var rotatedPos = new Vector2Int(connectorsPosition.y, connectorsPosition.x);
@@ -370,8 +364,6 @@ namespace MapGeneration
                 }
             }
 
-            // Debug.Log(possiblesNodes.Count);
-            // Debug.Log(Random.Range(0, possiblesNodes.Count));
             return possiblesNodes[Random.Range(0, possiblesNodes.Count)];
         }
         

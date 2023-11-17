@@ -8,6 +8,7 @@ public class CameraController : MonoBehaviour
     [field:SerializeField] public Transform CamTransform { get; private set; }
 
     [Header("Settings")]
+    [SerializeField] private float tankVisionMultiplier = 0.1f;
     [SerializeField] private Vector3 offset;
     [SerializeField] private float speed;
     [SerializeField] private Color fogColor = Color.black;
@@ -31,7 +32,7 @@ public class CameraController : MonoBehaviour
 
         if(!hasTarget) return;
         
-        CamTransform.position = target.Position + offset; 
+        CamTransform.position = target.Position + (offset * (target.MaxVisibilityRange * tankVisionMultiplier)); 
         
         CamTransform.LookAt(target.Position );
     }
@@ -59,7 +60,7 @@ public class CameraController : MonoBehaviour
 
         //var inputDirectionOffset = inputOffset * inputOffsetMultiplier; //TODO - probably do something with this
         
-        var targetPos = target.Position + offset; //TODO: offset this by the input direction if aiming
+        var targetPos = target.Position + (offset * (target.MaxVisibilityRange * tankVisionMultiplier)); //TODO: offset this by the input direction if aiming
         
         CamTransform.position = Vector3.MoveTowards(pos, targetPos, Speed * Time.deltaTime);
     }

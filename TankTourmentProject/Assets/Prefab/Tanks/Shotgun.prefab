@@ -459,7 +459,7 @@ PrefabInstance:
     - target: {fileID: 5510632380216159349, guid: 09bdb263e8caf3749ab19372c730a173,
         type: 3}
       propertyPath: m_Name
-      value: Tank Variant 1 (Shotgun)
+      value: Shotgun
       objectReference: {fileID: 0}
     - target: {fileID: 5807528364885444862, guid: 09bdb263e8caf3749ab19372c730a173,
         type: 3}
@@ -520,6 +520,11 @@ PrefabInstance:
         type: 3}
       propertyPath: stats.<Name>k__BackingField
       value: Shotgun Tank
+      objectReference: {fileID: 0}
+    - target: {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173,
+        type: 3}
+      propertyPath: stats.<MaxHp>k__BackingField
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173,
         type: 3}
@@ -605,6 +610,11 @@ PrefabInstance:
         type: 3}
       propertyPath: stats.<ProjectileData>k__BackingField.<Damage>k__BackingField
       value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173,
+        type: 3}
+      propertyPath: stats.<SecondaryCanonData>k__BackingField.<Cooldown>k__BackingField
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173,
         type: 3}

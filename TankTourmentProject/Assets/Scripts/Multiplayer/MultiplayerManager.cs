@@ -26,7 +26,7 @@ public class MultiplayerManager : MonoBehaviour
     [SerializeField] private List<PlayerController> playerControllers = new List<PlayerController>();
     [SerializeField] private List<PlayerController> inactivePlayerControllers = new List<PlayerController>();
     private int ActivePlayerCount => playerControllers.Count - inactivePlayerControllers.Count;
-    IEnumerable<PlayerController> ActivePlayers => playerControllers.Where(controller => !inactivePlayerControllers.Contains(controller));
+    private IEnumerable<PlayerController> ActivePlayers => playerControllers.Where(controller => !inactivePlayerControllers.Contains(controller));
 
 
     private bool isInGame = false;
@@ -115,6 +115,8 @@ public class MultiplayerManager : MonoBehaviour
 
             selection.ConnectToPlayerController(controller);
         }
+        
+        uiManager.ShowPressAnyKey(ActivePlayerCount <= 0);
     }
 
     private void TryStartGame(List<PlayerController> readyPlayers)
@@ -141,9 +143,9 @@ public class MultiplayerManager : MonoBehaviour
         
         uiManager.CanGenerateMap += GeneratedMap;
         
-        playerControllers[0].OnGameCDFinished += OnGameCDFinished;
+        ActivePlayers.First().OnGameCDFinished += OnGameCDFinished;
         
-        foreach (var controller in playerControllers)
+        foreach (var controller in ActivePlayers)
         {
             controller.CountdownForGameStart();
         }

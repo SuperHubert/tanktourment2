@@ -1456,7 +1456,7 @@ PrefabInstance:
     - target: {fileID: 5510632380216159349, guid: 09bdb263e8caf3749ab19372c730a173,
         type: 3}
       propertyPath: m_Name
-      value: Tank Variant 2 (Shippost)
+      value: Shipposter
       objectReference: {fileID: 0}
     - target: {fileID: 6379788550090304814, guid: 09bdb263e8caf3749ab19372c730a173,
         type: 3}
@@ -1732,6 +1732,11 @@ PrefabInstance:
         type: 3}
       propertyPath: stats.<MaxVisibilityAngle>k__BackingField
       value: 110
+      objectReference: {fileID: 0}
+    - target: {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173,
+        type: 3}
+      propertyPath: stats.<MaxVisibilityRange>k__BackingField
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173,
         type: 3}

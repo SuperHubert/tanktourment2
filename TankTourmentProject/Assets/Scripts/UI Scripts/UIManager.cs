@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI winnerText;
     [SerializeField] private TextMeshProUGUI tipsText;
+    [SerializeField] private TextMeshProUGUI pressAnyKeyText;
 
     public event Action CanGenerateMap;
     public event Action RestartGame;
@@ -17,6 +18,11 @@ public class UIManager : MonoBehaviour
     {
         winnerText.gameObject.SetActive(false);
         tipsText.gameObject.SetActive(false);
+    }
+    
+    public void ShowPressAnyKey(bool value)
+    {
+        pressAnyKeyText.gameObject.SetActive(value);
     }
 
     public void CountdownFirstTo(int points)
@@ -37,6 +43,8 @@ public class UIManager : MonoBehaviour
     
     public void ShowWinner(PlayerController playerController)
     {
+        pressAnyKeyText.gameObject.SetActive(false);
+        
         winnerText.gameObject.SetActive(true);
         tipsText.gameObject.SetActive(true);
         
