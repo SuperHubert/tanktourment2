@@ -24,19 +24,22 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    public void PlaySound(AudioClip clip)
+    public static void PlaySound(AudioClip clip)
     {
-        EffectSource.PlayOneShot(clip);
+        if(instance == null) return;
+        instance.EffectSource.PlayOneShot(clip);
     }
     
-    public void ChangeMusicVolume(float volume)
+    public static void ChangeMusicVolume(float volume)
     { 
-        audioMixer.SetFloat("MusiqueVolume", volume);
+        if(instance == null) return;
+        instance.audioMixer.SetFloat("MusiqueVolume", volume);
     }
-    public void ChangeEffectVolume(float volume)
+    public static void ChangeEffectVolume(float volume)
     { 
-        PlaySound(validateEffect);
-        audioMixer.SetFloat("SFXVolume", volume);
+        if(instance == null) return;
+        PlaySound(instance.validateEffect);
+        instance.audioMixer.SetFloat("SFXVolume", volume);
     }
     
 }

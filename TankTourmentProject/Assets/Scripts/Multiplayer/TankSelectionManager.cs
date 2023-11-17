@@ -20,7 +20,9 @@ public class TankSelectionManager : MonoBehaviour
     [SerializeField] private float colorMoveCooldown = 0.5f;
     [SerializeField] private int columns = 4;
     public List<Color> Colors => colors; 
-
+    
+    [Space]
+    [SerializeField] private Vector2 tankSelectionOffset = new Vector2(0f, 0f);
     [SerializeField,ReadOnly] private Tank[] tanks;
     [SerializeField] private float tankOffset = 2f;
     [SerializeField] private float tankRotationSpeed = 10f;
@@ -38,13 +40,12 @@ public class TankSelectionManager : MonoBehaviour
             var colorSelection = Instantiate(colorSelectionPrefab, colorSelectionLayout.transform);
 
             colorSelection.SetColor(color);
-            
+
             colorSelection.RefreshAppearance();
-            
+
             colorSelections.Add(colorSelection);
-            
         }
-        
+
         colorSelectionLayout.constraintCount = columns;
     }
 
@@ -68,11 +69,13 @@ public class TankSelectionManager : MonoBehaviour
         }
     }
     
-    public TankSelection GetTankSelection(PlayerController playerController)
+    public TankSelection GetTankSelection(PlayerController playerController,int index)
     {
         if (tankSelections.TryGetValue(playerController, out var selection)) return selection;
 
-        selection = Instantiate(tankSelectionPrefab);
+        var pos = new Vector3(tankSelectionOffset.x * index, 0, tankSelectionOffset.y * index);
+        
+        selection = Instantiate(tankSelectionPrefab, pos, Quaternion.identity, transform);
         
         tankSelections.Add(playerController, selection);
         

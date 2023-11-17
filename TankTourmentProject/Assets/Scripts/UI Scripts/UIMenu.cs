@@ -17,24 +17,24 @@ public class UIMenu : MonoBehaviour
 
     private void GoToPlayScene()
     {
-        SoundManager.instance.PlaySound(SelectSound);
+        SoundManager.PlaySound(SelectSound);
         SceneManager.LoadScene(1);
     }
     
     public void OpenPanel(GameObject panel)
     {
-        SoundManager.instance.PlaySound(SelectSound);
+        SoundManager.PlaySound(SelectSound);
         panel.SetActive(true);
     }
     public void ClosePanel(GameObject panel)
     {
-        SoundManager.instance.PlaySound(CancelSound);
+        SoundManager.PlaySound(CancelSound);
         panel.SetActive(false);
     }
 
     private void QuitGame()
     {
-        SoundManager.instance.PlaySound(CancelSound);
+        SoundManager.PlaySound(CancelSound);
         Application.Quit();
     }
 

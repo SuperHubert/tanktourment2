@@ -275,7 +275,7 @@ public class Tank : MonoBehaviour, IDamageable
         
         foreach (var shotOrigin in origin)
         {
-            SoundManager.instance.PlaySound(SoundManager.instance.shoot);
+            SoundManager.PlaySound(SoundManager.instance.shoot);
             
             var position = shotOrigin.position;
             var projectile =  ObjectPooler.Pool(projectilePrefab,position,shotOrigin.rotation);

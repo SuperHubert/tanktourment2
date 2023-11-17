@@ -169,7 +169,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8981547633313345037
 RectTransform:
   m_ObjectHideFlags: 0
@@ -327,7 +327,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1015
+    m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -790,7 +790,7 @@ Canvas:
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 7303184125657476110}
-  m_PlaneDistance: 5
+  m_PlaneDistance: 0.1
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -1195,6 +1195,7 @@ MonoBehaviour:
   <TankController>k__BackingField: {fileID: 2757046076287949333}
   <CameraController>k__BackingField: {fileID: 8650213442208460826}
   <ControlPointIndicator>k__BackingField: {fileID: 8895669935539735281}
+  quickStartTank: {fileID: 0}
   countDownText: {fileID: 1477344471095204907}
 --- !u!114 &2757046076287949333
 MonoBehaviour:

@@ -55,7 +55,7 @@ public class TankSelection : MonoBehaviour
         
         camTr.SetPositionAndRotation(CamTr.position,CamTr.rotation);
         
-        SetLayer(layer);
+        //SetLayer(layer);
         
         readyIndicatorGo.SetActive(tankSelectionData.IsReady);
 

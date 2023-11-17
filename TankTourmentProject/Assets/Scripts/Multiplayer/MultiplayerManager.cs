@@ -119,7 +119,7 @@ public class MultiplayerManager : MonoBehaviour
             
             controller.SetLayer(layer);
             
-            var selection = tankSelectionManager.GetTankSelection(controller);
+            var selection = tankSelectionManager.GetTankSelection(controller,i);
 
             selection.ConnectToPlayerController(controller, layer);
         }

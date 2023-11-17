@@ -83,7 +83,7 @@ public class Projectile : MonoBehaviour
     {
         if (go.layer == owner.gameObject.layer)  return;
         
-        SoundManager.instance.PlaySound(SoundManager.instance.explosion);
+        SoundManager.PlaySound(SoundManager.instance.explosion);
         var transform1 = transform;
         var position = transform1.position - transform1.forward.normalized * explosionOffset;
         

@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [field: SerializeField] public TankController TankController { get; private set; }
     [field: SerializeField] public CameraController CameraController { get; private set; }
     [field: SerializeField] public ControlPointIndicator ControlPointIndicator { get; private set; }
+    [Header("Debug")] [SerializeField] private Tank quickStartTank;
     public int Layer { get; private set; }
 
     private PointsManager.PointAmount pointAmount;
@@ -73,6 +74,23 @@ public class PlayerController : MonoBehaviour
     
     private void Start()
     {
+        if (quickStartTank != null)
+        {
+            TankController.ConnectTank(quickStartTank);
+            
+            CameraController.SetTarget(quickStartTank);
+            
+            quickStartTank.RespawnValues();
+
+            var tr = quickStartTank.transform;
+            
+            var pos = tr.position;
+            pos.y += quickStartTank.SpawnHeight;
+            tr.position = pos;
+            
+            return;
+        }
+        
         InvokeJoin(PlayerInput);
 
         PlayerInput.deviceRegainedEvent.AddListener(InvokeJoin);
@@ -81,13 +99,13 @@ public class PlayerController : MonoBehaviour
     
     private void InvokeJoin(PlayerInput _)
     {
-        SoundManager.instance.PlaySound(SoundManager.instance.validateEffect);
+        SoundManager.PlaySound(SoundManager.instance.validateEffect);
         OnPlayerJoin?.Invoke(this);
     }
 
     private void InvokeLeave(PlayerInput _)
     {
-        SoundManager.instance.PlaySound(SoundManager.instance.cancelEffect);
+        SoundManager.PlaySound(SoundManager.instance.cancelEffect);
         OnPlayerLeave?.Invoke(this);
     }
 }
@@ -116,7 +134,7 @@ public class TankSelectionData
     
     public void SetReady(bool value)
     {
-        SoundManager.instance.PlaySound(SoundManager.instance.validateEffect);
+        SoundManager.PlaySound(SoundManager.instance.validateEffect);
         IsReady = value;
         OnReadyChanged?.Invoke(value);
     }

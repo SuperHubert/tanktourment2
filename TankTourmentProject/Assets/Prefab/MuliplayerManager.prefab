@@ -128,6 +128,7 @@ MonoBehaviour:
   spawnPoints: []
   respawnDuration: 1.5
   respawnCamSpeedMultiplier: 10
+  minSpawnDistance: 5
   tanks: []
   isRunning: 0
 --- !u!114 &8838535159309284989
@@ -158,6 +159,7 @@ MonoBehaviour:
   - {r: 1, g: 0, b: 0.9999995, a: 1}
   colorMoveCooldown: 0.5
   columns: 4
+  tankSelectionOffset: {x: 35, y: 0}
   tanks:
   - {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173, type: 3}
   tankOffset: 2
