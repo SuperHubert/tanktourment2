@@ -37,7 +37,7 @@ public class TankSelection : MonoBehaviour
     private float colorCooldown;
     private float currentColorCooldown;
 
-    public void ConnectToPlayerController(PlayerController controller,int layer)
+    public void ConnectToPlayerController(PlayerController controller)
     {
         playerController = controller;
         
@@ -54,11 +54,7 @@ public class TankSelection : MonoBehaviour
         var camTr = camController.CamTransform;
         var cam = camController.Cam;
         
-        camController.SetFowAngle(0);
-        
         camTr.SetPositionAndRotation(CamTr.position,CamTr.rotation);
-        
-        //SetLayer(layer);
         
         readyIndicatorGo.SetActive(tankSelectionData.IsReady);
 

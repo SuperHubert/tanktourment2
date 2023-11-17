@@ -64,13 +64,6 @@ public class PlayerController : MonoBehaviour
         OnPlayerJoin = null;
         OnPlayerLeave = null;
     }
-
-    public void SetLayer(int layer)
-    {
-        CameraController.SetLayerVisible(Layer,false);
-        Layer = layer;
-        CameraController.SetLayerVisible(Layer,true);
-    }
     
     private void Start()
     {
