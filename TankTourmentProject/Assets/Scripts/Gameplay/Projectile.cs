@@ -71,25 +71,17 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        Debug.Log($"Collision {other.gameObject.name}");
         OnCollide(other.gameObject);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"Trigger {other.gameObject.name}");
         OnCollide(other.gameObject);
     }
     
     private void OnCollide(GameObject go)
     {
-        if (go.layer == owner.gameObject.layer)
-        {
-            Debug.Log($"{go.name} is on the same layer as {owner.gameObject.name}");
-            return;
-        }
-        
-        Debug.Log($"{go.name}");
+        if (go.layer == owner.gameObject.layer)  return;
         
         SoundManager.instance.PlaySound(SoundManager.instance.explosion);
         var transform1 = transform;

@@ -3,29 +3,46 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class WheelTrailHandler : MonoBehaviour
 { 
-    
+    [Header("Component")]
     [SerializeField] TrailRenderer trailRenderer;
-    [SerializeField] private Rigidbody rb;
-    public float tireSensityvity = 0.5f;
-    private void Awake()
+    
+    [Header("Settings")]
+    [SerializeField] public float tireSensitivity = 0.2f;
+
+    private Tank connectedTank;
+    private bool connected = false;
+    
+    public void ConnectToTank(Tank tank)
     {
-        rb = GetComponentInParent<Rigidbody>();
+        connectedTank = tank;
+        
         trailRenderer.emitting = false;
+
+        connected = true;
+        
+        tank.OnTankRespawned += RestartEmission;
     }
     
+    public void StopEmission()
+    {
+        trailRenderer.emitting = false;
+    }
+
+    private void RestartEmission()
+    {
+        trailRenderer.emitting = true;
+    }
     
     private void Update()
     {
-        if (Vector3.Dot(rb.velocity.normalized, this.transform.forward) < (1 - tireSensityvity))
-        {
-            trailRenderer.emitting = true;
-        }
-        else
-        {
-            trailRenderer.emitting = false;
-        }
+        if(!connected) return;
+        
+        if(!connectedTank.IsAlive) return;
+        
+        trailRenderer.emitting = Vector3.Dot(connectedTank.Rb.velocity.normalized, transform.forward) < (1 - tireSensitivity);
     }
 }

@@ -135,7 +135,7 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_MaskInteraction: 0
   m_Autodestruct: 0
-  m_Emitting: 1
+  m_Emitting: 0
   m_ApplyActiveColorSpace: 1
 --- !u!114 &3192284349479038465
 MonoBehaviour:
@@ -150,5 +150,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trailRenderer: {fileID: 676352781651238176}
-  rb: {fileID: 0}
-  tireSensityvity: 0.2
+  tireSensitivity: 0.2
