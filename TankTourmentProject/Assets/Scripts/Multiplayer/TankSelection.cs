@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class TankSelection : MonoBehaviour
 {
     [field: SerializeField] public Transform TankTr { get; private set; }
+    [field: SerializeField] public GridLayoutGroup ColorLayoutTr { get; private set; }
     public Vector3 TankTrOrigin { get; private set; }
     [field: SerializeField] public Transform CamTr { get; private set; }
     

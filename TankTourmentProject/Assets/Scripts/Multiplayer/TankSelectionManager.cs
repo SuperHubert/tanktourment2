@@ -11,7 +11,6 @@ public class TankSelectionManager : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] private UIColorSelection colorSelectionPrefab;
-    [SerializeField] private GridLayoutGroup colorSelectionLayout;
 
     [SerializeField] private TankSelection tankSelectionPrefab;
     
@@ -19,7 +18,6 @@ public class TankSelectionManager : MonoBehaviour
     [SerializeField] private List<Color> colors = new List<Color>();
     [SerializeField] private float colorMoveCooldown = 0.5f;
     [SerializeField] private int columns = 4;
-    public List<Color> Colors => colors; 
     
     [Space]
     [SerializeField] private Vector2 tankSelectionOffset = new Vector2(0f, 0f);
@@ -28,41 +26,18 @@ public class TankSelectionManager : MonoBehaviour
     [SerializeField] private float tankRotationSpeed = 10f;
     [SerializeField] private float tankMoveDuration = 1f;
     
-    private List<UIColorSelection> colorSelections = new List<UIColorSelection>();
+    //private List<UIColorSelection> colorSelections = new List<UIColorSelection>();
     
     private Dictionary<PlayerController,TankSelection> tankSelections = new Dictionary<PlayerController, TankSelection>();
     public event Action<List<PlayerController>> OnPlayerReadyChanged;
     
-    private void Start()
-    {
-        foreach (var color in colors)
-        {
-            var colorSelection = Instantiate(colorSelectionPrefab, colorSelectionLayout.transform);
-
-            colorSelection.SetColor(color);
-
-            colorSelection.RefreshAppearance();
-
-            colorSelections.Add(colorSelection);
-        }
-
-        colorSelectionLayout.constraintCount = columns;
-    }
-
     public void SetAvailableTanks(Tank[] availableTanks)
     {
         tanks = availableTanks;
     }
     
-    public void ShowColors(bool value)
-    {
-        colorSelectionLayout.gameObject.SetActive(value);
-    }
-
     public void HideSelections()
     {
-        ShowColors(false);
-        
         foreach (var selection in tankSelections.Values)
         {
             selection.gameObject.SetActive(false);
@@ -82,15 +57,32 @@ public class TankSelectionManager : MonoBehaviour
         selection.SetTanks(tanks,tankOffset);
         selection.SetColorCooldown(colorMoveCooldown);
         
+        var colorSelections = new List<UIColorSelection>();
+        foreach (var color in colors)
+        {
+            var colorSelection = Instantiate(colorSelectionPrefab, selection.ColorLayoutTr.transform);
+
+            colorSelection.SetColor(color);
+            
+            colorSelection.RefreshAppearance(color);
+            
+            colorSelections.Add(colorSelection);
+            
+            UIColorSelection.OnSelectionCountUpdated += colorSelection.RefreshAppearance;
+        }
+
+        selection.ColorLayoutTr.constraintCount = columns;
+        
         var tankSelectionData = playerController.TankSelectionData;
         
         var tankIndex = 0;
         var colorIndex = 0;
-
+        
         var count = 0;
-        while (count < colorSelections.Count && colorSelections[colorIndex].SelectionCount > 0)
+        while (count < colorSelections.Count && !UIColorSelection.IsColorAvailable(colors[count]))
         {
             colorIndex++;
+            count++;
         }
         
         tankSelectionData.OnReadyChanged += TryStartGame;
@@ -101,6 +93,7 @@ public class TankSelectionManager : MonoBehaviour
         selection.OnColorChanged += ChangeColorIndex;
         
         ChangeTankIndex(0);
+        
         ChangeColor(colorIndex,false);
         
         return selection;
@@ -148,6 +141,8 @@ public class TankSelectionManager : MonoBehaviour
 
         void ChangeColor(int index,bool removeSelection)
         {
+            Debug.Log("Changing color");
+            
             if(index < 0) index = 0;
             index %= colors.Count;
             
@@ -164,7 +159,7 @@ public class TankSelectionManager : MonoBehaviour
 
     private void TryStartGame(bool _)
     {
-        if(colorSelections.Any(selection => selection.SelectionCount > 1)) return;
+        if(!UIColorSelection.AllUnique) return;
         
         var readyPlayers = tankSelections.Keys.Where(p => p.TankSelectionData.IsReady).ToList();
         
@@ -180,5 +175,6 @@ public class TankSelectionManager : MonoBehaviour
             selections.CleanupEvents();
             selections.DisconnectInputs();
         }
+        UIColorSelection.CleanupDict();
     }
 }

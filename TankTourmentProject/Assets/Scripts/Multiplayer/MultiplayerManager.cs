@@ -14,7 +14,7 @@ public class MultiplayerManager : MonoBehaviour
     [SerializeField] private WaveCollapseManager waveCollapseManager;
     [SerializeField] private TankSelectionManager tankSelectionManager;
     [SerializeField] private PointsManager pointsManager;
-    [FormerlySerializedAs("uiGameOver")] [SerializeField] private UIManager uiManager;
+    [SerializeField] private UIManager uiManager;
     [SerializeField] private Camera mainCamera;
 
     [Header("Settings")]
@@ -50,8 +50,6 @@ public class MultiplayerManager : MonoBehaviour
         
         tankSelectionManager.OnPlayerReadyChanged += TryStartGame;
         
-        tankSelectionManager.ShowColors(false);
-        
         tankSelectionManager.SetAvailableTanks(tankManager.GetAvailableTankModels());
     }
 
@@ -79,8 +77,6 @@ public class MultiplayerManager : MonoBehaviour
 
     public void OnPlayersUpdate()
     {
-        tankSelectionManager.ShowColors(!isInGame && playerControllers.Count > 1);
-        
         // TODO, propably not hardcode it
 
         var activePlayers = ActivePlayers.ToList();

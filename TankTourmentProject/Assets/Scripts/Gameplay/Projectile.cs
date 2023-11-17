@@ -81,11 +81,21 @@ public class Projectile : MonoBehaviour
     
     private void OnCollide(GameObject go)
     {
-        if (go.layer == owner.gameObject.layer)  return;
+        Debug.Log("Collided with " + go.name);
         
-        SoundManager.PlaySound(SoundManager.instance.explosion);
         var transform1 = transform;
         var position = transform1.position - transform1.forward.normalized * explosionOffset;
+        var data = new DamageData(position, owner, damage);
+        
+        if (go.TryGetComponent(out IDamageable mainDamageable))
+        {
+            if(ReferenceEquals(mainDamageable, owner)) return;
+            
+            mainDamageable.TakeDamage(data);
+        }
+        
+        
+        SoundManager.PlaySound(SoundManager.instance.explosion);
         
         var explo = ObjectPooler.Pool(explosionPrefab, position, Quaternion.identity);
         explo.gameObject.transform.localScale = Vector3.one * explosionRadius * 0.8f;
@@ -93,20 +103,7 @@ public class Projectile : MonoBehaviour
         explo.Play();
 
         gameObject.SetActive(false);
-
-
-        var data = new DamageData(position, owner, damage);
         
-        // TODO - explosion feedback
-        //fx
-        //maybe push stuff around
-        
-        if (go.TryGetComponent(out IDamageable mainDamageable))
-        {
-            mainDamageable.TakeDamage(data);
-        }
-        
-
         var colliders = Physics.OverlapSphere(position, explosionRadius);
         
         foreach (var col in colliders)

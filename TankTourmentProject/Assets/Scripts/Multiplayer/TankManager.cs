@@ -9,6 +9,7 @@ public class TankManager : MonoBehaviour
     [SerializeField] private Tank tankPrefab;
 
     [Header("Settings")]
+    [SerializeField] private int tankLayer = 10;
     [SerializeField] private List<Tank> availableTanksModels = new List<Tank>();
     [SerializeField] private Vector3[] spawnPoints;
     [SerializeField] private float respawnDuration;
@@ -83,7 +84,7 @@ public class TankManager : MonoBehaviour
         
         var tank = Instantiate(prefab,pos, Quaternion.identity);
 
-        tank.SetLayer(controller.Layer);
+        tank.SetLayer(tankLayer);
         tank.SetColor(controller.TankSelectionData.SelectedColor);
         
         tank.gameObject.name = $"GameTank ({LayerMask.LayerToName(controller.Layer)})";

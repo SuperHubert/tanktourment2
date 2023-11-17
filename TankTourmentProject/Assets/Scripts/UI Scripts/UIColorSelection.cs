@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,32 +9,63 @@ public class UIColorSelection : MonoBehaviour
     [field:SerializeField] public Image Image { get; private set; }
     [SerializeField] private GameObject selectedGo;
     [SerializeField] private GameObject overSelectedGo;
-    [Header("Debug")]
-    [SerializeField] private int selectionCount = 0;
-    public int SelectionCount => selectionCount;
+
+    private Color color;
     
-    public void SetColor(Color color)
+    private static Dictionary<Color,int> colorCountDict = new ();
+    public static bool AllUnique => colorCountDict.All(kvp => kvp.Value <= 1);
+    public static event Action<Color> OnSelectionCountUpdated;
+    
+    public static void CleanupDict()
     {
+        colorCountDict.Clear();
+        OnSelectionCountUpdated = null;
+    }
+
+    public static bool IsColorAvailable(Color col)
+    {
+        if (!colorCountDict.ContainsKey(col)) return true;
+        return colorCountDict[col] == 0;
+    }
+
+    public void SetColor(Color col)
+    {
+        color = col;
         Image.color = color;
-        selectionCount = 0;
+        colorCountDict.TryAdd(color, 0);
     }
     
-    public void RefreshAppearance()
+    public void RefreshAppearance(Color col)
     {
-        selectedGo.SetActive(selectionCount == 1);
-        overSelectedGo.SetActive(selectionCount > 1);
+        if(col != color) return;
+        
+        Debug.Log("refreshing color");
+        
+        var count = colorCountDict[color];
+        selectedGo.SetActive(count == 1);
+        overSelectedGo.SetActive(count > 1);
     }
 
     public void AddSelection()
     {
-        selectionCount++;
-        RefreshAppearance();
+        Debug.Log("color++");
+        
+        colorCountDict.TryAdd(color, 0);
+
+        colorCountDict[color]++;
+        
+        OnSelectionCountUpdated?.Invoke(color);
     }
 
     public void RemoveSelection()
     {
-        selectionCount--;
-        if (selectionCount < 0) selectionCount = 0;
-        RefreshAppearance();
+        Debug.Log("color--");
+        
+        colorCountDict.TryAdd(color, 0);
+
+        colorCountDict[color]--;
+        if(colorCountDict[color] < 0) colorCountDict[color] = 0;
+        
+        OnSelectionCountUpdated?.Invoke(color);
     }
 }
