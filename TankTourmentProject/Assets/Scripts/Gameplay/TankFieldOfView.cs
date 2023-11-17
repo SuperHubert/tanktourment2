@@ -8,8 +8,10 @@ public class TankFieldOfView : MonoBehaviour
     [Header("Components")] 
     [SerializeField] private MeshFilter meshFilter;
     [SerializeField] private Camera planeCamera;
+    [SerializeField] private Transform sphereMask;
 
     [Header("Settings")]
+    [SerializeField] private float closeAreaMultiplier = 0.09f;
     [SerializeField] private float projectionRatio = 0.5f;
     [SerializeField] private int meshResolution = 10;
     [SerializeField] private int edgeResolveIterations = 4;
@@ -100,6 +102,9 @@ public class TankFieldOfView : MonoBehaviour
             
             vertices[i] = vertice;
         }
+
+        sphereMask.localPosition = vertices[0];
+        sphereMask.localScale = Vector3.one * (closeAreaMultiplier * connectedTank.Stats.CloseAreaSize);
         
         mesh.Clear();
         mesh.vertices = vertices;

@@ -31,6 +31,7 @@ public class Tank : MonoBehaviour, IDamageable
         [field: Space]
         [field: SerializeField, Range(0f, 360f), Tooltip("°")] public float MaxVisibilityAngle{  get; private set; } = 90f;
         [field: SerializeField, Range(0f, 360f), Tooltip("°")] public float MaxVisibilityRange {  get; private set; } = 10f;
+        [field: SerializeField] public float CloseAreaSize  {  get; private set; } = 1f;
         [field: Space]
         [field: SerializeField] public Projectile.ProjectileData ProjectileData { get; private set; }
         [field: SerializeField] public bool DualShooter { get; private set; } = false;
