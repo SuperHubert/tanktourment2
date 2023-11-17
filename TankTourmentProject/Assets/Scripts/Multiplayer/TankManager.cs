@@ -90,6 +90,7 @@ public class TankManager : MonoBehaviour
         
         tank.RespawnValues();
         
+        tank.OnHeadDirectionChanged += controller.CameraController.SetInputOffset;
         tank.OnTankKilled += Killed;
         tank.OnTankRespawned += ResetCamSpeed;
         

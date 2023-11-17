@@ -88,6 +88,7 @@ public class Tank : MonoBehaviour, IDamageable
     
     public int Layer { get; private set; }
     public event Action<Tank,Tank> OnTankKilled;
+    public event Action<Vector3> OnHeadDirectionChanged; 
     public event Action OnTankRespawned;
     public Vector3 Position => transform.position;
     
@@ -121,6 +122,11 @@ public class Tank : MonoBehaviour, IDamageable
             mat.color = Color;
             rend.material = mat;
         }
+
+        var keys = stats.ProjectileData.Color.colorKeys;
+        Array.ForEach(keys, key => key.color = Color);
+        
+        stats.ProjectileData.Color.SetKeys(keys,stats.ProjectileData.Color.alphaKeys);
     }
 
     public void SetVisibilityOverride(float value)
@@ -136,6 +142,7 @@ public class Tank : MonoBehaviour, IDamageable
     public void HandleHeadInputs(Vector2 inputs)
     {
         headDirection = new Vector3(inputs.x,0,inputs.y);
+        OnHeadDirectionChanged?.Invoke(headDirection);
     }
 
     public void RespawnValues()
@@ -289,7 +296,7 @@ public class Tank : MonoBehaviour, IDamageable
             
             var position = shotOrigin.position;
             var projectile =  ObjectPooler.Pool(projectilePrefab,position,shotOrigin.rotation);
-        
+            
             rb.AddExplosionForce(stats.ShootKnockBackForce, position, 1f, 0f);
             
             projectile.Shoot(stats.ProjectileData,this);

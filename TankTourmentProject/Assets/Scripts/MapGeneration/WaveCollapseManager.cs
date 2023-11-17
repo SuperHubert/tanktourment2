@@ -100,7 +100,7 @@ namespace MapGeneration
             tile.transform.localScale = scale;
             
             var mat = tile.Renderer.material;
-            mat.color = node.debugColor;
+            //mat.color = node.debugColor;
             
             node.SetTile(tile);
             tile.Renderer.material = mat;

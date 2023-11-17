@@ -169,6 +169,8 @@ public class MultiplayerManager : MonoBehaviour
             foreach (var controller in playerControllers)
             {
                 controller.CameraController.Cam.enabled = false;
+                
+                
             }
             
             uiManager.CountdownFirstTo(pointsManager.PointsToWin);

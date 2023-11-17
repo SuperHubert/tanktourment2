@@ -14,17 +14,18 @@ public class CameraController : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField] private Vector3 offset;
+    [SerializeField] private float inputOffsetMultiplier;
     [SerializeField] private float speed;
     [SerializeField] private Color fogColor = Color.black;
     private float speedMultiplier = 1f;
     private float Speed => speed * speedMultiplier;
 
-    [Header("Debug")]
+    private Vector3 inputOffset;
     private Tank target;
     private bool hasTarget = false;
     
     private Transform fowRotationTarget;
-
+    
     public void SetTarget(Tank tank)
     {
         target = tank;
@@ -44,6 +45,11 @@ public class CameraController : MonoBehaviour
         fowParentRotator.rotation = Quaternion.identity;
         
         fowFogImage.color = fogColor;
+    }
+    
+    public void SetInputOffset(Vector3 input)
+    {
+        inputOffset = input.normalized;
     }
     
     public void SetSpeedMultiplier(float multiplier)
@@ -104,7 +110,9 @@ public class CameraController : MonoBehaviour
         
         var pos = CamTransform.position;
 
-        var targetPos = target.Position  + offset; //TODO: offset this by the input direction if aiming
+        //var inputDirectionOffset = inputOffset * inputOffsetMultiplier; //TODO - probably do something with this
+        
+        var targetPos = target.Position + offset; //TODO: offset this by the input direction if aiming
         
         CamTransform.position = Vector3.MoveTowards(pos, targetPos, Speed * Time.deltaTime);
     }

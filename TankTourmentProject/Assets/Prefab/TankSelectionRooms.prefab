@@ -52,7 +52,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <TankTr>k__BackingField: {fileID: 5899307285272954193}
   <CamTr>k__BackingField: {fileID: 2454727702527099848}
-  readyIndicatorGo: {fileID: 6886518768538618047}
+  readyIndicatorGo: {fileID: 4332354378337711114}
   canvas: {fileID: 3138917817467636706}
   allGameObjects:
   - {fileID: 5753753829882590013}
