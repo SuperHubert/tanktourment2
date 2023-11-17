@@ -107,7 +107,6 @@ public class TankSelection : MonoBehaviour
         
         tankSelectionData.SetReady(!tankSelectionData.IsReady);
         
-        // Feedback
         readyIndicatorGo.SetActive(tankSelectionData.IsReady);
     }
     
