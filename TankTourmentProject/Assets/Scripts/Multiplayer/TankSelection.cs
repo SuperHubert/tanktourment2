@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,6 +16,8 @@ public class TankSelection : MonoBehaviour
     [SerializeField] private Canvas canvas;
     
     [SerializeField] private GameObject[] allGameObjects;
+    [SerializeField] private TextMeshProUGUI statsText;
+    [SerializeField] private TextMeshProUGUI statsTextBot;
     
     public event Action<Vector2> OnColorChanged;
     public event Action<int> OnTankChanged;
@@ -155,6 +158,33 @@ public class TankSelection : MonoBehaviour
         {
             tank.SetColor(col);
         }
+    }
+
+    public void UpdateStats(Tank tank)
+    {
+        var stats = tank.Stats;
+        var projectile = stats.ProjectileData;
+        var hrs = stats.HeadRotationSpeed;
+        var hrsString = hrs == -1f ? "infinie" : $"{hrs}";
+        var sorc = stats.DualShooter ? $" / ×{tank.ShotOriginsRightCount}" : "";
+
+        statsText.text = $"Max Hp: {stats.MaxHp}\n" +
+                         $"Heal: +{stats.HealAmount}/{stats.TimeBetweenHeal}s\n" +
+                         $"Heal Cooldown: {stats.HealCooldown}" +
+                         "\n" +
+                         $"Speed: {stats.MaxSpeed}\n" +
+                         $"Acceleration: {stats.Acceleration}\n" +
+                         $"Max Turn Speed: {stats.MaxTurnSpeed}\n" +
+                         $"Max Rotation Speed: {hrsString}\n";
+        
+        statsTextBot.text = $"Fire Rate: {stats.ShootCooldown} (×{tank.ShotOriginsLeftCount}{sorc})\n" +
+                            $"Damage: {projectile.Damage}\n" +
+                            $"KB Force: {stats.ShootKnockBackForce}\n" +
+                            $"Self Damage Multiplier: {stats.SelfDamageMultiplier}\n" +
+                            "\n" +
+                            $"Bullet Speed: {projectile.Velocity}\n" +
+                            $"Explosion Size: {projectile.ExplosionRadius}\n" +
+                            $"Explosion KB: {projectile.ExplosionForce}\n";
     }
 
     public void SetLayer(int layer)

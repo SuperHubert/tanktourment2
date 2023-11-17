@@ -39,6 +39,8 @@ public class Tank : MonoBehaviour, IDamageable
 
     [SerializeField] private TankStats stats;
     public TankStats Stats => stats;
+    public int ShotOriginsLeftCount => shotOriginsLeft.Length;
+    public int ShotOriginsRightCount => shotOriginsRight.Length;
     
     [Header("Settings")]
     [SerializeField] private LayerMask explosionLayers;
