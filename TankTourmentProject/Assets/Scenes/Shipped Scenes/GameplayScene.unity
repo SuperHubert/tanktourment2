@@ -997,11 +997,6 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2394796766702861415, guid: 509b571c29abc374c9cffd3860f8bd1e,
         type: 3}
-      propertyPath: minPlayer
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2394796766702861415, guid: 509b571c29abc374c9cffd3860f8bd1e,
-        type: 3}
       propertyPath: uiManager
       value: 
       objectReference: {fileID: 1532132192}
@@ -1010,11 +1005,6 @@ PrefabInstance:
       propertyPath: mainCamera
       value: 
       objectReference: {fileID: 1323421977}
-    - target: {fileID: 2721971204016645279, guid: 509b571c29abc374c9cffd3860f8bd1e,
-        type: 3}
-      propertyPath: <PointsToWin>k__BackingField
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3770755211667358811, guid: 509b571c29abc374c9cffd3860f8bd1e,
         type: 3}
       propertyPath: m_Name
