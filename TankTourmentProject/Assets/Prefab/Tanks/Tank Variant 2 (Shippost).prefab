@@ -1595,6 +1595,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173,
         type: 3}
+      propertyPath: stats.<Name>k__BackingField
+      value: Shipposter
+      objectReference: {fileID: 0}
+    - target: {fileID: 7540930523534340670, guid: 09bdb263e8caf3749ab19372c730a173,
+        type: 3}
       propertyPath: raycastOrigins.Array.data[1]
       value: 
       objectReference: {fileID: 3645522520324187226}

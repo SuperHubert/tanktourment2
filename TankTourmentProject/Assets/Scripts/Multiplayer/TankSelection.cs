@@ -19,7 +19,8 @@ public class TankSelection : MonoBehaviour
     
     [SerializeField] private GameObject[] allGameObjects;
     [SerializeField] private TextMeshProUGUI statsText;
-    [SerializeField] private TextMeshProUGUI statsTextBot;
+    [SerializeField] private TextMeshProUGUI statsTextBot1;
+    [SerializeField] private TextMeshProUGUI statsTextBot2;
     
     public event Action<Vector2> OnColorChanged;
     public event Action<int> OnTankChanged;
@@ -161,28 +162,24 @@ public class TankSelection : MonoBehaviour
     public void UpdateStats(Tank tank)
     {
         var stats = tank.Stats;
-        var projectile = stats.ProjectileData;
-        var hrs = stats.HeadRotationSpeed;
-        var hrsString = hrs == -1f ? "infinie" : $"{hrs}";
-        var sorc = stats.DualShooter ? $" / ×{tank.ShotOriginsRightCount}" : "";
+        var isDualShooter = stats.DualShooter;
+        var alwaysUseMain = stats.AlwaysUseMain;
 
-        statsText.text = $"Max Hp: {stats.MaxHp}\n" +
-                         $"Heal: +{stats.HealAmount}/{stats.TimeBetweenHeal}s\n" +
-                         $"Heal Cooldown: {stats.HealCooldown}" +
-                         "\n" +
-                         $"Speed: {stats.MaxSpeed}\n" +
-                         $"Acceleration: {stats.Acceleration}\n" +
-                         $"Max Turn Speed: {stats.MaxTurnSpeed}\n" +
-                         $"Max Rotation Speed: {hrsString}\n";
+        statsText.text = stats.GetText();
+
+        var attackHeader = "<size=40>Main Attack:</size>";
+        var attackText = tank.Stats.MainCanonData.GetText(tank.ShotOriginsLeftCount);
         
-        statsTextBot.text = $"Fire Rate: {stats.ShootCooldown} (×{tank.ShotOriginsLeftCount}{sorc})\n" +
-                            $"Damage: {projectile.Damage}\n" +
-                            $"KB Force: {stats.ShootKnockBackForce}\n" +
-                            $"Self Damage Multiplier: {stats.SelfDamageMultiplier}\n" +
-                            "\n" +
-                            $"Bullet Speed: {projectile.Velocity}\n" +
-                            $"Explosion Size: {projectile.ExplosionRadius}\n" +
-                            $"Explosion KB: {projectile.ExplosionForce}\n";
+        statsTextBot1.text = $"{attackHeader}\n{attackText}";
+
+        statsTextBot2.text = "";
+        
+        if(!isDualShooter) return;
+
+        attackHeader = "<size=40>Secondary Attack:</size>";
+        if (!alwaysUseMain) attackText = tank.Stats.SecondaryCanonData.GetText(tank.ShotOriginsRightCount);
+        
+        statsTextBot2.text = $"{attackHeader}\n{attackText}";
     }
 
     public void SetLayer(int layer)

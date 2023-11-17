@@ -16,13 +16,13 @@ public class Tank : MonoBehaviour, IDamageable
     [SerializeField] private Transform[] raycastOrigins;
     [SerializeField] private Transform[] shotOriginsLeft;
     [SerializeField] private Transform[] shotOriginsRight;
-    [SerializeField] private Projectile projectilePrefab;
     [Space]
     [SerializeField] private WheelTrailHandler[] wheelTrailHandlers;
     
     [Serializable]
     public class TankStats
     {
+        [field: SerializeField] public string Name { get; private set; }
         [field: SerializeField] public int MaxHp { get; private set; }
         [field: SerializeField] public float MaxSpeed { get; private set; } = 10f;
         [field: SerializeField] public float Acceleration { get; private set; } = 10f;
@@ -33,18 +33,72 @@ public class Tank : MonoBehaviour, IDamageable
         [field: SerializeField, Range(0f, 360f), Tooltip("°")] public float MaxVisibilityRange {  get; private set; } = 10f;
         [field: SerializeField] public float CloseAreaSize  {  get; private set; } = 1f;
         [field: Space]
-        [field: SerializeField] public Projectile.ProjectileData ProjectileData { get; private set; }
+        [field: SerializeField] public CanonData MainCanonData { get; private set; }
+        [field: SerializeField] public CanonData SecondaryCanonData { get; private set; }
         [field: SerializeField] public bool DualShooter { get; private set; } = false;
-        [field: SerializeField] public float ShootCooldown { get; private set; } = 1f;
-        [field: SerializeField] public float ShootKnockBackForce { get; private set; } = 0f;
-        [field: SerializeField] public float SelfDamageMultiplier { get; private set; } = 1f;
+        [field: SerializeField] public bool AlwaysUseMain { get; private set; } = true;
         [field: Space]
         [field: SerializeField] public int HealAmount { get; private set; } = 1;
-
         [field: SerializeField] public float TimeBetweenHeal { get; private set; } = 1f;
         [field: SerializeField] public float HealCooldown { get; private set; } = 1f;
-        
+
+        public string GetText()
+        {
+            var text = $"<size=50>{Name.ToUpper()}</size>\n" +  
+                       $"Max Hp: {MaxHp}\n" +
+                       $"Heal: +{HealAmount}/{TimeBetweenHeal}s\n" +
+                       $"Heal Cooldown: {HealCooldown}\n" +
+                       $"Speed: {MaxSpeed}\n" +
+                       $"Acceleration: {Acceleration}\n" +
+                       $"Max Turn Speed: {MaxTurnSpeed}\n";
+            if(HeadRotationSpeed >= 0) text += $"Aim Rotation Speed: {HeadRotationSpeed}\n";
+
+            return text;
+        }
     }
+
+    [Serializable]
+    public class CanonData
+    {
+        [field: SerializeField] public float Cooldown { get; private set; } = 1f;
+        [field: SerializeField] public float KnockBack { get; private set; } = 0f;
+        [field: SerializeField] public Projectile ProjectilePrefab { get; private set; }
+        [field: SerializeField] public ProjectileData ProjectileData { get; private set; }
+
+        public string GetText(int canonCount = 1)
+        {
+            var fireRateText = $"Fire Rate: {Cooldown}";
+            
+            if (canonCount > 1) fireRateText += $" (×{canonCount})";
+
+            var bulletText = ProjectilePrefab != null
+                ?  $"Damage: {ProjectileData.Damage}\n" +
+                   $"Self Damage Multiplier: {ProjectileData.SelfDamageMultiplier}\n" +
+                   $"Bullet Speed: {ProjectileData.Velocity}\n" +
+                   $"Explosion Size: {ProjectileData.ExplosionRadius}\n" +
+                   $"Explosion KB: {ProjectileData.ExplosionForce}\n"
+                : string.Empty;
+
+            var text = $"{fireRateText}\n" +
+                       $"KB Force: {KnockBack}\n" +
+                       bulletText;
+                      
+            return text;
+        }
+    }
+    
+    [Serializable]
+    public struct ProjectileData
+    {
+        [field: SerializeField] public float Velocity { get; private set; }
+        [field: SerializeField] public Gradient Color { get; private set; }
+        [field: SerializeField] public int Damage { get; private set; }
+        [field: SerializeField] public float SelfDamageMultiplier { get; private set; }
+        [field: SerializeField] public float ExplosionRadius { get; private set; }
+        [field: SerializeField] public float ExplosionForce { get; private set; }
+        [field: SerializeField] public float ExplosionOffset { get; private set; }
+    }
+    
     [Space]
     [SerializeField] private TankStats stats;
     public TankStats Stats => stats;
@@ -123,11 +177,14 @@ public class Tank : MonoBehaviour, IDamageable
             mat.color = Color;
             rend.material = mat;
         }
-
-        var keys = stats.ProjectileData.Color.colorKeys;
-        Array.ForEach(keys, key => key.color = Color);
         
-        stats.ProjectileData.Color.SetKeys(keys,stats.ProjectileData.Color.alphaKeys);
+        var keys = stats.MainCanonData.ProjectileData.Color.colorKeys;
+        Array.ForEach(keys, key => key.color = Color);
+        stats.MainCanonData.ProjectileData.Color.SetKeys(keys,stats.MainCanonData.ProjectileData.Color.alphaKeys);
+        
+        keys = stats.SecondaryCanonData.ProjectileData.Color.colorKeys;
+        Array.ForEach(keys, key => key.color = Color);
+        stats.SecondaryCanonData.ProjectileData.Color.SetKeys(keys,stats.SecondaryCanonData.ProjectileData.Color.alphaKeys);
     }
 
     public void SetVisibilityOverride(float value)
@@ -274,20 +331,24 @@ public class Tank : MonoBehaviour, IDamageable
         }
         
         if(currentShotCooldownRight > 0 ) return;
-        currentShotCooldownRight = stats.ShootCooldown;
         
-        Shoot(shotOriginsRight);
+        var data = stats.AlwaysUseMain ? stats.MainCanonData : stats.SecondaryCanonData;
+        
+        currentShotCooldownRight = data.Cooldown;
+        
+        Shoot(shotOriginsRight,data);
     }
     
     public void ShootLeft()
     {
         if(currentShotCooldownLeft > 0 ) return;
-        currentShotCooldownLeft = stats.ShootCooldown;
         
-        Shoot(shotOriginsLeft);
+        currentShotCooldownLeft = stats.MainCanonData.Cooldown;
+        
+        Shoot(shotOriginsLeft,stats.MainCanonData);
     }
 
-    private void Shoot(IEnumerable<Transform> origin)
+    private void Shoot(IEnumerable<Transform> origin,CanonData data)
     {
         if(!IsAlive) return;
         
@@ -295,34 +356,39 @@ public class Tank : MonoBehaviour, IDamageable
         {
             SoundManager.PlaySound(SoundManager.instance.shoot);
             
+            var prefab = data.ProjectilePrefab;
             var position = shotOrigin.position;
-            var projectile =  ObjectPooler.Pool(projectilePrefab,position,shotOrigin.rotation);
             
-            rb.AddExplosionForce(stats.ShootKnockBackForce, position, 1f, 0f);
+            rb.AddExplosionForce(data.KnockBack, position, 1f, 0f);
             
-            projectile.Shoot(stats.ProjectileData,this);
+            if (prefab != null)
+            {
+                var projectile =  ObjectPooler.Pool(data.ProjectilePrefab,position,shotOrigin.rotation);
+                projectile.Shoot(data.ProjectileData,this);
+            }
+            
+            
         }
     }
 
-    public void TakeDamage(Projectile.DamageData data)
+    public void TakeDamage(ProjectileData data,Vector3 explosionOrigin,Tank shooter)
     {
         if(!IsAlive) return;
         
-        var explosionOrigin = data.ExplosionOrigin;
-        var explosionForce = data.Shooter.stats.ProjectileData.ExplosionForce;
-        var radius = data.Shooter.stats.ProjectileData.ExplosionRadius;
+        var explosionForce = data.ExplosionForce;
+        var radius = data.ExplosionRadius;
         
         rb.AddExplosionForce(explosionForce, explosionOrigin, radius, 0f);
         
         float damage = data.Damage;
-        if (data.Shooter == this) damage *= stats.SelfDamageMultiplier;
+        if (shooter == this) damage *= data.SelfDamageMultiplier;
         CurrentHp -= damage;
 
         currentHealCooldown = stats.HealCooldown;
 
         if (CurrentHp > 0) return;
 
-        Kill(data.Shooter);
+        Kill(shooter);
     }
 
     private void Kill(Tank killer)
@@ -371,7 +437,7 @@ public class Tank : MonoBehaviour, IDamageable
 
 public interface IDamageable
 {
-    void TakeDamage(Projectile.DamageData data);
+    void TakeDamage(Tank.ProjectileData data,Vector3 explosionOrigin,Tank shooter);
 
     bool HitByObject(Vector3 position);
 }
