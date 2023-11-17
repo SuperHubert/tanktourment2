@@ -109,7 +109,7 @@ public class Tank : MonoBehaviour, IDamageable
     [SerializeField] private LayerMask explosionLayers;
     [SerializeField] private bool moveTowardsDirection = true;
     public float MaxVisibilityAngle =>  currentHp > 0 ? visibilityOverride < 0 ? stats.MaxVisibilityAngle : visibilityOverride : 0;
-    public float MaxVisibilityRange =>  visibilityOverride < 0 ? stats.MaxVisibilityRange : visibilityOverride;
+    public float MaxVisibilityRange =>  stats.MaxVisibilityRange;
     [field: SerializeField] public float SpawnHeight { get; private set; } = 1f;
 
     [Header("Debug")]
