@@ -118,7 +118,7 @@ public class TankManager : MonoBehaviour
 
     private void OnTankKilled(Tank tank, Tank killer)
     {
-        var pos = NextAvailableSpawnPoint(); // check si y'a pas des gens trop proche du point de respawn (sinon next available)
+        var pos = NextAvailableSpawnPoint();
         pos.y += tankPrefab.SpawnHeight;
         
         tank.transform.position = pos;

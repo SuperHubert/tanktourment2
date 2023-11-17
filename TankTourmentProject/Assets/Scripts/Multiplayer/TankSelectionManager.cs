@@ -94,7 +94,8 @@ public class TankSelectionManager : MonoBehaviour
         }
         
         tankSelectionData.OnReadyChanged += TryStartGame;
-        tankSelectionData.OnSelectedColorChanged += selection.ChangeColor; // TODO same for tank stats
+        tankSelectionData.OnSelectedColorChanged += selection.ChangeColor;
+        tankSelectionData.OnSelectedTankChanged += selection.UpdateStats;
         
         selection.OnTankChanged += ChangeTankIndex;
         selection.OnColorChanged += ChangeColorIndex;
