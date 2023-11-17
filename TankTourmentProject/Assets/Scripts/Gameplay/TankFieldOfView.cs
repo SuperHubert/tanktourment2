@@ -7,8 +7,10 @@ public class TankFieldOfView : MonoBehaviour
 {
     [Header("Components")] 
     [SerializeField] private MeshFilter meshFilter;
+    [SerializeField] private Camera planeCamera;
 
     [Header("Settings")]
+    [SerializeField] private float projectionRatio = 0.5f;
     [SerializeField] private int meshResolution = 10;
     [SerializeField] private int edgeResolveIterations = 4;
     [SerializeField] private float edgeDistanceThreshold = 4;
@@ -20,10 +22,11 @@ public class TankFieldOfView : MonoBehaviour
     private Tank connectedTank;
     private bool connected = false;
 
-    public void SetTank(Tank tank)
+    public void SetTank(Tank tank,Camera cam)
     {
         connectedTank = tank;
         connected = connectedTank != null;
+        planeCamera = cam;
     }
     
     private void Start()
@@ -86,6 +89,16 @@ public class TankFieldOfView : MonoBehaviour
             triangles[i * 3] = 0;
             triangles[i * 3 + 1] = i + 1;
             triangles[i * 3 + 2] = i + 2;
+        }
+
+        var camPos = transform.InverseTransformPoint(planeCamera.transform.position);
+        for (int i = 0; i < vertexCount; i++)
+        {
+            var vertice = vertices[i];
+            
+            vertice = Vector3.Lerp(vertice,camPos, projectionRatio);
+            
+            vertices[i] = vertice;
         }
         
         mesh.Clear();

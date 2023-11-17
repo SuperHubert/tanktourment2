@@ -97,6 +97,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meshFilter: {fileID: 2104822965533067362}
+  planeCamera: {fileID: 0}
+  projectionRatio: 0.95
   meshResolution: 2
   edgeResolveIterations: 4
   edgeDistanceThreshold: 0.5
