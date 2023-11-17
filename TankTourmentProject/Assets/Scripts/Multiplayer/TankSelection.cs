@@ -103,6 +103,8 @@ public class TankSelection : MonoBehaviour
     
     private void ToggleReady(InputAction.CallbackContext context)
     {
+        if(!UIColorSelection.AllUnique) return;
+        
         tankSelectionData.SetReady(!tankSelectionData.IsReady);
         
         // Feedback
