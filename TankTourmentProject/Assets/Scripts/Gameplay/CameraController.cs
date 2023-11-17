@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,16 +6,10 @@ public class CameraController : MonoBehaviour
     [field: Header("Components")]
     [field:SerializeField] public Camera Cam { get; private set; }
     [field: Space]
-    [field:SerializeField] public Camera OverlayCam { get; private set; }
     [SerializeField] private Transform fowParentRotator;
     [SerializeField] private Image fowMask;
     private Transform FowTr => fowMask.transform;
-    [SerializeField] private RawImage visibleRender;
-    private Transform RenderTr => visibleRender.transform;
     [SerializeField] private Image fowFogImage;
-    private Transform FowImageTr => fowFogImage.transform;
-    
-    private RenderTexture visibleRenderTexture;
     [field:SerializeField] public Transform CamTransform { get; private set; }
 
     [Header("Settings")]
@@ -46,23 +39,9 @@ public class CameraController : MonoBehaviour
         CamTransform.position = target.Position + offset; 
         
         CamTransform.LookAt(target.Position );
-
-        var w = Screen.width;
-        var h = Screen.height;
-        
-        visibleRenderTexture = new RenderTexture(w,h,16,RenderTextureFormat.ARGB32);
-        RenderTr.localScale = Vector3.one * h / w;
-        visibleRenderTexture.Create();
-        
-        visibleRender.texture = visibleRenderTexture;
-        
-        OverlayCam.targetTexture = visibleRenderTexture;
         
         FowTr.rotation = Quaternion.identity;
-        RenderTr.rotation = Quaternion.identity;
         fowParentRotator.rotation = Quaternion.identity;
-        
-        OverlayCam.enabled = true;
         
         fowFogImage.color = fogColor;
     }
@@ -90,7 +69,7 @@ public class CameraController : MonoBehaviour
     {
         if(!hasTarget) return;
         
-        var pos = OverlayCam.WorldToViewportPoint(fowRotationTarget.position);
+        var pos = Cam.WorldToViewportPoint(fowRotationTarget.position);
         pos.x -= 0.5f;
         pos.x *= 100;
         pos.y -= 0.5f;
@@ -100,7 +79,7 @@ public class CameraController : MonoBehaviour
         SetFowPosition(pos);
     }
     
-    public void SetFowPosition(Vector3 position)
+    private void SetFowPosition(Vector3 position)
     {
         if(!hasTarget) return;
 
@@ -114,14 +93,10 @@ public class CameraController : MonoBehaviour
     {
         angle /= 360;
 
-        fowMask.fillAmount = angle;
+        fowMask.fillAmount = 1 - angle;
         
-        FowTr.localRotation = Quaternion.Euler(0f,0f,180*angle);
-        
-        RenderTr.position = FowImageTr.position;
-        RenderTr.rotation = FowImageTr.rotation;
+        FowTr.localRotation = Quaternion.Euler(0f,0f,-180*angle);
     }
-    
     
     private void MoveWithTarget()
     {
@@ -136,6 +111,8 @@ public class CameraController : MonoBehaviour
 
     public void SetLayerVisible(int layer, bool visible)
     {
+        return;
+        
         if(layer == 0) return;
         if (visible)
         {

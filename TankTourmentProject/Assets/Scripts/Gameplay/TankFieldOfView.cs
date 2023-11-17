@@ -3,20 +3,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FieldOfView : MonoBehaviour
+public class TankFieldOfView : MonoBehaviour
 {
     [Header("Components")] 
     [SerializeField] private MeshFilter meshFilter;
-    
+
     [Header("Settings")]
-    [SerializeField,Range(0,360)] private float viewAngle;
-    [SerializeField] private float viewDistance = 50f;
     [SerializeField] private int meshResolution = 10;
     [SerializeField] private int edgeResolveIterations = 4;
     [SerializeField] private float edgeDistanceThreshold = 4;
+    private float ViewDistance => connectedTank.MaxVisibilityRange;
+    private float ViewAngle => connectedTank.MaxVisibilityAngle;
     [SerializeField] private LayerMask obstacleMask;
     
     private Mesh mesh;
+    private Tank connectedTank;
+    private bool connected = false;
+
+    public void SetTank(Tank tank)
+    {
+        connectedTank = tank;
+        connected = connectedTank != null;
+    }
     
     private void Start()
     {
@@ -35,15 +43,17 @@ public class FieldOfView : MonoBehaviour
 
     private void DrawFov()
     {
-        var rayCount = Mathf.RoundToInt(viewAngle * meshResolution);
-        var angleStep = viewAngle / rayCount;
+        if(!connected) return;
+        
+        var rayCount = Mathf.RoundToInt(ViewAngle * meshResolution);
+        var angleStep = ViewAngle / rayCount;
         
         var viewPoints = new List<Vector3>();
 
         var previousViewCastInfo = new ViewCastInfo();
         for (var i = 0; i <= rayCount; i++)
         {
-            var currentAngle = transform.eulerAngles.y - viewAngle / 2 + angleStep * i;
+            var currentAngle = transform.eulerAngles.y - ViewAngle / 2 + angleStep * i;
             
             var viewCastInfo = ViewCast(currentAngle);
 
@@ -112,13 +122,13 @@ public class FieldOfView : MonoBehaviour
     private ViewCastInfo ViewCast(float globalAngle)
     {
         var dir = DirFromAngle(globalAngle, true);
-        var didHit = Physics.Raycast(transform.position, dir, out var hit, viewDistance, obstacleMask);
+        var didHit = Physics.Raycast(transform.position, dir, out var hit, ViewDistance, obstacleMask);
         return didHit ?
             new ViewCastInfo(true,hit.point,hit.distance,globalAngle) : 
-            new ViewCastInfo(false,transform.position + dir * viewDistance,viewDistance,globalAngle);
+            new ViewCastInfo(false,transform.position + dir * ViewDistance,ViewDistance,globalAngle);
     }
 
-    public struct ViewCastInfo
+    private struct ViewCastInfo
     {
         public bool hit;
         public Vector3 point;
@@ -134,7 +144,7 @@ public class FieldOfView : MonoBehaviour
         }
     }
     
-    public struct EdgeInfo
+    private struct EdgeInfo
     {
         public Vector3 pointA;
         public Vector3 pointB;

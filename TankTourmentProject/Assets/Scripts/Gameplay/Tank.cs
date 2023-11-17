@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Tank : MonoBehaviour, IDamageable
 {
     [Header("Components")]
     [SerializeField] private Rigidbody rb;
+    [SerializeField] private TankFieldOfView tankFieldOfView;
     public Rigidbody Rb => rb;
+    public TankFieldOfView TankFieldOfView => tankFieldOfView;
     [field: SerializeField] public Transform HeadTransform { get; private set; }
     [field:SerializeField] public Renderer[] ColoredRenderers { get; private set; }
     [SerializeField] public GameObject[] layerGameobjects;
@@ -25,7 +28,9 @@ public class Tank : MonoBehaviour, IDamageable
         [field: SerializeField] public float Acceleration { get; private set; } = 10f;
         [field: SerializeField] public float MaxTurnSpeed { get; private set; } = 10f;
         [field: SerializeField] public float HeadRotationSpeed { get; private set; }= 360f;
+        [field: Space]
         [field: SerializeField, Range(0f, 360f), Tooltip("°")] public float MaxVisibilityAngle{  get; private set; } = 90f;
+        [field: SerializeField, Range(0f, 360f), Tooltip("°")] public float MaxVisibilityRange {  get; private set; } = 10f;
         [field: Space]
         [field: SerializeField] public Projectile.ProjectileData ProjectileData { get; private set; }
         [field: SerializeField] public bool DualShooter { get; private set; } = false;
@@ -49,6 +54,7 @@ public class Tank : MonoBehaviour, IDamageable
     [SerializeField] private LayerMask explosionLayers;
     [SerializeField] private bool moveTowardsDirection = true;
     public float MaxVisibilityAngle =>  currentHp > 0 ? visibilityOverride < 0 ? stats.MaxVisibilityAngle : visibilityOverride : 0;
+    public float MaxVisibilityRange =>  visibilityOverride < 0 ? stats.MaxVisibilityRange : visibilityOverride;
     [field: SerializeField] public float SpawnHeight { get; private set; } = 1f;
 
     [Header("Debug")]
@@ -88,6 +94,7 @@ public class Tank : MonoBehaviour, IDamageable
     public void SetStatic()
     {
         rb.isKinematic = true;
+        tankFieldOfView.enabled = false;
         CurrentHp = stats.MaxHp;
     }
     
@@ -138,6 +145,7 @@ public class Tank : MonoBehaviour, IDamageable
         Array.ForEach(wheelTrailHandlers,handler => handler.ConnectToTank(this));
         
         rb.isKinematic = false;
+        tankFieldOfView.enabled = true;
         
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
@@ -314,6 +322,7 @@ public class Tank : MonoBehaviour, IDamageable
         ShowLayerObjects(false);
         
         rb.isKinematic = true;
+        tankFieldOfView.enabled = false;
         
         Array.ForEach(wheelTrailHandlers,handler => handler.StopEmission());
         
