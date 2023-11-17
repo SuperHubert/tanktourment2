@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: floorMat
-  m_Shader: {fileID: -6465566751694194690, guid: b22eb318a16685d4f998533ef37476b7,
+  m_Shader: {fileID: -6465566751694194690, guid: cccadf8a1e1886946ab55fb68d94aa51,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
