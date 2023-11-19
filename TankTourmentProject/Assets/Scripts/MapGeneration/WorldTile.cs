@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class WorldTile : MonoBehaviour
 {
+    /*
+        Class of a GameObject that represent a Tile in the world.
+     */
     [field: SerializeField] public Renderer Renderer { get; private set; }
     [SerializeField] private Transform spawnTransform;
     

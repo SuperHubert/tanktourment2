@@ -39,6 +39,7 @@ public class MultiplayerManager : MonoBehaviour
 
     private void Setup()
     {
+        /* Subscribe to events */
         playerInputManager.EnableJoining();
         
         PlayerController.CleanupEvents();
@@ -77,8 +78,6 @@ public class MultiplayerManager : MonoBehaviour
 
     public void OnPlayersUpdate()
     {
-        // TODO, propably not hardcode it
-
         var activePlayers = ActivePlayers.ToList();
         for (var index = 0; index < ActivePlayerCount; index++)
         {
@@ -121,6 +120,7 @@ public class MultiplayerManager : MonoBehaviour
 
     private void TryStartGame(List<PlayerController> readyPlayers)
     {
+        // Make sure the player count is within the min player count
         var activeAndReady = readyPlayers.Count(player => !inactivePlayerControllers.Contains(player));
         
         if(activeAndReady < minPlayer || activeAndReady < ActivePlayerCount) return;
@@ -145,6 +145,7 @@ public class MultiplayerManager : MonoBehaviour
         
         ActivePlayers.First().OnGameCDFinished += OnGameCDFinished;
         
+        // Start countdown
         foreach (var controller in ActivePlayers)
         {
             controller.CountdownForGameStart();

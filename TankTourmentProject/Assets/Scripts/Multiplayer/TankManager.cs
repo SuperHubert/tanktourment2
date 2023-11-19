@@ -59,6 +59,8 @@ public class TankManager : MonoBehaviour
 
     private void SpawnTank(PlayerController controller)
     {
+        /* Spawn the tank at the next available spawn point if no other tank is close, search another one if that's
+         not the case */
         var pos = NextAvailableSpawnPoint();
 
         var validPos = false;

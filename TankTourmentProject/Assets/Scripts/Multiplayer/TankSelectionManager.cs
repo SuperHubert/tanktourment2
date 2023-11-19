@@ -100,6 +100,7 @@ public class TankSelectionManager : MonoBehaviour
 
         void ChangeTankIndex(int change)
         {
+            /* Select tank at index */
             if(tankSelectionData.IsReady) return;
             
             var index = tankIndex + change;
@@ -141,8 +142,6 @@ public class TankSelectionManager : MonoBehaviour
 
         void ChangeColor(int index,bool removeSelection)
         {
-            Debug.Log("Changing color");
-            
             if(index < 0) index = 0;
             index %= colors.Count;
             

@@ -42,6 +42,8 @@ public class TankSelection : MonoBehaviour
 
     public void ConnectToPlayerController(PlayerController controller)
     {
+        /* Setup for new player controller */
+        
         playerController = controller;
         
         var inputs = playerController.PlayerInput;
@@ -162,6 +164,8 @@ public class TankSelection : MonoBehaviour
 
     public void UpdateStats(Tank tank)
     {
+        /* Update tank stats according to the tank selected */
+        
         var stats = tank.Stats;
         var isDualShooter = stats.DualShooter;
         var alwaysUseMain = stats.AlwaysUseMain;
@@ -198,6 +202,7 @@ public class TankSelection : MonoBehaviour
 
     public void SetTanks(Tank[] tanksToSpawn,float tankOffset)
     {
+        /* Spawn the preview tanks */ 
         tankModels.Clear();
 
         TankTrOrigin = TankTr.position;

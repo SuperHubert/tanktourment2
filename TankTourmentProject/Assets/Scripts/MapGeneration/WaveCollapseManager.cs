@@ -51,6 +51,8 @@ namespace MapGeneration
 
         public void DebugNeighbors(int i, int j)
         {
+            /* Debug the neighbors of a Tile */
+            
             Debug.Log($"{i}, {j}");
             
             if (j > 0) Debug.Log($"Bot : {DebugAvaillables(i, j-1, Enums.Direction.Top)}");
@@ -61,6 +63,8 @@ namespace MapGeneration
 
         private string DebugAvaillables(int i, int j, Enums.Direction direction)
         {
+            /* Debug the availlable tiles for a specific direction */
+            
             if (nodes[i, j].IsCollapsed) return nodes[i, j].TileTypeSelected.GetPrefabConnexionNoSplit(direction);
 
             string poss = "";
@@ -73,19 +77,10 @@ namespace MapGeneration
             return poss;
         }
 
-        void GenerateVisualMap()
-        {
-            for (int i = 0; i < Width; i++)
-            {
-                for (int j = 0; j < Height; j++)
-                {
-                    if (nodes[i,j].IsCollapsed) GenerateVisualFor(i, j);
-                }
-            }
-        }
-
         void GenerateVisualFor(int i, int j)
         {
+            /* Instantiate the GameObject representing a Node */
+            
             if(i < 0 || i >= Width || j < 0 || j >= Height) return;
             
             var node = nodes[i, j];
@@ -100,7 +95,6 @@ namespace MapGeneration
             tile.transform.localScale = scale;
             
             var mat = tile.Renderer.material;
-            //mat.color = node.debugColor;
             
             node.SetTile(tile);
             tile.Renderer.material = mat;
@@ -108,10 +102,12 @@ namespace MapGeneration
         
         public void GenerateMap(out GenerationData data)
         {
+            /* Generate the wall map, with Wave function collapse & BFS */
+            
             // Init all Nodes
             InitNodes();
         
-            // Set Fix nodes
+            // Set Fix nodes (control, spawn, connectors)
             SpawnPoints(controlPosition, controlPSize, tilePrefabs[0],controlPointsNodes);
             SpawnPoints(spawnPosition, spawnSize, tilePrefabs[1],spawnPositionNodes);
             SpawnPoints(connectorsPosition, connectorsSize, tilePrefabs[2],connectorNodes);
@@ -131,7 +127,6 @@ namespace MapGeneration
             }
             
             // Connect : Player - connector - control
-
             var path = new List<Node>();
             var buffer = new List<Node>();
 
@@ -165,15 +160,9 @@ namespace MapGeneration
             
             data = new GenerationData(spawnTiles,worldCenter,scale,pointTiles);
             
-            // Wall around the connectors
-            // Collapse the rest :happy:
-            // Wall around the map (ignore collapse)
-
-
-            //GenerateVisualMap();
-
             if (noFun)
             {
+                /* Iterate without IENUMERATOR (no delay) */
                 IterateNoFun();
                 return;
             }
@@ -183,6 +172,7 @@ namespace MapGeneration
         
         private void SpawnPoints(Vector2Int position, Vector2Int size, PrefabData prefabData,List<Node> addedNodes)
         {
+            /* Spawn nodes at random in position + size at the 4 corners by rotating around the map */
             position += Vector2Int.one;
             SpawnControlPoint(position, size); // bot left
             
@@ -221,6 +211,7 @@ namespace MapGeneration
 
         private void IterateNoFun()
         {
+            /* Iterate without IENUMERATOR (no delay) */
             while (!IsFullyCollapsed(1))
             {
                 IterateWaveCollapse(1);
@@ -232,13 +223,17 @@ namespace MapGeneration
         
         IEnumerator IterateSlowly()
         {
+            /* Iterate slowly with a delay specified so we can see the collapse */
+            
+            
+            /* Collapse the map except the borders */
             while (!IsFullyCollapsed(1))
             {
                 yield return new WaitForSeconds(creationSpeed);
                 IterateWaveCollapse(1);
             }
             
-            // Borders
+            // Place the corners
             SelectShowPropagate(0, 0, borderPrefabs[3], true);
             yield return new WaitForSeconds(creationSpeed);
             
@@ -251,7 +246,7 @@ namespace MapGeneration
             SelectShowPropagate(0, Height-1, borderPrefabs[0], true);
             yield return new WaitForSeconds(creationSpeed);
             
-            // Propagates
+            /* Collapse again to have the borders */
             while (!IsFullyCollapsed(0))
             {
                 IterateWaveCollapse(0);
@@ -262,6 +257,7 @@ namespace MapGeneration
 
         private void SetBordersNoFun()
         {
+            /* Same as above but without the delay */
             SelectShowPropagate(0, 0, borderPrefabs[3], true);
             SelectShowPropagate(Width-1, 0, borderPrefabs[2], true);
             SelectShowPropagate(Width-1, Height-1, borderPrefabs[1], true);
@@ -276,6 +272,7 @@ namespace MapGeneration
     
         private void InitNodes()
         {
+            /* Initialize all nodes, their neighbors for the BFS and the possibles tiles */
             nodes = new Node[Width, Height];
             
             for (int i = 0; i < Width; i++)
@@ -319,6 +316,7 @@ namespace MapGeneration
     
         private bool IsFullyCollapsed(int borders = 1)
         {
+            /* return true if all nodes are collapsed */
             for (int i = borders; i < Width-borders; i++)
             {
                 for (int j = borders; j < Height-borders; j++)
@@ -332,6 +330,7 @@ namespace MapGeneration
     
         private void IterateWaveCollapse(int borders = 1)
         {
+            /* Iterate the wave collapse algorithm (collapse a node and propagate */
             Node nodeToCollapse = GetMinEntropyNode(borders);
             CollapseNode(nodeToCollapse);
             GenerateVisualFor(nodeToCollapse.Position.x, nodeToCollapse.Position.y);
@@ -341,6 +340,8 @@ namespace MapGeneration
         
         private Node GetMinEntropyNode(int borders = 1)
         {
+            /* Get the node with the minimal entropy, at random if multiple with min value */
+            
             List<Node> possiblesNodes = new List<Node>();
             int minEntropy = Int32.MaxValue;
             
@@ -374,6 +375,7 @@ namespace MapGeneration
         
         private void PropagateWave(Node node)
         {
+            /* Propagate the wave collapse algorithm on each neighbor */
             List<Node> nodeToUpdate = new List<Node>();
             Node nodeUpToDate;
             nodeToUpdate.Add(node);
@@ -399,7 +401,10 @@ namespace MapGeneration
         
         private void UpdateNode(Node nodeUpToDate, Enums.Direction direction, ref List<Node> nodesToUpdate, int borders = 0)
         {
-            /* Remove possibilities if it does not correspond to nodeUpToDate's selected or available */
+            /*
+             Remove possibilities if it does not correspond to nodeUpToDate's selected or available and continue
+             propagation if the node's possibilities changed.
+             */
             
             int x = nodeUpToDate.Position.x;
             int y = nodeUpToDate.Position.y;
@@ -460,12 +465,14 @@ namespace MapGeneration
         [SerializeField] public WorldTile go;
         [SerializeField] public Quaternion rotation;
 
+        
+        /* Possibles neighbors */
         [SerializeField] public string top;
         [SerializeField] public string bot;
         [SerializeField] public string left;
         [SerializeField] public string right;
 
-        [field: SerializeField] public bool CanSpawn { get; private set; } = true;
+        [field: SerializeField] public bool CanSpawn { get; private set; } = true; // Can spawn with wave function collapse
         [field: SerializeField] public Color DebugColor { get; private set; } = Color.white;
 
 
@@ -489,6 +496,7 @@ namespace MapGeneration
 
     public class GenerationData
     {
+        /* Informations about the map that is passed to managers */
         public List<Vector3> SpawnTilePositions { get; }
         public List<Vector3> ControlTilePositions { get; }
         public Vector3 WorldCenter { get; }

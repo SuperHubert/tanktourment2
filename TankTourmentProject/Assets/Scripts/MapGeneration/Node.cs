@@ -9,6 +9,12 @@ namespace MapGeneration
     [Serializable]
     public class Node
     {
+        /*
+             Class that represent a the possibilities a Tile of our map has.
+             It's used by the Wave Collapse Manager to calculate the possibilities of each tile.
+             TileTypePossible is the list that get shrunk as the algorithm goes on.
+         */
+        
         public Vector2Int Position { get; private set; } //Maybe not needed (bonnus?)
         public PrefabData TileTypeSelected { get; private set; }
         [HideInInspector] public List<PrefabData> TileTypesPossibles { get; private set; }
@@ -63,6 +69,9 @@ namespace MapGeneration
             
             if (spawnables.Count == 0)
             {
+                /* Used as debug when the Wave function collapse can't find a corresponding tile. It shows the
+                type of tile that could not be spawned because it was missing.
+                */
                 Debug.Log($"No spawnables: {Position}");
                 
                 WaveCollapseManager.Instance.DebugNeighbors(Position.x, Position.y);
@@ -78,6 +87,7 @@ namespace MapGeneration
 
         private void DebugNeighbors(Node neighbor, Enums.Direction direction)
         {
+            /* Log neighbors of a node. Used for debug. */
             if (!neighbor.IsCollapsed)
                 return;
             
@@ -86,6 +96,7 @@ namespace MapGeneration
 
         public void SelectTile(PrefabData selected)
         {
+            /* Select and collapse a Node */
             TileTypeSelected = selected;
             TileTypesPossibles.Clear();
             TileTypesPossibles.Add(TileTypeSelected);
@@ -102,10 +113,13 @@ namespace MapGeneration
             neighbors = nodes;
         }
         
-        // A* pathfinding, nvm its BFS xd
-        // https://www.redblobgames.com/pathfinding/a-star/introduction.html
         public bool GetPath(Node destination, out List<Node> path)
-        {
+        { 
+            /*
+             Get the path from this node to the destination node
+             It's an implementation of the BFS algorithm.
+             Does not include the destination node in the path. 
+             */
             var start = this;
             
             var frontier = new Queue<Node>();
@@ -118,8 +132,6 @@ namespace MapGeneration
             while (frontier.Count > 0)
             {
                 var current = frontier.Dequeue();
-
-                //current.debugColor = Color.black;
                 
                 if (current == destination)
                 {
@@ -132,11 +144,8 @@ namespace MapGeneration
                     }
 
                     path.Remove(destination);
-                    
                     path.RemoveAll(n => n.IsCollapsed);
-                    
                     path.Reverse();
-                    
                     return true;
                 }
 
@@ -146,7 +155,6 @@ namespace MapGeneration
                     if (!cameFromDict.ContainsKey(next))
                     {
                         frontier.Enqueue(next);
-                        
                         cameFromDict.Add(next,current);
                     }
                 }

@@ -31,6 +31,7 @@ public class PointsManager : MonoBehaviour
 
     public void SetPlayers(IEnumerable<PlayerController> players)
     {
+        // Initialize values and subscribe to events
         playerPoints.Clear();
         
         var playersList = players.ToList();

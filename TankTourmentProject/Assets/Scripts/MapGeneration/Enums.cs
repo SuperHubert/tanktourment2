@@ -4,6 +4,7 @@ namespace MapGeneration
     {
         public static Direction ReverseDirection(Direction direction)
         {
+            /* Reverses the direction */
             switch (direction)
             {
                 case Direction.Top:
@@ -21,6 +22,7 @@ namespace MapGeneration
         
         public enum Direction
         {
+            /* Enums of the Directions, used for the Wave function collapse */
             Top,
             Bottom,
             Left,
